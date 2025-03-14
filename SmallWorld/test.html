@@ -3,792 +3,667 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Your Tour Guide</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Guide Registration | Tourism Platform</title>
     <style>
-        body {
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #059669;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
         }
-        .guide-section {
-            background-color: #ffffff;
-            padding: 50px 0;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+
+        body {
+            background-color: #f9fafb;
+            color: var(--dark);
         }
-        .search-box {
-            background-color: #f8f9fd;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .search-title {
-            color: #3a86ff;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
-        .line-dec {
-            width: 60px;
-            height: 3px;
-            background-color: #3a86ff;
-            margin: 15px 0 25px 0;
-        }
-        .guide-card {
+
+        header {
             background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0px 3px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .guide-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 5px 20px rgba(0,0,0,0.15);
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .guide-img {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
         }
-        .guide-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .guide-verified {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background-color: #38b000;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .guide-info {
-            padding: 20px;
-        }
-        .guide-name {
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .guide-location {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        .guide-location i {
-            color: #3a86ff;
-            margin-right: 5px;
-        }
-        .guide-languages {
-            margin-bottom: 15px;
-        }
-        .language-tag {
-            display: inline-block;
-            background-color: #e6f2ff;
-            color: #3a86ff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        .guide-expertise {
-            margin-bottom: 15px;
-        }
-        .expertise-tag {
-            display: inline-block;
-            background-color: #fff0e6;
-            color: #ff6b35;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        .guide-rating {
-            color: #ffb703;
-            margin-bottom: 15px;
-        }
-        .guide-price {
-            font-weight: 700;
-            color: #3a86ff;
-            margin-bottom: 15px;
-        }
-        .guide-availability {
-            color: #38b000;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        .guide-availability.not-available {
-            color: #e63946;
-        }
-        .primary-btn {
-            background-color: #3a86ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .primary-btn:hover {
-            background-color: #2a75e8;
-            color: white;
+
+        .nav-links a {
+            margin-left: 20px;
             text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
         }
-        .outline-btn {
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-actions button {
             background-color: transparent;
-            color: #3a86ff;
-            border: 1px solid #3a86ff;
-            padding: 8px 18px;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 16px;
         }
-        .outline-btn:hover {
-            background-color: #3a86ff;
+
+        .user-profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            text-decoration: none;
+            font-weight: bold;
+            margin-left: 15px;
         }
-        .experience-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: rgba(0,0,0,0.6);
+
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/api/placeholder/1200/300") center/cover;
+            padding: 60px 0;
             color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            text-align: center;
+            margin-bottom: 40px;
         }
-        .filter-section {
+
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .registration-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-group .hint {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .languages-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
         }
-        .filter-pill {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 6px 15px;
+
+        .language-tag {
+            background-color: var(--light);
+            padding: 8px 12px;
             border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-tag span {
             font-size: 14px;
+        }
+
+        .language-tag button {
+            background: none;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            color: var(--gray);
+            font-size: 16px;
         }
-        .filter-pill:hover, .filter-pill.active {
-            background-color: #3a86ff;
-            color: white;
-            border-color: #3a86ff;
+
+        .language-tag button:hover {
+            color: var(--danger);
         }
-        .language-filter, .expertise-filter, .availability-filter {
-            margin-bottom: 15px;
-        }
-        .guide-short-info {
+
+        .add-language {
             display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .info-item {
-            margin-right: 20px;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #666;
+
+        .add-language select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
-        .info-item i {
-            margin-right: 5px;
-            color: #3a86ff;
+
+        .add-language select:last-child {
+            width: 120px;
         }
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        .pagination {
-            display: flex;
-            list-style: none;
-            padding: 0;
-        }
-        .pagination li {
-            margin: 0 5px;
-        }
-        .pagination li a {
-            display: block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            background-color: white;
-            border-radius: 5px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .pagination li a:hover, .pagination li a.active {
-            background-color: #3a86ff;
+
+        .add-language button {
+            background-color: var(--primary);
             color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0 15px;
+            cursor: pointer;
         }
-        .modal-content {
-            border-radius: 10px;
-            overflow: hidden;
+
+        .add-language button:hover {
+            background-color: var(--primary-dark);
         }
-        .modal-header {
-            background-color: #3a86ff;
-            color: white;
-            border-bottom: none;
+
+        .tour-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
-        .modal-body {
-            padding: 30px;
+
+        .tour-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .review-item {
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 15px;
+
+        .tour-type input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .certifications {
+            margin-bottom: 30px;
+        }
+
+        .certification-card {
+            background-color: var(--light);
+            border-radius: 6px;
+            padding: 15px;
             margin-bottom: 15px;
-        }
-        .review-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            align-items: center;
         }
-        .review-author {
-            font-weight: 600;
+
+        .certification-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-        .review-date {
-            color: #666;
+
+        .certification-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .certification-meta h4 {
+            margin-bottom: 5px;
+        }
+
+        .certification-meta p {
+            color: var(--gray);
             font-size: 14px;
         }
-        .review-rating {
-            color: #ffb703;
+
+        .certification-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .certification-actions button:hover {
+            color: var(--danger);
+        }
+
+        .upload-section {
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            color: var(--gray);
             margin-bottom: 10px;
+        }
+
+        .upload-text {
+            margin-bottom: 15px;
+        }
+
+        .upload-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .upload-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .submit-button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #047857;
+        }
+
+        .preview-profile {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .preview-profile:hover {
+            background-color: rgba(37, 99, 235, 0.1);
         }
     </style>
 </head>
 <body>
+<!-- Header -->
+<header>
+    <div class="container header-content">
+        <div class="logo">TourismPlatform</div>
+        <div class="nav-links">
+            <a href="#">Places</a>
+            <a href="#">Hotels</a>
+            <a href="#">Transport</a>
+            <a href="#">Guides</a>
+        </div>
+        <div class="user-actions">
+            <button>🔔</button>
+            <button>🌐 EN</button>
+            <div class="user-profile">T</div>
+        </div>
+    </div>
+</header>
 
-<div class="guide-section" id="guide-search">
+<!-- Page Header -->
+<section class="page-header">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="search-box">
-                    <h4 class="search-title">Find Your Perfect Guide</h4>
-                    <div class="line-dec"></div>
-                    <p>Discover experienced local guides to make your journey unforgettable with personalized tours and insider knowledge.</p>
+        <h1>Become a Guide</h1>
+        <p>Share your knowledge and passion for your region with travelers from around the world</p>
+    </div>
+</section>
 
-                    <form>
-                        <div class="form-group">
-                            <label for="location">Destination</label>
-                            <input type="text" class="form-control" id="location" placeholder="Where do you need a guide?">
-                        </div>
+<!-- Registration Form -->
+<div class="container">
+    <div class="registration-container">
+        <div class="section-title">
+            <i>👤</i>
+            <h2>Personal Information</h2>
+        </div>
 
-                        <div class="form-group">
-                            <label>Languages</label>
-                            <div class="language-filter">
-                                <div class="filter-pill" data-language="english">English</div>
-                                <div class="filter-pill" data-language="japanese">Japanese</div>
-                                <div class="filter-pill" data-language="chinese">Chinese</div>
-                                <div class="filter-pill" data-language="german">German</div>
-                                <div class="filter-pill" data-language="french">French</div>
-                            </div>
-                        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" required>
+            </div>
+        </div>
 
-                        <div class="form-group">
-                            <label>Expertise</label>
-                            <div class="expertise-filter">
-                                <div class="filter-pill" data-expertise="history">History</div>
-                                <div class="filter-pill" data-expertise="culture">Culture</div>
-                                <div class="filter-pill" data-expertise="adventure">Adventure</div>
-                                <div class="filter-pill" data-expertise="nature">Nature</div>
-                                <div class="filter-pill" data-expertise="food">Food</div>
-                            </div>
-                        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" required>
+            </div>
+        </div>
 
-                        <div class="form-group">
-                            <label>Availability</label>
-                            <div class="availability-filter">
-                                <div class="filter-pill" data-availability="available">Available Now</div>
-                                <div class="filter-pill" data-availability="this-week">This Week</div>
-                                <div class="filter-pill" data-availability="this-month">This Month</div>
-                            </div>
-                        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="nationality">Nationality</label>
+                <select id="nationality" required>
+                    <option value="">Select your nationality</option>
+                    <option value="US">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                    <option value="ID">Indonesia</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
 
-                        <div class="form-group">
-                            <label for="date">Tour Date</label>
-                            <input type="date" class="form-control" id="date">
-                        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" required></textarea>
+        </div>
 
-                        <div class="form-group">
-                            <label for="duration">Duration</label>
-                            <select class="form-control" id="duration">
-                                <option value="">Any Duration</option>
-                                <option value="half-day">Half Day (4 hours)</option>
-                                <option value="full-day">Full Day (8 hours)</option>
-                                <option value="multi-day">Multiple Days</option>
-                            </select>
-                        </div>
+        <div class="section-title">
+            <i>🧳</i>
+            <h2>Experience</h2>
+        </div>
 
-                        <div class="form-group">
-                            <label for="group-size">Group Size</label>
-                            <select class="form-control" id="group-size">
-                                <option value="1-2">1-2 People</option>
-                                <option value="3-5">3-5 People</option>
-                                <option value="6-10">6-10 People</option>
-                                <option value="10+">More than 10</option>
-                            </select>
-                        </div>
+        <div class="form-group">
+            <label for="experience">Years of Experience</label>
+            <select id="experience" required>
+                <option value="">Select years of experience</option>
+                <option value="1">Less than 1 year</option>
+                <option value="1-3">1-3 years</option>
+                <option value="3-5">3-5 years</option>
+                <option value="5-10">5-10 years</option>
+                <option value="10+">More than 10 years</option>
+            </select>
+        </div>
 
-                        <button type="button" class="btn primary-btn btn-block" id="search-guides">Find Guides</button>
-                    </form>
+        <div class="form-group">
+            <label>Types of Tours</label>
+            <div class="tour-types">
+                <div class="tour-type">
+                    <input type="checkbox" id="historical" name="tourTypes" value="historical">
+                    <label for="historical">Historical</label>
+                </div>
+                <div class="tour-type">
+                    <input type="checkbox" id="adventure" name="tourTypes" value="adventure">
+                    <label for="adventure">Adventure</label>
+                </div>
+                <div class="tour-type">
+                    <input type="checkbox" id="cultural" name="tourTypes" value="cultural">
+                    <label for="cultural">Cultural</label>
+                </div>
+                <div class="tour-type">
+                    <input type="checkbox" id="food" name="tourTypes" value="food">
+                    <label for="food">Food & Culinary</label>
+                </div>
+                <div class="tour-type">
+                    <input type="checkbox" id="nature" name="tourTypes" value="nature">
+                    <label for="nature">Nature & Wildlife</label>
+                </div>
+                <div class="tour-type">
+                    <input type="checkbox" id="photography" name="tourTypes" value="photography">
+                    <label for="photography">Photography</label>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-8">
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4>Available Tour Guides</h4>
-                        <div class="line-dec"></div>
-                        <p>Showing 12 guides available for your search</p>
+        <div class="section-title">
+            <i>🌐</i>
+            <h2>Languages</h2>
+        </div>
+
+        <div class="languages-container">
+            <div class="language-tag">
+                <span>English - Fluent</span>
+                <button type="button">×</button>
+            </div>
+            <div class="language-tag">
+                <span>Spanish - Intermediate</span>
+                <button type="button">×</button>
+            </div>
+        </div>
+
+        <div class="add-language">
+            <select id="language">
+                <option value="">Select language</option>
+                <option>Arabic</option>
+                <option>Chinese</option>
+                <option>English</option>
+                <option>French</option>
+                <option>German</option>
+                <option>Japanese</option>
+                <option>Korean</option>
+                <option>Portuguese</option>
+                <option>Russian</option>
+                <option>Spanish</option>
+            </select>
+            <select id="proficiency">
+                <option value="">Proficiency</option>
+                <option>Basic</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+                <option>Fluent</option>
+                <option>Native</option>
+            </select>
+            <button type="button">Add</button>
+        </div>
+
+        <div class="section-title">
+            <i>🏆</i>
+            <h2>Certifications</h2>
+        </div>
+
+        <div class="certifications">
+            <div class="certification-card">
+                <div class="certification-info">
+                    <div class="certification-icon">📄</div>
+                    <div class="certification-meta">
+                        <h4>Licensed Tour Guide</h4>
+                        <p>Issued by Tourism Department • Expires Dec 2025</p>
                     </div>
                 </div>
-
-                <div class="row">
-                    <!-- Guide 1 -->
-                    <div class="col-md-6">
-                        <div class="guide-card">
-                            <div class="guide-img">
-                                <img src="/api/placeholder/400/320" alt="Tour Guide">
-                                <div class="experience-badge">5+ Years Experience</div>
-                                <div class="guide-verified">Verified</div>
-                            </div>
-                            <div class="guide-info">
-                                <h5 class="guide-name">Saman Perera</h5>
-                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Colombo, Sri Lanka</p>
-
-                                <div class="guide-short-info">
-                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 10</div>
-                                    <div class="info-item"><i class="fas fa-check-circle"></i> 75 Tours</div>
-                                </div>
-
-                                <div class="guide-languages">
-                                    <span class="language-tag">English</span>
-                                    <span class="language-tag">Japanese</span>
-                                    <span class="language-tag">French</span>
-                                </div>
-
-                                <div class="guide-expertise">
-                                    <span class="expertise-tag">History</span>
-                                    <span class="expertise-tag">Culture</span>
-                                    <span class="expertise-tag">Food</span>
-                                </div>
-
-                                <div class="guide-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="text-muted ml-1">(42 reviews)</span>
-                                </div>
-
-                                <div class="guide-price">
-                                    From $50 per day
-                                </div>
-
-                                <div class="guide-availability">
-                                    <i class="fas fa-calendar-check"></i> Available this week
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="outline-btn view-profile" data-guide="saman">View Profile</a>
-                                    <a href="#" class="primary-btn contact-guide" data-guide="saman">Contact</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Guide 2 -->
-                    <div class="col-md-6">
-                        <div class="guide-card">
-                            <div class="guide-img">
-                                <img src="/api/placeholder/400/320" alt="Tour Guide">
-                                <div class="experience-badge">3+ Years Experience</div>
-                                <div class="guide-verified">Verified</div>
-                            </div>
-                            <div class="guide-info">
-                                <h5 class="guide-name">Nimal Jayawardena</h5>
-                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Kandy, Sri Lanka</p>
-
-                                <div class="guide-short-info">
-                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 8</div>
-                                    <div class="info-item"><i class="fas fa-check-circle"></i> 42 Tours</div>
-                                </div>
-
-                                <div class="guide-languages">
-                                    <span class="language-tag">English</span>
-                                    <span class="language-tag">German</span>
-                                    <span class="language-tag">Chinese</span>
-                                </div>
-
-                                <div class="guide-expertise">
-                                    <span class="expertise-tag">Adventure</span>
-                                    <span class="expertise-tag">Nature</span>
-                                    <span class="expertise-tag">History</span>
-                                </div>
-
-                                <div class="guide-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="text-muted ml-1">(28 reviews)</span>
-                                </div>
-
-                                <div class="guide-price">
-                                    From $45 per day
-                                </div>
-
-                                <div class="guide-availability">
-                                    <i class="fas fa-calendar-check"></i> Available now
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="outline-btn view-profile" data-guide="nimal">View Profile</a>
-                                    <a href="#" class="primary-btn contact-guide" data-guide="nimal">Contact</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Guide 3 -->
-                    <div class="col-md-6">
-                        <div class="guide-card">
-                            <div class="guide-img">
-                                <img src="/api/placeholder/400/320" alt="Tour Guide">
-                                <div class="experience-badge">7+ Years Experience</div>
-                                <div class="guide-verified">Verified</div>
-                            </div>
-                            <div class="guide-info">
-                                <h5 class="guide-name">Kumari Silva</h5>
-                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Galle, Sri Lanka</p>
-
-                                <div class="guide-short-info">
-                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 6</div>
-                                    <div class="info-item"><i class="fas fa-check-circle"></i> 98 Tours</div>
-                                </div>
-
-                                <div class="guide-languages">
-                                    <span class="language-tag">English</span>
-                                    <span class="language-tag">French</span>
-                                </div>
-
-                                <div class="guide-expertise">
-                                    <span class="expertise-tag">History</span>
-                                    <span class="expertise-tag">Culture</span>
-                                    <span class="expertise-tag">Food</span>
-                                </div>
-
-                                <div class="guide-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <span class="text-muted ml-1">(62 reviews)</span>
-                                </div>
-
-                                <div class="guide-price">
-                                    From $60 per day
-                                </div>
-
-                                <div class="guide-availability not-available">
-                                    <i class="fas fa-calendar-times"></i> Available from next week
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="outline-btn view-profile" data-guide="kumari">View Profile</a>
-                                    <a href="#" class="primary-btn contact-guide" data-guide="kumari">Contact</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Guide 4 -->
-                    <div class="col-md-6">
-                        <div class="guide-card">
-                            <div class="guide-img">
-                                <img src="/api/placeholder/400/320" alt="Tour Guide">
-                                <div class="experience-badge">2+ Years Experience</div>
-                                <div class="guide-verified">Verified</div>
-                            </div>
-                            <div class="guide-info">
-                                <h5 class="guide-name">Ranjith Fernando</h5>
-                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Sigiriya, Sri Lanka</p>
-
-                                <div class="guide-short-info">
-                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 12</div>
-                                    <div class="info-item"><i class="fas fa-check-circle"></i> 31 Tours</div>
-                                </div>
-
-                                <div class="guide-languages">
-                                    <span class="language-tag">English</span>
-                                    <span class="language-tag">Russian</span>
-                                    <span class="language-tag">Hindi</span>
-                                </div>
-
-                                <div class="guide-expertise">
-                                    <span class="expertise-tag">Adventure</span>
-                                    <span class="expertise-tag">Wildlife</span>
-                                    <span class="expertise-tag">Photography</span>
-                                </div>
-
-                                <div class="guide-rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="text-muted ml-1">(19 reviews)</span>
-                                </div>
-
-                                <div class="guide-price">
-                                    From $40 per day
-                                </div>
-
-                                <div class="guide-availability">
-                                    <i class="fas fa-calendar-check"></i> Available now
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <a href="#" class="outline-btn view-profile" data-guide="ranjith">View Profile</a>
-                                    <a href="#" class="primary-btn contact-guide" data-guide="ranjith">Contact</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="pagination-container">
-                    <ul class="pagination">
-                        <li><a href="#" class="active">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i></a></li>
-                    </ul>
+                <div class="certification-actions">
+                    <button type="button">✏️</button>
+                    <button type="button">🗑️</button>
                 </div>
             </div>
+        </div>
+
+        <div class="form-group">
+            <label>Add Certification</label>
+            <div class="upload-section">
+                <div class="upload-icon">📤</div>
+                <div class="upload-text">
+                    <p>Upload your certification documents</p>
+                    <span>Supported formats: PDF, JPG, PNG (Max size: 5MB)</span>
+                </div>
+                <button class="upload-button">Upload Files</button>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <i>📝</i>
+            <h2>Bio & Description</h2>
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio (Short introduction)</label>
+            <textarea id="bio" placeholder="A brief introduction about yourself" required></textarea>
+            <div class="hint">This short introduction will appear in search results (150 characters max)</div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Full Description</label>
+            <textarea id="description" placeholder="Describe your experience, expertise, and what makes you unique as a guide" required></textarea>
+            <div class="hint">Tell travelers why they should choose you as their guide</div>
+        </div>
+
+        <div class="section-title">
+            <i>📸</i>
+            <h2>Profile Photo</h2>
+        </div>
+
+        <div class="form-group">
+            <div class="upload-section">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">
+                    <p>Upload your profile photo</p>
+                    <span>Recommended size: 500x500px (Max size: 2MB)</span>
+                </div>
+                <button class="upload-button">Choose Photo</button>
+            </div>
+        </div>
+
+        <div class="submit-section">
+            <button type="button" class="preview-profile">Preview Profile</button>
+            <button type="submit" class="submit-button">Submit Application</button>
         </div>
     </div>
 </div>
 
-<!-- Guide Profile Modal -->
-<div class="modal fade" id="guideProfileModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Guide Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="/api/placeholder/400/320" alt="Guide" class="img-fluid rounded">
-                        <div class="mt-3">
-                            <div class="guide-rating mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="text-muted ml-1">(42)</span>
-                            </div>
-                            <p><i class="fas fa-map-marker-alt text-primary mr-2"></i> Colombo, Sri Lanka</p>
-                            <p><i class="fas fa-calendar-check text-success mr-2"></i> Available this week</p>
-                            <p><i class="fas fa-clock text-primary mr-2"></i> Response time: 2 hours</p>
-                            <p><i class="fas fa-users text-primary mr-2"></i> Groups up to 10</p>
-                            <p><i class="fas fa-check-circle text-primary mr-2"></i> 75 Tours completed</p>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <h4>Saman Perera</h4>
-                        <p class="text-muted">Professional Tour Guide • 5+ Years Experience</p>
-
-                        <h5 class="mt-4">About Me</h5>
-                        <p>Passionate about sharing the beauty and culture of Sri Lanka with visitors from around the world. With over 5 years of experience as a professional guide, I specialize in historical, cultural, and culinary tours across the island. I speak fluent English, Japanese, and French.</p>
-
-                        <h5 class="mt-4">Certifications</h5>
-                        <p><i class="fas fa-certificate text-warning mr-2"></i> Certified by Sri Lanka Tourism Development Authority</p>
-                        <p><i class="fas fa-certificate text-warning mr-2"></i> First Aid Certified</p>
-                        <p><i class="fas fa-certificate text-warning mr-2"></i> Cultural Heritage Preservation Training</p>
-
-                        <h5 class="mt-4">Languages</h5>
-                        <div class="guide-languages mb-3">
-                            <span class="language-tag">English (Fluent)</span>
-                            <span class="language-tag">Japanese (Fluent)</span>
-                            <span class="language-tag">French (Intermediate)</span>
-                        </div>
-
-                        <h5 class="mt-4">Expertise</h5>
-                        <div class="guide-expertise mb-3">
-                            <span class="expertise-tag">History</span>
-                            <span class="expertise-tag">Culture</span>
-                            <span class="expertise-tag">Food</span>
-                            <span class="expertise-tag">Architecture</span>
-                            <span class="expertise-tag">Local Customs</span>
-                        </div>
-
-                        <h5 class="mt-4">Rates</h5>
-                        <p><strong>Half Day (4 hours):</strong> $50</p>
-                        <p><strong>Full Day (8 hours):</strong> $90</p>
-                        <p><strong>Multi-Day:</strong> Contact for custom pricing</p>
-                        <p class="text-muted small">* Rates may vary based on group size and specific requirements</p>
-                    </div>
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">TourismPlatform</div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                    <a href="#">Contact</a>
                 </div>
-
-                <hr>
-
-                <h5 class="mt-4">Recent Reviews</h5>
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="review-author">Maria Johnson</div>
-                        <div class="review-date">February 2025</div>
-                    </div>
-                    <div class="review-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p>Saman was an incredible guide! His knowledge of Sri Lankan history and culture made our trip unforgettable. He took us to hidden spots that weren't in any guidebook and was very accommodating with our schedule. Highly recommend!</p>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">Safety</a>
+                    <a href="#">Cancellation Options</a>
+                    <a href="#">COVID-19 Resources</a>
                 </div>
-
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="review-author">Takashi Yamamoto</div>
-                        <div class="review-date">January 2025</div>
-                    </div>
-                    <div class="review-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <p>I was impressed with Saman's Japanese language skills. Being able to communicate in my native language made the tour much more enjoyable. He's very knowledgeable about Sri Lankan cuisine and took us to some amazing local restaurants.</p>
-                </div>
-
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="review-author">Sophie Dupont</div>
-                        <div class="review-date">December 2024</div>
-                    </div>
-                    <div class="review-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <p>Notre visite à Colombo avec Saman était excellente. Il parle très bien français et connaît parfaitement l'histoire coloniale. Je recommande vivement ses services pour tous les francophones!</p>
+                <div class="footer-column">
+                    <h3>Guides</h3>
+                    <a href="#">Become a Guide</a>
+                    <a href="#">Resources</a>
+                    <a href="#">Community</a>
+                    <a href="#">Guide Stories</a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn primary-btn">Contact Guide</button>
+            <div class="footer-social">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+                <a href="#">LinkedIn</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 TourismPlatform. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
             </div>
         </div>
     </div>
-</div>
-<!-- Contact Guide Modal -->
-<div class="modal fade" id="contactGuideModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Contact Guide</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="contact-name">Your Name</label>
-                        <input type="text" class="form-control" id="contact-name" placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-email">Email Address</label>
-                        <input type="email" class="form-control" id="contact-email" placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-phone">Phone Number</label>
-                        <input type="tel" class="form-control" id="contact-phone" placeholder="Enter your phone number">
-                    </div>
-                    <div class="form-group">
-                        <label for="tour-date">Preferred Tour Date</label>
-                        <input type="date" class="form-control" id="tour-date">
-                    </div>
-                    <div class="form-group">
-                        <label for="group-size-contact">Group Size</label>
-                        <select class="form-control" id="group-size-contact">
-                            <option value="1-2">1-2 People</option>
-                            <option value="3-5">3-5 People</option>
-                            <option value="6-10">6-10 People</option>
-                            <option value="10+">More than 10</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="tour-duration">Tour Duration</label>
-                        <select class="form-control" id="tour-duration">
-                            <option value="half-day">Half Day (4 hours)</option>
-                            <option value="full-day">Full Day (8 hours)</option>
-                            <option value="multi-day">Multiple Days</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea class="form-control" id="message" rows="4" placeholder="Describe what you're looking for in this tour..."></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn primary-btn">Send Request</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- JavaScript to make the modals work -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // View Profile Button Click
-        $('.view-profile').click(function(e) {
-            e.preventDefault();
-            $('#guideProfileModal').modal('show');
-        });
-
-        // Contact Guide Button Click
-        $('.contact-guide').click(function(e) {
-            e.preventDefault();
-            $('#contactGuideModal').modal('show');
-        });
-
-        // Filter pill click handling
-        $('.filter-pill').click(function() {
-            $(this).toggleClass('active');
-        });
-    });
-</script>
+</footer>
 </body>
 </html>
