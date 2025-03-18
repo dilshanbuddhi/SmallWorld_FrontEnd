@@ -193,14 +193,34 @@ form {
     color: #fff;
 }
 
+.input-field select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff; /* Text color */
+    font-size: 16px;
+}
+.input-field select option {
+    background: transparent;
+    border: none;
+    outline: none; /* Transparent background */
+    color: #000000; /* Text color */
+}
+
 .input-field input:focus~label,
 .input-field input:valid~label {
+    top: -8px;
+    font-size: 12px;
+    color: #fff;
+    transform: translateY(0);
+}
+.input-field select:focus~label,
+.input-field select:not([value=""])~label {
     top: -5px;
     font-size: 12px;
     color: #fff;
     transform: translateY(0);
 }
-
 /* Remember me and forgot password */
 .forget {
     display: flex;
