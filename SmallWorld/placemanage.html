@@ -319,39 +319,52 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="addPlace" method="post">
+                <!-- Add enctype for file uploads -->
+                <form action="addPlace" method="post" enctype="multipart/form-data" id="addPlaceForm">
                     <div class="mb-3">
                         <label for="placename" class="form-label">Place Name</label>
                         <input name="name" type="text" class="form-control" id="placename" required>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="categoryID" required>
+                            <option value="historical">Historical</option>
+                            <option value="fun">Fun</option>
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="placedesc" class="form-label">Description</label>
                         <textarea name="description" class="form-control" id="placedesc" required></textarea>
                     </div>
+
                     <div class="mb-3">
                         <label for="placelocation" class="form-label">Location</label>
                         <input name="location" type="text" class="form-control" id="placelocation" required>
                     </div>
+
                     <div class="mb-3">
-                        <label for="lattitude" class="form-label">Latitude</label>
-                        <input name="location" type="number" class="form-control" id="lattitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="Longitude" class="form-label">Longitude</label>
-                        <input name="location" type="number" class="form-control" id="Longitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="placeimages" class="form-label">Upload Images</label>
-                        <input name="images" type="file" class="form-control" id="placeimages" multiple accept="image/*">
+                        <label for="latitude" class="form-label">Latitude</label>
+                        <input name="latitude" type="number" step="any" class="form-control" id="latitude" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Add Place</button>
+                    <div class="mb-3">
+                        <label for="longitude" class="form-label">Longitude</label>
+                        <input name="longitude" type="number" step="any" class="form-control" id="longitude" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="placeimages" class="form-label">Upload Images</label>
+                        <input name="imageFiles" type="file" class="form-control" id="placeimages" multiple accept="image/*">
+                    </div>
+
+                    <button type="button" id="submitPlace" class="btn btn-primary">Add Place</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Edit Place Modal -->
 <div class="modal fade" id="editPlaceModal" tabindex="-1" aria-labelledby="editPlaceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -418,6 +431,113 @@
 <script src="JQ/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the form and submit button elements
+        const form = document.getElementById('addPlaceForm');
+        const submitButton = document.getElementById('submitPlace');
+
+        if (!form || !submitButton) {
+            console.error('Form or submit button not found');
+            return;
+        }
+
+        // Add click event listener to the submit button
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Basic form validation
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!valid) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            // Create FormData object
+            const formData = new FormData(form);
+
+            // Get files from file input
+            const fileInput = document.getElementById('placeimages');
+            if (fileInput && fileInput.files.length > 0) {
+                // Remove any existing files from formData (in case formData already contains them)
+                formData.delete('imageFiles');
+
+                // Add each file to formData
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('imageFiles', fileInput.files[i]);
+                }
+            }
+
+            // Show loading indicator
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+
+            // Send AJAX request
+            fetch('http://localhost:8080/api/v1/place/save', {
+                headers: {
+                    "Authorization": "Bearer " +'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ'
+                },
+                method: 'POST',
+                body: formData,
+                // Don't set Content-Type header - the browser will set it with the boundary parameter
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Server returned ' + response.status + ': ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+
+                    // Reset form
+                    form.reset();
+
+                    // Close modal after successful submission
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addPlaceModal'));
+                    if (modal) {
+                        modal.hide();
+                    } else {
+                        // If modal isn't initialized with Bootstrap, try to close it differently
+                        const modalElement = document.getElementById('addPlaceModal');
+                        if (modalElement) {
+                            modalElement.classList.remove('show');
+                            modalElement.style.display = 'none';
+                            document.body.classList.remove('modal-open');
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) backdrop.remove();
+                        }
+                    }
+
+                    // Show success message
+                    alert('Place added successfully!');
+
+                    // Optionally refresh the page or update the UI
+                    // location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to add place: ' + error.message);
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Add Place';
+                });
+        });
+    });
+</script>
 <script>
     // Add an event listener to the logout link
     document.getElementById("logoutLink").addEventListener("click", function(event) {
