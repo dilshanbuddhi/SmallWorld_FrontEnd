@@ -277,32 +277,17 @@
                     <tr>
                         <th>Place ID</th>
                         <th>Name</th>
+                        <th>Category</th>
                         <th>Description</th>
                         <th>Location</th>
+                        <th>Longitude</th>
+                        <th>Latitude</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Place Name</td>
-                        <td>Beautiful place description</td>
-                        <td>Location XYZ</td>
-                        <td><img src="place.jpg" alt="Place Image" width="100"></td>
-                        <td>
-                            <button id="edit-btn" class="btn btn-sm btn-success"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editPlaceModal">
-                                <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button id="delete-btn" class="btn btn-sm btn-danger"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deletePlaceModal">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </td>
-                    </tr>
+                    <tbody id="placeBody">
+
                     </tbody>
                 </table>
             </div>
@@ -320,7 +305,6 @@
             </div>
             <div class="modal-body">
                 <!-- Add enctype for file uploads -->
-                <form action="addPlace" method="post" enctype="multipart/form-data" id="addPlaceForm">
                     <div class="mb-3">
                         <label for="placename" class="form-label">Place Name</label>
                         <input name="name" type="text" class="form-control" id="placename" required>
@@ -329,8 +313,7 @@
                     <div class="mb-3">
                         <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" name="categoryID" required>
-                            <option value="historical">Historical</option>
-                            <option value="fun">Fun</option>
+                            <option value="id">name</option>
                         </select>
                     </div>
 
@@ -359,8 +342,7 @@
                         <input name="imageFiles" type="file" class="form-control" id="placeimages" multiple accept="image/*">
                     </div>
 
-                    <button type="button" id="submitPlace" class="btn btn-primary">Add Place</button>
-                </form>
+                    <button  id="savePlaceBtn" class="btn btn-primary">Add Place</button>
             </div>
         </div>
     </div>
@@ -599,6 +581,8 @@
 
 </script>
 
+<script src="JQ/jquery-3.7.1.min.js"></script>
+<script src="js/placemanage.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
