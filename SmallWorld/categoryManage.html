@@ -271,7 +271,7 @@
                     </tr>
                     </thead>
 
-
+<tbody>
                     <tr>
                         <td><%= category.getId() %></td>
                         <td><%= category.getName() %></td>
@@ -293,6 +293,7 @@
                             </button>
                         </td>
                     </tr>
+</tbody>
                 </table>
             </div>
         </div>
@@ -300,7 +301,7 @@
 </section>
 
 <!-- Add Category Modal -->
-<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="addCategoryModal"  aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -308,7 +309,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="saveCategory" method="post">
                     <div class="mb-3">
                         <label for="categoryName" class="form-label">Category Name</label>
                         <input name="name" type="text" class="form-control" id="categoryName" required>
@@ -317,8 +317,7 @@
                         <label for="categoryDescription" class="form-label">Description</label>
                         <textarea name="description" class="form-control" id="categoryDescription" rows="3"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Category</button>
-                </form>
+                    <button id="saveCategoryBtn" class="btn btn-primary">Add Category</button>
             </div>
         </div>
     </div>
@@ -333,7 +332,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="updateCategory" method="post">
                     <div class="mb-3">
                         <label for="editCategoryId" class="form-label">Category Id</label>
                         <input name="id" type="text" class="form-control" id="editCategoryId"  required>
@@ -347,8 +345,7 @@
                         <label for="editCategoryDescription" class="form-label">Description</label>
                         <textarea name="description" class="form-control" id="editCategoryDescription" rows="3">All types of pet food products</textarea>
                     </div>
-                    <button type="submit" class="btn btn-success">Update Category</button>
-                </form>
+                    <button id="editCategoryBtn" class="btn btn-success">Update Category</button>
             </div>
         </div>
     </div>
@@ -367,11 +364,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteCategoryForm" action="deleteCategory" method="post">
                     <!-- Hidden input to store the category ID -->
                     <input type="hidden" id="deleteCategoryId" name="id">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                    <button id="deleteCategoryBtn" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </div>
@@ -385,6 +380,7 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="JQ/jquery-3.7.1.min.js"></script>
+<script src="js/placeCategory.js"></script>
 
 <script>
     // Get the edit modal element
