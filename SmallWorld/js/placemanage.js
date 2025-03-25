@@ -93,43 +93,87 @@ $(document).ready(function() {
         e.preventDefault(); // Prevent the default form submission
 
         // Create FormData to append the form values
-        var formData = new FormData();
-        formData.append('name', $('#placename').val());
-        formData.append('categoryID', $('#category').val());
-        formData.append('description', $('#placedesc').val());
-        formData.append('location', $('#placelocation').val());
-        formData.append('latitude', $('#latitude').val());
-        formData.append('longitude', $('#longitude').val());
+        var formData1 = new FormData();
+        formData1.append('name', $('#placename').val());
+        formData1.append('categoryID', $('#category').val());
+        formData1.append('description', $('#placedesc').val());
+        formData1.append('location', $('#placelocation').val());
+        formData1.append('latitude', $('#latitude').val());
+        formData1.append('longitude', $('#longitude').val());
+
+
+        var imageFiles = $('#placeimages')[0].files; // Use 'files' to get the FileList object
+
+        if (imageFiles.length === 0) {
+            alert('Please select some images to upload.');
+            return;
+        }
+
+        var uploadedUrls = []; // Array to store the uploaded image URLs
+
+        // Loop through the files and upload each one
+        for (var i = 0; i < imageFiles.length; i++) {
+            var formData = new FormData();
+            formData.append('file', imageFiles[i]); // Append each file individually
+            formData.append('upload_preset', 'smallworld'); // Replace with your actual preset
+            formData.append('cloud_name', 'dtvizkvur'); // Replace with your Cloudinary cloud name
+
+            // Make the AJAX request to Cloudinary's API
+            $.ajax({
+                url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
+                type: 'POST',
+                data: formData,
+                processData: false, // Stop jQuery from processing the data
+                contentType: false, // Prevent jQuery from setting contentType
+                success: function(response) {
+                    // Store the uploaded URL
+                    uploadedUrls.push(response.url);
+                    console.log('Uploaded Successfully:', response.url);
+
+                    // If all files have been processed
+                    if (uploadedUrls.length === imageFiles.length) {
+                        console.log('All images uploaded:', uploadedUrls);
+                        formData1.append('imageFiles', uploadedUrls);
+                        $.ajax({
+                            url: 'http://localhost:8080/api/v1/place/save',
+                            type: 'POST',
+                            headers: {
+                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+                            },
+                            data: formData1,
+                            processData: false, // Important to prevent jQuery from processing the data
+                            contentType: false, // Important to allow FormData to be sent correctly
+                            success: function(response) {
+                                console.log('Success:', response);
+                                // Handle success (e.g., show a success message or close modal)
+                                uploadedUrls = [];
+                                alert('Place added successfully!');
+                                $('#addPlaceModal').modal('hide');
+                                getAll();// Hide the modal after submission
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error:', error);
+                                // Handle error (e.g., show an error message)
+                                alert('There was an error adding the place.');
+                            }
+                        });
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Upload Failed:', error);
+                    alert('There was an error uploading one of the images.');
+                }
+            });
+        }
+
 
         // Get image files and append them
-        var imageFiles = $('#placeimages')[0].files;
+/*        var imageFiles = $('#placeimages')[0].files;
         $.each(imageFiles, function(i, file) {
             formData.append('imageFiles', file);
-        });
+        });*/
 
-        // Send the data using jQuery's Ajax
-        $.ajax({
-            url: 'http://localhost:8080/api/v1/place/save',
-            type: 'POST',
-            headers: {
-                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
-            },
-            data: formData,
-            processData: false, // Important to prevent jQuery from processing the data
-            contentType: false, // Important to allow FormData to be sent correctly
-            success: function(response) {
-                console.log('Success:', response);
-                // Handle success (e.g., show a success message or close modal)
-                alert('Place added successfully!');
-                $('#addPlaceModal').modal('hide');
-                getAll();// Hide the modal after submission
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                // Handle error (e.g., show an error message)
-                alert('There was an error adding the place.');
-            }
-        });
     });
 });
 
