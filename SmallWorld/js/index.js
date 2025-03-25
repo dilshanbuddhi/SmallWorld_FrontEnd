@@ -42,7 +42,7 @@ function getPlaces() {
                                                 <i class="far fa-star"></i>
                                                 <span class="text-muted ml-1">(128)</span>
                                             </div>
-                                            <a href="#" class="outline-btn">View Details</a>
+                                            <a href="placeDetail.html?id=${place.id}" class="outline-btn">View Details</a>
                                         </div>
                                     </div>
                                 </div>
