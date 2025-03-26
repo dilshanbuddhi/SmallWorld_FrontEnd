@@ -316,13 +316,13 @@
             <div class="destination-container row">
                 <!-- Sidebar -->
                 <div class="col-lg-3 sidebar">
-                    <h2 class="text-2xl font-bold mb-6">Ella Rock</h2>
+                    <h2 class="text-2xl font-bold mb-6" id="place-name">Ella Rock</h2>
 
                     <div class="icon-box">
                         <i data-feather="tag" class="icon" size="32"></i>
                         <div>
                             <h4 class="font-semibold">Category</h4>
-                            <p class="text-sm text-gray-600">Beach</p>
+                            <p class="text-sm text-gray-600" id="category">Beach</p>
                         </div>
                     </div>
                     <!-- Location Details -->
@@ -331,7 +331,7 @@
                         <i data-feather="map-pin" class="icon" size="32"></i>
                         <div>
                             <h4 class="font-semibold">Location</h4>
-                            <p class="text-sm text-gray-600">Central Highlands, Sri Lanka</p>
+                            <p class="text-sm text-gray-600" id="place-location">Central Highlands, Sri Lanka</p>
                         </div>
                     </div>
 
@@ -339,8 +339,8 @@
                     <div class="icon-box">
                         <i data-feather="navigation" class="icon" size="32"></i>
                         <div>
-                            <h4 class="font-semibold">Elevation</h4>
-                            <p class="text-sm text-gray-600">1,030 meters above sea level</p>
+                            <h4 class="font-semibold">Travel Destination</h4>
+                            <p class="text-sm text-gray-600" id="destination">1,030 meters above sea level</p>
                         </div>
                     </div>
 
@@ -358,19 +358,41 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h4 class="font-semibold">Current Weather</h4>
-                                <p class="mb-2">24°C | Partly Cloudy</p>
+                                <p id="temperature" class="mb-2">Loading...</p>
                             </div>
-                            <i data-feather="cloud-rain" size="48"></i>
+                            <i data-feather="cloud-rain" size="48" id="weather-icon"></i>
                         </div>
                         <div class="mt-3">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <small>Humidity</small>
-                                    <p>65%</p>
+                                    <p id="humidity">Loading...</p>
                                 </div>
                                 <div>
                                     <small>Wind</small>
-                                    <p>12 km/h</p>
+                                    <p id="wind-speed">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weather-card mt-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4 class="font-semibold">Location</h4>
+                                <p id="location" class="mb-2">Loading...</p>
+                            </div>
+                            <i data-feather="wind" size="48" id="wind-icon"></i>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small>Sun Rice</small>
+                                    <p id="feel-like">Loading...</p> <!-- Corrected id to "wind-speed" -->
+                                </div>
+                                <div>
+                                    <small>Pressure</small>
+                                    <p id="pressure">Loading...</p>
                                 </div>
                             </div>
                         </div>
@@ -384,41 +406,15 @@
                         <h3 class="text-xl font-bold mb-4">Gallery</h3>
                         <div id="ellaRockGallery" class="carousel slide carousel-fade gallery-slider" data-bs-ride="carousel">
                             <!-- Indicators -->
-                            <div class="carousel-indicators">
+                            <div class="carousel-indicators" >
                                 <button type="button" data-bs-target="#ellaRockGallery" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                 <button type="button" data-bs-target="#ellaRockGallery" data-bs-slide-to="1" aria-label="Slide 2"></button>
                                 <button type="button" data-bs-target="#ellaRockGallery" data-bs-slide-to="2" aria-label="Slide 3"></button>
                             </div>
 
                             <!-- Carousel Items -->
-                            <div class="carousel-inner rounded-lg overflow-hidden">
-                                <div class="carousel-item active">
-                                    <img src="http://res.cloudinary.com/dtvizkvur/image/upload/v1742825511/ckfjh4ucbholh3ff6dpn.png"
-                                         class="d-block w-100 gallery-image"
-                                         alt="Ella Rock View 1"
-                                         style="max-height: 500px; object-fit: cover;">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5 class="text-white bg-dark bg-opacity-50 p-2 rounded">Panoramic Mountain View</h5>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="http://res.cloudinary.com/dtvizkvur/image/upload/v1742825511/ckfjh4ucbholh3ff6dpn.png"
-                                         class="d-block w-100 gallery-image"
-                                         alt="Ella Rock View 2"
-                                         style="max-height: 500px; object-fit: cover;">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5 class="text-white bg-dark bg-opacity-50 p-2 rounded">Lush Green Landscape</h5>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="http://res.cloudinary.com/dtvizkvur/image/upload/v1742825511/ckfjh4ucbholh3ff6dpn.png"
-                                         class="d-block w-100 gallery-image"
-                                         alt="Ella Rock View 3"
-                                         style="max-height: 500px; object-fit: cover;">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5 class="text-white bg-dark bg-opacity-50 p-2 rounded">Scenic Hiking Trail</h5>
-                                    </div>
-                                </div>
+                            <div class="carousel-inner rounded-lg overflow-hidden" id="image-set" >
+
                             </div>
 
                             <!-- Navigation Buttons -->
@@ -435,8 +431,8 @@
 
                     <!-- Destination Description -->
                     <div class="mb-6 pe-4">
-                        <h3 class="text-xl font-bold mb-4">About Ella Rock</h3>
-                        <p class="text-gray-600">
+                        <h3 class="text-xl font-bold mb-4">About <span id="about-name">Ella Rock</span></h3>
+                        <p class="text-gray-600" id="description">
                             Ella Rock is a breathtaking hiking destination in the Central Highlands of Sri Lanka.
                             Offering panoramic views of lush tea plantations, verdant forests, and distant mountain ranges,
                             it's a paradise for nature lovers and adventure enthusiasts.
@@ -456,70 +452,12 @@
         </div>
     </div>
 </div>
-
+<script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyUWwOdCOT8CeMdmIjABqoyO5YcXyvoUuRH&callback=initMap" async defer></script>
 <script src="JQ/jquery-3.7.1.min.js"></script>
 <script src="js/placeDetail.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyUWwOdCOT8CeMdmIjABqoyO5YcXyvoUuRH&callback=initMap" async defer></script>
 
-<script>
-    let map;
-    let directionsService;
-    let directionsRenderer;
-
-    // Initialize the map and direction services
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 10,
-            center: { lat: 6.7106, lng: 79.9074 }, // Default center at Panadura
-        });
-
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer();
-        directionsRenderer.setMap(map);
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const currentLocation = {
-                        lat: position.coords.latitude,  // Get the latitude
-                        lng: position.coords.longitude, // Get the longitude
-                    };
-
-                    // Call the function to calculate and display the route
-                    calculateAndDisplayRoute(currentLocation);
-                },
-                () => {
-                    alert("Error: Unable to fetch your location."); // Handle errors
-                }
-            );
-        } else {
-            alert("Error: Geolocation is not supported by this browser.");
-        }
-
-    }
-
-    // Function to calculate and display the route
-    function calculateAndDisplayRoute(currentLocation) {
-        const destination = { lat: 7.2906, lng: 80.6337 }; // Destination: Kandy
-
-        directionsService.route(
-            {
-                origin: currentLocation,    // User's current location
-                destination: destination,   // Destination (Kandy)
-                travelMode: google.maps.TravelMode.DRIVING,
-            },
-            (response, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    directionsRenderer.setDirections(response);
-                } else {
-                    alert("Directions request failed due to " + status);
-                }
-            }
-        );
-    }
-</script>
 
 <!-- Initialize Feather Icons -->
 <script>
