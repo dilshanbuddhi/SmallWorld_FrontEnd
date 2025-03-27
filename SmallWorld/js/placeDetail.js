@@ -78,8 +78,6 @@ let map;
 let directionsService;
 let directionsRenderer;
 
-// Initialize the map and direction services
-// Initialize the map and direction services
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
