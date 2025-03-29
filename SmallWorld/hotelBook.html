@@ -3,8 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
     <title>Hotel Booking | Tourism Platform</title>
     <style>
+
+        .hero-container {
+            margin-top: 36px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-text {
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .search-container {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .search-input {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-input label {
+            color: white;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .search-input input,
+        .search-input select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+            font-size: 1rem;
+        }
+
+        .search-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero-image {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image:hover img {
+            transform: rotateX(5deg) rotateY(-5deg) scale(1.05);
+        }
+
+
+        body {
+            font-family: 'Baloo 2', cursive;
+        }
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -20,7 +130,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /*
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            */
         }
 
         body {
@@ -49,22 +161,7 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-        }
 
-        .nav-links a {
-            margin-left: 20px;
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
 
         .user-actions {
             display: flex;
@@ -79,44 +176,7 @@
             font-size: 16px;
         }
 
-        .user-profile {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-left: 15px;
-        }
 
-        .search-container {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/api/placeholder/1200/400") center/cover;
-            padding: 50px 0;
-            color: white;
-        }
-
-        .search-box {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            padding: 25px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .search-box h2 {
-            color: var(--dark);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .search-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 15px;
-        }
 
         @media (max-width: 768px) {
             .search-form {
@@ -514,27 +574,141 @@
         .confirm-button:hover {
             background-color: #047857;
         }
+
+
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 20px 30px 20px;
+            display: flex
+        ;
+            align-items: center;
+            transition: 0.3s ease-out;
+            backdrop-filter: blur(8px) brightness(1.2);
+            -webkit-backdrop-filter: blur(8px) brightness(1.2);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            color: #000000;
+            font-size: 20px;
+            mask-image: linear-gradient(black 70%, transparent);
+            z-index: 1000;
+
+            @media (min-width: 640px) {
+                padding: 16px 50px 30px 50px;
+            }
+        }
+        nav.is-hidden {
+            transform: translateY(-100%);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+        .list {
+            list-style-type: none;
+            margin-left: auto;
+            display: none;
+            @media (min-width: 640px) {
+                display: flex;
+            }
+            li {
+                margin-left: 20px;
+            }
+        }
+        .search {
+            display: inline-block;
+            padding: 0;
+            font-size: 0;
+            background: none;
+            border: none;
+            margin-left: auto;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,.5));
+            @media (min-width: 640px) {
+                margin-left: 20px;
+            }
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 2rem;
+                height: 2rem;
+                background: center/1.3rem 1.3rem no-repeat url("data:image/svg+xml, %3Csvg%20xmlns=%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2015.17%2014.81%27%20width=%2715.17%27%20height=%2714.81%27%3E%3Cpath%20d=%27M6,.67A5.34,5.34,0,1,1,.67,6,5.33,5.33,0,0,1,6,.67ZM9.86,9.58l4.85,4.75Z%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-width=%271.33%27%2F%3E%3C%2Fsvg%3E");
+            }
+        }
+
+        .join-btn {
+
+            padding: 2px 24px;
+            background-color: #874caf;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .join-btn:hover {
+            background-color: #45a049;
+        }
+        .menu {
+            display: inline-block;
+            padding: 0;
+            font-size: 0;
+            background: none;
+            border:  none;
+            margin-left: 20px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,.5));
+            &::before {
+                content: url("data:image/svg+xml, %3Csvg%20xmlns=%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2024.8%2018.92%27%20width=%2724.8%27%20height=%2718.92%27%3E%3Cpath%20d=%27M23.8,9.46H1m22.8,8.46H1M23.8,1H1%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-linecap=%27round%27%20stroke-width=%272%27%2F%3E%3C%2Fsvg%3E")
+            }
+            @media (min-width: 640px) {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
 <!-- Header -->
 <header>
-    <div class="container header-content">
-        <div class="logo">TourismPlatform</div>
-        <div class="nav-links">
-            <a href="#">Places</a>
-            <a href="#">Hotels</a>
-            <a href="#">Transport</a>
-            <a href="#">Guides</a>
-        </div>
-        <div class="user-actions">
-            <button>🔔</button>
-            <button>🌐 EN</button>
-            <div class="user-profile">T</div>
-        </div>
-    </div>
+    <nav>
+        <a href="#">No mask</a>
+        <ul class="list">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">User</a></li>
+            <li><a href="#">Place</a></li>
+            <li><a href="#">Hotel</a></li>
+            <li><i class="bi bi-person-plus" onclick="openModal()"></i>
+            </li>
+            <li> <a href="userProfile.html"><i class="fas fa-user-circle"></i></a>
+            </li>
+            <li><button class="join-btn" onclick="openRegModal()">Join</button></li>
+        </ul>
+        <button class="menu">Menu</button>
+    </nav>
 </header>
 
+
+<div class="hero-container">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1 class="hero-title">Discover Your Perfect Stay</h1>
+            <p class="hero-subtitle">Luxury accommodations tailored to your travel dreams. Explore, book, and experience the world like never before.</p>
+
+        </div>
+
+        <div class="hero-image">
+            <img src="img/3rd-tab.jpg" alt="Luxury Hotel Room">
+        </div>
+    </div>
+</div>
 <!-- Search Section -->
 
 <!-- Results Section -->
@@ -553,150 +727,9 @@
             </div>
         </div>
 
-        <div class="hotel-grid">
+        <div class="hotel-grid" id="hotel-cards">
             <!-- Hotel Card 1 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$120 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Bali Paradise Resort</h3>
-                    <div class="hotel-location">📍 Kuta, Bali - 2.3 km from center</div>
 
-                    <div class="hotel-features">
-                        <div class="feature">🏊‍♂️ Pool</div>
-                        <div class="feature">🍽️ Restaurant</div>
-                        <div class="feature">🅿️ Parking</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.8</span>
-                            <span class="rating-count">(423 reviews)</span>
-                        </div>
-                        <button class="book-button" onclick="openBookingModal()">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hotel Card 2 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$85 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Ubud Retreat</h3>
-                    <div class="hotel-location">📍 Ubud, Bali - 5.1 km from center</div>
-
-                    <div class="hotel-features">
-                        <div class="feature">🏊‍♂️ Pool</div>
-                        <div class="feature">🍹 Bar</div>
-                        <div class="feature">💆‍♀️ Spa</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.5</span>
-                            <span class="rating-count">(287 reviews)</span>
-                        </div>
-                        <button class="book-button">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hotel Card 3 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$210 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Beachfront Luxury Villa</h3>
-                    <div class="hotel-location">📍 Seminyak, Bali - 3.7 km from center</div>
-
-                    <div class="hotel-features">
-                        <div class="feature">🏖️ Beachfront</div>
-                        <div class="feature">🏊‍♂️ Private Pool</div>
-                        <div class="feature">🍽️ Restaurant</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.9</span>
-                            <span class="rating-count">(156 reviews)</span>
-                        </div>
-                        <button class="book-button">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hotel Card 4 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$95 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Tropical Garden Hotel</h3>
-                    <div class="hotel-location">📍 Denpasar, Bali - 1.8 km from center</div>
-
-                    <div class="hotel-features">
-                        <div class="feature">🏊‍♂️ Pool</div>
-                        <div class="feature">🍽️ Restaurant</div>
-                        <div class="feature">🚌 Airport Shuttle</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.2</span>
-                            <span class="rating-count">(342 reviews)</span>
-                        </div>
-                        <button class="book-button">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hotel Card 5 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$150 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Ocean View Resort</h3>
-                    <div class="hotel-location">📍 Nusa Dua, Bali - 8.2 km from center</div>
-
-                    <div class="hotel-features">
-                        <div class="feature">🌊 Ocean View</div>
-                        <div class="feature">🏊‍♂️ Infinity Pool</div>
-                        <div class="feature">💆‍♀️ Spa</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.7</span>
-                            <span class="rating-count">(218 reviews)</span>
-                        </div>
-                        <button class="book-button">Book Now</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hotel Card 6 -->
-            <div class="hotel-card">
-                <div class="hotel-image" style="background-image: url('/api/placeholder/400/200');"></div>
-                <div class="hotel-content">
-                    <div class="hotel-price">$75 <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ night</span></div>
-                    <h3 class="hotel-title">Bali Budget Inn</h3>
-                    <div class="hotel-location">📍 Kuta, Bali - 1.2 km from center</div>
-
-                    <div class="hotel-features">
-                        <div class="feature">🍽️ Breakfast</div>
-                        <div class="feature">🧹 Daily Cleaning</div>
-                        <div class="feature">🚌 Airport Shuttle</div>
-                    </div>
-
-                    <div class="hotel-rating">
-                        <div class="rating">
-                            <span class="rating-number">4.0</span>
-                            <span class="rating-count">(189 reviews)</span>
-                        </div>
-                        <button class="book-button">Book Now</button>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <button class="load-more">Load More Hotels</button>
@@ -707,12 +740,12 @@
 <div class="modal-overlay" id="bookingModal" style="display: none;">
     <div class="modal">
         <div class="modal-header">
-            <h2>Book Your Stay</h2>
+            <h2 id="card-test">Book Your Stay</h2>
             <button class="close-button" onclick="closeBookingModal()">×</button>
         </div>
         <div class="modal-content">
             <div class="hotel-detail">
-                <div class="detail-image" style="background-image: url('/api/placeholder/500/300');"></div>
+                <div class="detail-image" style="background-image: url('img/4th-big-item.jpg');"></div>
                 <div>
                     <h2>Bali Paradise Resort</h2>
                     <div class="hotel-location">📍 Kuta, Bali - 2.3 km from center</div>
@@ -720,7 +753,7 @@
                         <span class="rating-number">4.8</span>
                         <span class="rating-count">(423 reviews)</span>
                     </div>
-                    <p style="margin-top: 15px;">
+                    <p style="margin-top: 15px;" id="desc">
                         Experience the perfect blend of luxury and comfort at our beachfront resort. Enjoy stunning views of the ocean, top-notch amenities, and exceptional service during your stay.
                     </p>
                     <div class="hotel-features" style="margin-top: 15px;">
@@ -734,11 +767,11 @@
                 </div>
             </div>
 
-            <div class="room-selection">
-                <h3>Select Your Room</h3>
+            <div class="room-selection" id="room-cards">
+                <!--<h3>Select Your Room</h3>
                 <p>Check-in: March 15, 2025 — Check-out: March 18, 2025 — 3 nights</p>
-
-                <!-- Room Option 1 -->
+-->
+            <!--    &lt;!&ndash; Room Option 1 &ndash;&gt;
                 <div class="room-card">
                     <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
                     <div class="room-details">
@@ -758,7 +791,7 @@
                     </div>
                 </div>
 
-                <!-- Room Option 2 -->
+                &lt;!&ndash; Room Option 2 &ndash;&gt;
                 <div class="room-card">
                     <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
                     <div class="room-details">
@@ -780,8 +813,7 @@
                     </div>
                 </div>
 
-                <!-- Room Option 3 -->
-                <!-- Room Option 3 -->
+                &lt;!&ndash; Room Option 3 &ndash;&gt;
                 <div class="room-card">
                     <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
                     <div class="room-details">
@@ -802,7 +834,7 @@
                         <span class="price-period">per night</span>
                         <button class="select-button">Select</button>
                     </div>
-                </div>
+                </div>-->
             </div>
 
             <div class="booking-summary">
@@ -878,14 +910,10 @@
     </div>
 </div>
 
+<script src="JQ/jquery-3.7.1.min.js"></script>
+<script src="js/hotelBook.js"></script>
 <script>
-    function openBookingModal() {
-        document.getElementById('bookingModal').style.display = 'flex';
-    }
 
-    function closeBookingModal() {
-        document.getElementById('bookingModal').style.display = 'none';
-    }
 </script>
 </body>
 </html>
