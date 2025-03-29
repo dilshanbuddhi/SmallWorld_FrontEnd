@@ -7,7 +7,111 @@
 
     <title>Hotel Booking | Tourism Platform</title>
     <style>
+        /* Add these styles to your existing CSS */
 
+        /* Add these styles to your existing CSS */
+
+        .night-selector {
+            display: inline-flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            margin-left: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .night-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+
+        .night-btn:hover:not([disabled]) {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .night-btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #nights-count {
+            font-weight: bold;
+            margin: 0 5px;
+            color: var(--primary);
+        }
+
+        .selected-room {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .room-card .select-button {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .room-card.selected-room .select-button {
+            background-color: var(--secondary);
+        }
+
+        .booking-summary {
+            transition: all 0.3s ease;
+        }
+
+        .confirm-button[disabled] {
+            background-color: var(--gray);
+            cursor: not-allowed;
+        }
+
+        .room-card {
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .room-card.selected-room {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .confirm-button[disabled] {
+            background-color: var(--gray);
+            cursor: not-allowed;
+        }
+
+        .room-card .select-button {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .room-card.selected-room .select-button {
+            background-color: var(--secondary);
+        }
+
+        .booking-summary {
+            transition: all 0.3s ease;
+        }
         .hero-container {
             margin-top: 36px;
             min-height: 70vh;
@@ -768,73 +872,7 @@
             </div>
 
             <div class="room-selection" id="room-cards">
-                <!--<h3>Select Your Room</h3>
-                <p>Check-in: March 15, 2025 — Check-out: March 18, 2025 — 3 nights</p>
--->
-            <!--    &lt;!&ndash; Room Option 1 &ndash;&gt;
-                <div class="room-card">
-                    <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
-                    <div class="room-details">
-                        <h4>Standard Room</h4>
-                        <p>1 queen bed • 28m² • Garden view</p>
-                        <div class="room-features">
-                            <div class="room-feature">Free WiFi</div>
-                            <div class="room-feature">Breakfast included</div>
-                            <div class="room-feature">Air conditioning</div>
-                            <div class="room-feature">TV</div>
-                        </div>
-                    </div>
-                    <div class="room-price">
-                        <div class="price">$120</div>
-                        <span class="price-period">per night</span>
-                        <button class="select-button">Select</button>
-                    </div>
-                </div>
 
-                &lt;!&ndash; Room Option 2 &ndash;&gt;
-                <div class="room-card">
-                    <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
-                    <div class="room-details">
-                        <h4>Deluxe Ocean View</h4>
-                        <p>1 king bed • 35m² • Ocean view</p>
-                        <div class="room-features">
-                            <div class="room-feature">Free WiFi</div>
-                            <div class="room-feature">Breakfast included</div>
-                            <div class="room-feature">Air conditioning</div>
-                            <div class="room-feature">TV</div>
-                            <div class="room-feature">Mini bar</div>
-                            <div class="room-feature">Balcony</div>
-                        </div>
-                    </div>
-                    <div class="room-price">
-                        <div class="price">$165</div>
-                        <span class="price-period">per night</span>
-                        <button class="select-button">Select</button>
-                    </div>
-                </div>
-
-                &lt;!&ndash; Room Option 3 &ndash;&gt;
-                <div class="room-card">
-                    <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
-                    <div class="room-details">
-                        <h4>Family Suite</h4>
-                        <p>1 king bed + 2 single beds • 48m² • Ocean view</p>
-                        <div class="room-features">
-                            <div class="room-feature">Free WiFi</div>
-                            <div class="room-feature">Breakfast included</div>
-                            <div class="room-feature">Air conditioning</div>
-                            <div class="room-feature">TV</div>
-                            <div class="room-feature">Mini bar</div>
-                            <div class="room-feature">Balcony</div>
-                            <div class="room-feature">Separate living area</div>
-                        </div>
-                    </div>
-                    <div class="room-price">
-                        <div class="price">$220</div>
-                        <span class="price-period">per night</span>
-                        <button class="select-button">Select</button>
-                    </div>
-                </div>-->
             </div>
 
             <div class="booking-summary">
@@ -851,29 +889,6 @@
                     <div>Total</div>
                     <div>$544.50</div>
                 </div>
-
-                <div class="booking-form">
-                    <h4>Guest Information</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName">
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone">
-                        </div>
-                    </div>
 
                     <h4>Payment Method</h4>
                     <div class="payment-methods">

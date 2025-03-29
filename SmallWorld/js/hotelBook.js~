@@ -58,7 +58,7 @@ function openBookingModal(hotelIndex) {
                 <h3>Select Your Room</h3>
                 <div class="night-selector">
                     <button class="night-btn decrease-night" ${selectedRoom.nights <= 1 ? 'disabled' : ''}>-</button>
-                     <span id="nights-count">${selectedRoom.nights}</span> night${selectedRoom.nights !== 1 ? 's' : ''}
+                    // <span id="nights-count">${selectedRoom.nights}</span>
                     <button class="night-btn increase-night">+</button>
                 </div>
                 </p>

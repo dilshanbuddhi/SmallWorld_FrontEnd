@@ -645,7 +645,7 @@
                         url = response.url;
                         guideData.profile_photo = url;
 
-
+                        
                     }
                 })
             }
