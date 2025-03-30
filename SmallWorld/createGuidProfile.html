@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Guide Profile Creation</title>
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --text-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --border-color: #e9ecef;
+            --success-color: #38b000;
+            --error-color: #ef233c;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f0f2f5;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section-title {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            flex: 1 0 100%;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 768px) {
+            .form-group.half {
+                flex: 0 0 50%;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .required:after {
+            content: " *";
+            color: var(--error-color);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 3px solid var(--border-color);
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-preview-placeholder {
+            color: #adb5bd;
+            font-size: 48px;
+        }
+
+        .photo-upload-btn {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .photo-upload-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .languages-container, .certifications-container {
+            margin-top: 10px;
+        }
+
+        .language-select-wrapper, .certification-input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .language-select {
+            appearance: none;
+            padding-right: 30px;
+            background: white;
+        }
+
+        .language-select-wrapper:after {
+            content: "▼";
+            font-size: 12px;
+            color: #6c757d;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .language-tags, .certification-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .language-tag, .certification-tag {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .language-tag:hover, .certification-tag:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .language-tag span, .certification-tag span {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .proficiency-level, .issuer-text {
+            margin-left: 8px;
+            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn svg {
+            margin-left: 8px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Create Your Tour Guide Profile</h1>
+        <p>Fill in your details to join our network of professional guides</p>
+    </div>
+
+    <div class="form-container">
+        <form id="guide-form">
+            <div class="photo-upload">
+                <div class="photo-preview" id="photo-preview">
+                    <div class="photo-preview-placeholder">👤</div>
+                </div>
+                <label for="file-input" class="photo-upload-btn">Upload Profile Photo</label>
+                <input type="file" id="file-input" accept="image/*">
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">Personal Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name" class="required">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="phone" class="required">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (123) 456-7890" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address" class="required">Address</label>
+                        <input type="text" id="address" name="name" placeholder="Enter your addressfile" required>
+                    </div>
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="aboutme" class="required">about you</label>
+                        <textarea id="aboutme" cols="30" rows="10" style="width: 100%;"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="form-section-title">Professional Information</h2>
+
+                <div class="form-group">
+                    <label for="language-select" class="required">Languages</label>
+                    <div class="languages-container">
+                        <div class="language-select-wrapper">
+                            <select id="language-select" class="language-select">
+                                <option value="">Select a language</option>
+                                <option value="English">English</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="French">French</option>
+                                <option value="German">German</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Mandarin">Mandarin</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="Portuguese">Portuguese</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div id="other-language-input" style="display: none;" class="form-group">
+                            <input type="text" id="other-language" placeholder="Enter language">
+                        </div>
+
+                        <div class="language-select-wrapper">
+                            <select id="proficiency-select" class="language-select">
+                                <option value="">Select proficiency level</option>
+                                <option value="Native">Native</option>
+                                <option value="Fluent">Fluent</option>
+                                <option value="Advanced">Advanced</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Basic">Basic</option>
+                            </select>
+                        </div>
+
+                        <button type="button" id="add-language-btn" class="photo-upload-btn" style="margin-top: 10px;">Add Language</button>
+
+                        <div class="language-tags" id="language-tags"></div>
+                        <input type="hidden" id="languages" name="languages">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="experience" class="required">Years of Experience</label>
+                        <input type="number" id="experience" name="experience" min="0" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="certification-name">Certifications</label>
+                    <div class="certifications-container">
+                        <div class="certification-input-wrapper">
+                            <input type="text" id="certification-name" placeholder="Certification name (e.g., First Aid, Tour Guide License)">
+                        </div>
+
+                        <div class="certification-input-wrapper">
+                            <input type="text" id="certification-issuer" placeholder="Issuing organization (optional)">
+                        </div>
+
+                        <div class="certification-input-wrapper">
+                            <input type="text" id="certification-year" placeholder="Year issued (optional)">
+                        </div>
+
+                        <button type="button" id="add-certification-btn" class="photo-upload-btn" style="margin-top: 10px;">Add Certification</button>
+
+                        <div class="certification-tags" id="certification-tags"></div>
+                        <input type="hidden" id="certifications" name="certifications">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="price" class="required">Price per day</label>
+                        <input type="number" id="price" name="experience" min="0" placeholder="1000LKR" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="submit-btn">
+                    Create Profile
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="JQ/jquery-3.7.1.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Profile Photo Preview
+        const fileInput = document.getElementById('file-input');
+        const photoPreview = document.getElementById('photo-preview');
+
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    photoPreview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
+                }
+
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Languages
+        const languageSelect = document.getElementById('language-select');
+        const otherLanguageInput = document.getElementById('other-language-input');
+        const otherLanguage = document.getElementById('other-language');
+        const proficiencySelect = document.getElementById('proficiency-select');
+        const addLanguageBtn = document.getElementById('add-language-btn');
+        const languageTags = document.getElementById('language-tags');
+        const languagesHidden = document.getElementById('languages');
+
+        let languages = [];
+        let languageNames =[];
+
+        languageSelect.addEventListener('change', function() {
+            if (this.value === 'Other') {
+                otherLanguageInput.style.display = 'block';
+            } else {
+                otherLanguageInput.style.display = 'none';
+            }
+        });
+
+        addLanguageBtn.addEventListener('click', function() {
+            let language = languageSelect.value;
+            if (language === 'Other') {
+                language = otherLanguage.value.trim();
+            }
+
+            const proficiency = proficiencySelect.value;
+
+            if (language && proficiency) {
+                const languageData = {
+                    name: language,
+                    proficiency: proficiency
+                };
+
+                // Check if already exists
+                const exists = languages.some(lang =>
+                    lang.name === languageData.name &&
+                    lang.proficiency === languageData.proficiency
+                );
+
+                if (!exists) {
+                    addLanguageTag(languageData);
+
+                    // Reset selects
+                    languageSelect.value = '';
+                    proficiencySelect.value = '';
+                    otherLanguage.value = '';
+                    otherLanguageInput.style.display = 'none';
+                }
+            } else {
+                alert('Please select both a language and proficiency level');
+            }
+        });
+
+        function addLanguageTag(languageData) {
+            languages.push(languageData);
+            languageNames.push(languageData.name);
+
+            const tag = document.createElement('div');
+            tag.className = 'language-tag';
+            tag.innerHTML = `
+                    ${languageData.name}
+                    <span class="proficiency-level">${languageData.proficiency}</span>
+                    <span class="remove-tag">&times;</span>
+                `;
+
+            tag.querySelector('.remove-tag').addEventListener('click', function() {
+                removeLanguageTag(tag, languageData);
+            });
+
+            languageTags.appendChild(tag);
+            updateLanguagesHidden();
+        }
+
+        function removeLanguageTag(tag, languageData) {
+            languages = languages.filter(lang =>
+                !(lang.name === languageData.name && lang.proficiency === languageData.proficiency)
+            );
+            languageTags.removeChild(tag);
+            updateLanguagesHidden();
+        }
+
+        function updateLanguagesHidden() {
+            languagesHidden.value = JSON.stringify(languages);
+        }
+
+        // Certifications
+        const certificationName = document.getElementById('certification-name');
+        const certificationIssuer = document.getElementById('certification-issuer');
+        const certificationYear = document.getElementById('certification-year');
+        const addCertificationBtn = document.getElementById('add-certification-btn');
+        const certificationTags = document.getElementById('certification-tags');
+        const certificationsHidden = document.getElementById('certifications');
+
+        let certifications = [];
+        let singleCertifications = [];
+
+        addCertificationBtn.addEventListener('click', function() {
+            const name = certificationName.value.trim();
+            const issuer = certificationIssuer.value.trim();
+            const year = certificationYear.value.trim();
+
+            if (name) {
+                const certificationData = {
+                    name: name,
+                    issuer: issuer,
+                    year: year
+                };
+
+                // Check if already exists
+                const exists = certifications.some(cert =>
+                    cert.name === certificationData.name &&
+                    cert.issuer === certificationData.issuer &&
+                    cert.year === certificationData.year
+                );
+
+                if (!exists) {
+                    addCertificationTag(certificationData);
+
+                    // Reset inputs
+                    certificationName.value = '';
+                    certificationIssuer.value = '';
+                    certificationYear.value = '';
+                }
+            } else {
+                alert('Please enter a certification name');
+            }
+        });
+
+        function addCertificationTag(certificationData) {
+            certifications.push(certificationData);
+            singleCertifications.push(certificationData.name)
+
+            const tag = document.createElement('div');
+            tag.className = 'certification-tag';
+
+            let tagContent = certificationData.name;
+
+            // Add issuer if provided
+            if (certificationData.issuer) {
+                tagContent += `<span class="issuer-text">${certificationData.issuer}</span>`;
+            }
+
+            // Add year if provided
+            if (certificationData.year) {
+                tagContent += `<span class="issuer-text">${certificationData.year}</span>`;
+            }
+
+            tagContent += `<span class="remove-tag">&times;</span>`;
+
+            tag.innerHTML = tagContent;
+
+            tag.querySelector('.remove-tag').addEventListener('click', function() {
+                removeCertificationTag(tag, certificationData);
+            });
+
+            certificationTags.appendChild(tag);
+            updateCertificationsHidden();
+        }
+
+        function removeCertificationTag(tag, certificationData) {
+            certifications = certifications.filter(cert =>
+                !(cert.name === certificationData.name &&
+                    cert.issuer === certificationData.issuer &&
+                    cert.year === certificationData.year)
+            );
+            certificationTags.removeChild(tag);
+            updateCertificationsHidden();
+        }
+
+        function updateCertificationsHidden() {
+            certificationsHidden.value = JSON.stringify(certifications);
+        }
+
+        // Form Submission
+        const form = document.getElementById('guide-form');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate languages
+            if (languages.length === 0) {
+                alert('Please add at least one language');
+                return;
+            }
+
+            // Get file data
+            //const fileData = $('#file')[0].files[0];
+            const fileData = $('#file-input')[0].files[0];
+
+
+            // Create the guide object
+            const guideData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone_number: document.getElementById('phone').value,
+                address : document.getElementById('address').value,
+                about_me: document.getElementById('aboutme').value,
+                price : document.getElementById('price').value,
+                profile_image: null,
+                languages: languageNames,
+                years_experience: parseInt(document.getElementById('experience').value),
+                certifications: singleCertifications,
+                availability: "available"
+            };
+
+            var formimage = new FormData();
+            var url;
+            if (fileData) {
+                console.log("   file ekk thinwa" , fileData)
+                formimage.append("file", fileData);
+                formimage.append('upload_preset', 'smallworld'); // Replace with your actual preset
+                formimage.append('cloud_name', 'dtvizkvur');
+
+                $.ajax({
+                    url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
+                    type: 'POST',
+                    data: formimage,
+                    processData: false, // Stop jQuery from processing the data
+                    contentType: false,
+
+                    success : function (response){
+                        url = response.url;
+                        guideData.profile_image = url;
+
+                        $.ajax({
+                            url: 'http://localhost:8080/api/v1/guid/save',
+                            type: 'POST',
+                            headers: {
+                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzMzMzNjA0LCJleHAiOjE3NDQzNzA0MDR9.pvTaWycEl_iHVD9JtzCQeG2UbKxjVC8Qh4YM7U6h6L5_hZu1n5-iBHz4_Pf-0crL3TENSD59Dz69ddaO03-74Q"
+                            },
+                            data: JSON.stringify(guideData),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                console.log(response);
+                                //alert('Profile created successfully!');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                                alert('Profile creation failed. Please try again.');
+                            }
+                        });
+
+                    }
+                })
+            }
+
+            // Here you would normally send this data to a server
+            console.log('Guide Profile Data:', guideData);
+            alert('Profile created successfully!');
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

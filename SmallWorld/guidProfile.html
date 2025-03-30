@@ -3,693 +3,542 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tour Guide Profile Creation</title>
-
+    <title>Guide Profile</title>
     <style>
-        :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --text-color: #2b2d42;
-            --light-color: #f8f9fa;
-            --border-color: #e9ecef;
-            --success-color: #38b000;
-            --error-color: #ef233c;
-            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --border-radius: 12px;
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --background: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --border: #e5e7eb;
+            --radius: 12px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f0f2f5;
-            padding: 30px 20px;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: var(--secondary-color);
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-
-        .form-container {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--box-shadow);
-        }
-
-        .form-section {
-            margin-bottom: 40px;
-        }
-
-        .form-section-title {
-            font-size: 1.4rem;
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .form-row {
             display: flex;
-            flex-wrap: wrap;
-            margin: 0 -10px;
+            max-width: 1200px;
+            margin: 40px auto;
+            gap: 24px;
         }
 
-        .form-group {
-            margin-bottom: 25px;
-            flex: 1 0 100%;
-            padding: 0 10px;
+        .sidebar {
+            width: 280px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            position: sticky;
+            top: 40px;
+            height: fit-content;
         }
 
-        @media (min-width: 768px) {
-            .form-group.half {
-                flex: 0 0 50%;
-            }
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-color);
+        .logo svg {
+            margin-right: 12px;
         }
 
-        .required:after {
-            content: " *";
-            color: var(--error-color);
+        .sidebar h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 12px;
         }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
+        .nav-list {
+            list-style-type: none;
+            margin-bottom: 32px;
+        }
+
+        .nav-list li {
+            margin-bottom: 4px;
+        }
+
+        .nav-list li a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: all 0.2s ease;
         }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        .nav-list li a svg {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
         }
 
-        .photo-upload {
+        .nav-list li a:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-list li a.active {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .content {
+            flex-grow: 1;
+        }
+
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .edit-btn {
+            padding: 8px 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 32px;
+        }
+
+        .profile-picture {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 30px;
         }
 
-        .photo-preview {
-            width: 150px;
-            height: 150px;
+        .avatar {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background-color: #e9ecef;
+            background-color: #e0e7ff;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            margin-bottom: 15px;
-            border: 3px solid var(--border-color);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            border: 4px solid #e0e7ff;
+            position: relative;
         }
 
-        .photo-preview img {
+        .avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .photo-preview-placeholder {
-            color: #adb5bd;
-            font-size: 48px;
-        }
-
-        .photo-upload-btn {
-            background-color: white;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .photo-upload-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        .languages-container, .certifications-container {
-            margin-top: 10px;
-        }
-
-        .language-select-wrapper, .certification-input-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .language-select {
-            appearance: none;
-            padding-right: 30px;
-            background: white;
-        }
-
-        .language-select-wrapper:after {
-            content: "▼";
-            font-size: 12px;
-            color: #6c757d;
+        .avatar .camera-icon {
             position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
+            bottom: 0;
+            right: 0;
+            background-color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-picture h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 8px;
+            color: var(--text-primary);
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .detail-section {
+            margin-bottom: 28px;
+        }
+
+        .detail-section h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-section h4 svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            flex-grow: 1;
+        }
+
+        .tag {
+            background-color: #e0e7ff;
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .add-link {
+            color: var(--primary);
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 12px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .add-link svg {
+            margin-right: 6px;
+        }
+
+        .add-link:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
         }
 
         .language-tags, .certification-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .language-tag, .certification-tag {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s;
+            background-color: #e0e7ff;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 500;
         }
 
-        .language-tag:hover, .certification-tag:hover {
-            background-color: var(--secondary-color);
+        .certification-tag {
+            background-color: #f3e8ff;
+            color: #8b5cf6;
         }
 
-        .language-tag span, .certification-tag span {
-            margin-left: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .proficiency-level, .issuer-text {
-            margin-left: 8px;
-            font-size: 12px;
-            background-color: rgba(255, 255, 255, 0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .actions {
-            margin-top: 40px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+        .badge {
             display: inline-flex;
             align-items: center;
+            background-color: #ecfdf5;
+            color: #059669;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        .submit-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .badge svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
         }
 
-        .submit-btn svg {
-            margin-left: 8px;
+        .about-section {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 0 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .profile-info {
+                flex-direction: column;
+            }
+
+            .profile-picture {
+                margin-bottom: 24px;
+            }
+
+            .language-tags, .certification-tags {
+                flex-wrap: wrap;
+            }
         }
     </style>
-
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h1>Create Your Tour Guide Profile</h1>
-        <p>Fill in your details to join our network of professional guides</p>
-    </div>
+    <aside class="sidebar">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+            </svg>
+            AccuPro
+        </div>
 
-    <div class="form-container">
-        <form id="guide-form">
-            <div class="photo-upload">
-                <div class="photo-preview" id="photo-preview">
-                    <div class="photo-preview-placeholder">👤</div>
-                </div>
-                <label for="file-input" class="photo-upload-btn">Upload Profile Photo</label>
-                <input type="file" id="file-input" accept="image/*">
-            </div>
-
-            <div class="form-section">
-                <h2 class="form-section-title">Personal Information</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name" class="required">Full Name</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label for="email" class="required">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-                    </div>
-
-                    <div class="form-group half">
-                        <label for="phone" class="required">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+1 (123) 456-7890" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="address" class="required">Address</label>
-                        <input type="text" id="address" name="name" placeholder="Enter your addressfile" required>
-                    </div>
-                </div>
-                <div class="form-row">
-
-                    <div class="form-group">
-                        <label for="aboutme" class="required">about you</label>
-                        <textarea id="aboutme" cols="30" rows="10" style="width: 100%;"></textarea>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h2 class="form-section-title">Professional Information</h2>
-
-                <div class="form-group">
-                    <label for="language-select" class="required">Languages</label>
-                    <div class="languages-container">
-                        <div class="language-select-wrapper">
-                            <select id="language-select" class="language-select">
-                                <option value="">Select a language</option>
-                                <option value="English">English</option>
-                                <option value="Spanish">Spanish</option>
-                                <option value="French">French</option>
-                                <option value="German">German</option>
-                                <option value="Italian">Italian</option>
-                                <option value="Mandarin">Mandarin</option>
-                                <option value="Japanese">Japanese</option>
-                                <option value="Russian">Russian</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="Portuguese">Portuguese</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <div id="other-language-input" style="display: none;" class="form-group">
-                            <input type="text" id="other-language" placeholder="Enter language">
-                        </div>
-
-                        <div class="language-select-wrapper">
-                            <select id="proficiency-select" class="language-select">
-                                <option value="">Select proficiency level</option>
-                                <option value="Native">Native</option>
-                                <option value="Fluent">Fluent</option>
-                                <option value="Advanced">Advanced</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Basic">Basic</option>
-                            </select>
-                        </div>
-
-                        <button type="button" id="add-language-btn" class="photo-upload-btn" style="margin-top: 10px;">Add Language</button>
-
-                        <div class="language-tags" id="language-tags"></div>
-                        <input type="hidden" id="languages" name="languages">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label for="experience" class="required">Years of Experience</label>
-                        <input type="number" id="experience" name="experience" min="0" placeholder="0" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="certification-name">Certifications</label>
-                    <div class="certifications-container">
-                        <div class="certification-input-wrapper">
-                            <input type="text" id="certification-name" placeholder="Certification name (e.g., First Aid, Tour Guide License)">
-                        </div>
-
-                        <div class="certification-input-wrapper">
-                            <input type="text" id="certification-issuer" placeholder="Issuing organization (optional)">
-                        </div>
-
-                        <div class="certification-input-wrapper">
-                            <input type="text" id="certification-year" placeholder="Year issued (optional)">
-                        </div>
-
-                        <button type="button" id="add-certification-btn" class="photo-upload-btn" style="margin-top: 10px;">Add Certification</button>
-
-                        <div class="certification-tags" id="certification-tags"></div>
-                        <input type="hidden" id="certifications" name="certifications">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label for="price" class="required">Price per day</label>
-                        <input type="number" id="price" name="experience" min="0" placeholder="1000LKR" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button type="submit" class="submit-btn">
-                    Create Profile
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14"></path>
-                        <path d="M12 5l7 7-7 7"></path>
+        <h3>Account</h3>
+        <ul class="nav-list">
+            <li>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
                     </svg>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Guide Profile
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Activity
+                </a>
+            </li>
+        </ul>
+
+        <h3>Settings</h3>
+        <ul class="nav-list">
+            <li>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z"></path>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    Preferences
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Settings
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <div class="profile-card">
+            <div class="card-header">
+                <h2>Guide Profile</h2>
+                <button class="edit-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Edit Guide Profile
                 </button>
             </div>
-        </form>
-    </div>
+
+            <div class="profile-info">
+                <div class="profile-picture">
+                    <div class="avatar">
+                        <img src="https://i.pravatar.cc/300?img=17" alt="Guide Avatar">
+                        <div class="camera-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Sarah Williams</h3>
+                    <div class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Verified Guide
+                    </div>
+                </div>
+
+                <div class="user-details">
+                    <div class="detail-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Contact Information
+                        </h4>
+                        <div class="detail-item">
+                            <p>Email</p>
+                            <p>sarah.williams@example.com</p>
+                        </div>
+                        <div class="detail-item">
+                            <p>Phone</p>
+                            <p>+1 (555) 987-6543</p>
+                        </div>
+                        <div class="detail-item">
+                            <p>Location</p>
+                            <p>Portland, OR</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            About Me
+                        </h4>
+                        <div class="about-section">
+                            <p>Experienced tour guide with a passion for cultural history and outdoor adventures. I specialize in creating memorable experiences by sharing local knowledge and hidden gems off the beaten path. My goal is to provide personalized tours that cater to your interests while ensuring comfort and safety.</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            Experience & Qualifications
+                        </h4>
+                        <div class="detail-item">
+                            <p>Experience</p>
+                            <p>7.5 years</p>
+                        </div>
+                        <div class="detail-item">
+                            <p>Languages</p>
+                            <div class="language-tags">
+                                <span class="language-tag">English</span>
+                                <span class="language-tag">Spanish</span>
+                                <span class="language-tag">French</span>
+                                <span class="language-tag">Japanese</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <p>Certifications</p>
+                            <div class="certification-tags">
+                                <span class="certification-tag">Wilderness First Aid</span>
+                                <span class="certification-tag">Cultural Heritage Guide</span>
+                                <span class="certification-tag">Adventure Tourism Expert</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            Booking Information
+                        </h4>
+                        <div class="detail-item">
+                            <p>Rate</p>
+                            <p>$85/hour</p>
+                        </div>
+                        <div class="detail-item">
+                            <p>Availability</p>
+                            <p>Weekdays 9AM-6PM, Weekends 10AM-4PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
-
-<script src="JQ/jquery-3.7.1.min.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Profile Photo Preview
-        const fileInput = document.getElementById('file-input');
-        const photoPreview = document.getElementById('photo-preview');
-
-        fileInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    photoPreview.innerHTML = `<img src="${e.target.result}" alt="Profile Photo">`;
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-
-        // Languages
-        const languageSelect = document.getElementById('language-select');
-        const otherLanguageInput = document.getElementById('other-language-input');
-        const otherLanguage = document.getElementById('other-language');
-        const proficiencySelect = document.getElementById('proficiency-select');
-        const addLanguageBtn = document.getElementById('add-language-btn');
-        const languageTags = document.getElementById('language-tags');
-        const languagesHidden = document.getElementById('languages');
-
-        let languages = [];
-        let languageNames =[];
-
-        languageSelect.addEventListener('change', function() {
-            if (this.value === 'Other') {
-                otherLanguageInput.style.display = 'block';
-            } else {
-                otherLanguageInput.style.display = 'none';
-            }
-        });
-
-        addLanguageBtn.addEventListener('click', function() {
-            let language = languageSelect.value;
-            if (language === 'Other') {
-                language = otherLanguage.value.trim();
-            }
-
-            const proficiency = proficiencySelect.value;
-
-            if (language && proficiency) {
-                const languageData = {
-                    name: language,
-                    proficiency: proficiency
-                };
-
-                // Check if already exists
-                const exists = languages.some(lang =>
-                    lang.name === languageData.name &&
-                    lang.proficiency === languageData.proficiency
-                );
-
-                if (!exists) {
-                    addLanguageTag(languageData);
-
-                    // Reset selects
-                    languageSelect.value = '';
-                    proficiencySelect.value = '';
-                    otherLanguage.value = '';
-                    otherLanguageInput.style.display = 'none';
-                }
-            } else {
-                alert('Please select both a language and proficiency level');
-            }
-        });
-
-        function addLanguageTag(languageData) {
-            languages.push(languageData);
-            languageNames.push(languageData.name);
-
-            const tag = document.createElement('div');
-            tag.className = 'language-tag';
-            tag.innerHTML = `
-                    ${languageData.name}
-                    <span class="proficiency-level">${languageData.proficiency}</span>
-                    <span class="remove-tag">&times;</span>
-                `;
-
-            tag.querySelector('.remove-tag').addEventListener('click', function() {
-                removeLanguageTag(tag, languageData);
-            });
-
-            languageTags.appendChild(tag);
-            updateLanguagesHidden();
-        }
-
-        function removeLanguageTag(tag, languageData) {
-            languages = languages.filter(lang =>
-                !(lang.name === languageData.name && lang.proficiency === languageData.proficiency)
-            );
-            languageTags.removeChild(tag);
-            updateLanguagesHidden();
-        }
-
-        function updateLanguagesHidden() {
-            languagesHidden.value = JSON.stringify(languages);
-        }
-
-        // Certifications
-        const certificationName = document.getElementById('certification-name');
-        const certificationIssuer = document.getElementById('certification-issuer');
-        const certificationYear = document.getElementById('certification-year');
-        const addCertificationBtn = document.getElementById('add-certification-btn');
-        const certificationTags = document.getElementById('certification-tags');
-        const certificationsHidden = document.getElementById('certifications');
-
-        let certifications = [];
-        let singleCertifications = [];
-
-        addCertificationBtn.addEventListener('click', function() {
-            const name = certificationName.value.trim();
-            const issuer = certificationIssuer.value.trim();
-            const year = certificationYear.value.trim();
-
-            if (name) {
-                const certificationData = {
-                    name: name,
-                    issuer: issuer,
-                    year: year
-                };
-
-                // Check if already exists
-                const exists = certifications.some(cert =>
-                    cert.name === certificationData.name &&
-                    cert.issuer === certificationData.issuer &&
-                    cert.year === certificationData.year
-                );
-
-                if (!exists) {
-                    addCertificationTag(certificationData);
-
-                    // Reset inputs
-                    certificationName.value = '';
-                    certificationIssuer.value = '';
-                    certificationYear.value = '';
-                }
-            } else {
-                alert('Please enter a certification name');
-            }
-        });
-
-        function addCertificationTag(certificationData) {
-            certifications.push(certificationData);
-            singleCertifications.push(certificationData.name)
-
-            const tag = document.createElement('div');
-            tag.className = 'certification-tag';
-
-            let tagContent = certificationData.name;
-
-            // Add issuer if provided
-            if (certificationData.issuer) {
-                tagContent += `<span class="issuer-text">${certificationData.issuer}</span>`;
-            }
-
-            // Add year if provided
-            if (certificationData.year) {
-                tagContent += `<span class="issuer-text">${certificationData.year}</span>`;
-            }
-
-            tagContent += `<span class="remove-tag">&times;</span>`;
-
-            tag.innerHTML = tagContent;
-
-            tag.querySelector('.remove-tag').addEventListener('click', function() {
-                removeCertificationTag(tag, certificationData);
-            });
-
-            certificationTags.appendChild(tag);
-            updateCertificationsHidden();
-        }
-
-        function removeCertificationTag(tag, certificationData) {
-            certifications = certifications.filter(cert =>
-                !(cert.name === certificationData.name &&
-                    cert.issuer === certificationData.issuer &&
-                    cert.year === certificationData.year)
-            );
-            certificationTags.removeChild(tag);
-            updateCertificationsHidden();
-        }
-
-        function updateCertificationsHidden() {
-            certificationsHidden.value = JSON.stringify(certifications);
-        }
-
-        // Form Submission
-        const form = document.getElementById('guide-form');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Validate languages
-            if (languages.length === 0) {
-                alert('Please add at least one language');
-                return;
-            }
-
-            // Get file data
-            //const fileData = $('#file')[0].files[0];
-            const fileData = $('#file-input')[0].files[0];
-
-
-            // Create the guide object
-            const guideData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone_number: document.getElementById('phone').value,
-                address : document.getElementById('address').value,
-                about_me: document.getElementById('aboutme').value,
-                price : document.getElementById('price').value,
-                profile_image: null,
-                languages: languageNames,
-                years_experience: parseInt(document.getElementById('experience').value),
-                certifications: singleCertifications,
-                availability: "available"
-            };
-
-            var formimage = new FormData();
-            var url;
-            if (fileData) {
-                console.log("   file ekk thinwa" , fileData)
-                formimage.append("file", fileData);
-                formimage.append('upload_preset', 'smallworld'); // Replace with your actual preset
-                formimage.append('cloud_name', 'dtvizkvur');
-
-                $.ajax({
-                    url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
-                    type: 'POST',
-                    data: formimage,
-                    processData: false, // Stop jQuery from processing the data
-                    contentType: false,
-
-                    success : function (response){
-                        url = response.url;
-                        guideData.profile_image = url;
-
-                        $.ajax({
-                            url: 'http://localhost:8080/api/v1/guid/save',
-                            type: 'POST',
-                            headers: {
-                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
-                            },
-                            data: JSON.stringify(guideData),
-                            contentType: 'application/json',
-                            success: function (response) {
-                                console.log(response);
-                                //alert('Profile created successfully!');
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(error);
-                                alert('Profile creation failed. Please try again.');
-                            }
-                        });
-
-                    }
-                })
-            }
-
-            // Here you would normally send this data to a server
-            console.log('Guide Profile Data:', guideData);
-            alert('Profile created successfully!');
-        });
-    });
-
-
-
-</script>
 </body>
 </html>
