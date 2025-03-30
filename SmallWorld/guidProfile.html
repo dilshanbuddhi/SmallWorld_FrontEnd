@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tour Guide Profile Creation</title>
+
     <style>
         :root {
             --primary-color: #4361ee;
@@ -262,6 +263,7 @@
             margin-left: 8px;
         }
     </style>
+
 </head>
 <body>
 <div class="container">
@@ -298,6 +300,13 @@
                     <div class="form-group half">
                         <label for="phone" class="required">Phone Number</label>
                         <input type="tel" id="phone" name="phone" placeholder="+1 (123) 456-7890" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address" class="required">Address</label>
+                        <input type="text" id="address" name="name" placeholder="Enter your addressfile" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -405,6 +414,8 @@
         </form>
     </div>
 </div>
+
+<script src="JQ/jquery-3.7.1.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -611,16 +622,19 @@
             }
 
             // Get file data
-            const fileData = fileInput.files[0] ? fileInput.files[0].name : null;
+            //const fileData = $('#file')[0].files[0];
+            const fileData = $('#file-input')[0].files[0];
+
 
             // Create the guide object
             const guideData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone_number: document.getElementById('phone').value,
+                address : document.getElementById('address').value,
                 about_me: document.getElementById('aboutme').value,
                 price : document.getElementById('price').value,
-                profile_photo: null,
+                profile_image: null,
                 languages: languageNames,
                 years_experience: parseInt(document.getElementById('experience').value),
                 certifications: singleCertifications,
@@ -630,9 +644,10 @@
             var formimage = new FormData();
             var url;
             if (fileData) {
+                console.log("   file ekk thinwa" , fileData)
                 formimage.append("file", fileData);
-                formData.append('upload_preset', 'smallworld'); // Replace with your actual preset
-                formData.append('cloud_name', 'dtvizkvur');
+                formimage.append('upload_preset', 'smallworld'); // Replace with your actual preset
+                formimage.append('cloud_name', 'dtvizkvur');
 
                 $.ajax({
                     url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
@@ -643,8 +658,25 @@
 
                     success : function (response){
                         url = response.url;
-                        guideData.profile_photo = url;
+                        guideData.profile_image = url;
 
+                        $.ajax({
+                            url: 'http://localhost:8080/api/v1/guid/save',
+                            type: 'POST',
+                            headers: {
+                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+                            },
+                            data: JSON.stringify(guideData),
+                            contentType: 'application/json',
+                            success: function (response) {
+                                console.log(response);
+                                //alert('Profile created successfully!');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                                alert('Profile creation failed. Please try again.');
+                            }
+                        });
 
                     }
                 })
