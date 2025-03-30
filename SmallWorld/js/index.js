@@ -5,9 +5,7 @@ function getPlaces() {
         url: 'http://localhost:8080/api/v1/place/getAll',
         method: 'GET',
         dataType: 'json',
-        headers: {
-            Authorization: "Bearer " +"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
-        },
+
         success: function (data) {
             console.log(data);
             if (data.code === 200 && data.data) {

@@ -229,7 +229,7 @@
         <li><a href="#">User</a></li>
         <li><a href="#">Place</a></li>
         <li><a href="#">Hotel</a></li>
-        <li><i class="bi bi-person-plus" onclick="openModal()"></i>
+        <li id="loginIcon"><i class="bi bi-person-plus" onclick="openModal()"></i>
 </li>
         <li> <a href="userProfile.html"><i class="fas fa-user-circle"></i></a>
 </li>
@@ -283,11 +283,11 @@ forget popup
             <h2 id="login">Login</h2>
             <form action="#">
                 <div class="input-field">
-                    <input type="text" required>
+                    <input type="text" id="loginEmail" required>
                     <label>Enter your email</label>
                 </div>
                 <div class="input-field">
-                    <input type="password" required>
+                    <input type="password" id="loginPassword" required>
                     <label>Enter your password</label>
                 </div>
                 <div class="forget">
@@ -297,7 +297,7 @@ forget popup
                     </label>
                     <a href="#"  onclick="openForgetModal()">Forgot password?</a>
                 </div>
-                <button type="submit" class="formbtn">Log In</button>
+                <button id="loginBtn" class="formbtn">Log In</button>
                 <div class="register">
                     <p>Don't have an account? <a href="#">Register</a></p>
                 </div>
@@ -312,15 +312,15 @@ forget popup
             <h2>Registration</h2>
             <form action="#">
                 <div class="input-field">
-                    <input type="text" required>
+                    <input type="text" id="first_name" required>
                     <label>Enter your First Name</label>
                 </div>
                 <div class="input-field">
-                    <input type="text" required>
+                    <input type="text" id="last_name" required>
                     <label>Enter your Last Name</label>
                 </div>
                 <div class="input-field">
-                    <select  name="role" id="country" required>
+                    <select  name="role" id="country"  required>
                         <option value="Afghanistan"> </option>
                         <option value="Afghanistan">Afghanistan</option>
                         <option value="Åland Islands">Åland Islands</option>
@@ -570,14 +570,14 @@ forget popup
                     <label for="country">country</label>
                 </div>
                 <div class="input-field">
-                    <input type="email" required>
+                    <input type="email" id="reg_email" required>
                     <label>Enter your email</label>
                 </div>
                 <div class="input-field">
-                    <input type="password" required>
+                    <input type="password" id="reg_password" required>
                     <label>Enter your password</label>
                 </div>
-                <button type="submit" id="registerBtn">Register</button>
+                <button id="registerBtn">Register</button>
                 <div class="register">
                     <p>Already have an account? <a href="#">Login</a></p>
                 </div>
@@ -600,6 +600,8 @@ forget popup
         <div class="container">
             <div class="first-content">
                 <h1>SMALLWORLD</h1>
+                <button id="testOne"> test</button>
+
                 <span><em>Travell</em> Sri Lanka</span>
                 <div class="primary-button">
                     <a href="#services">Discover More</a>
@@ -1569,6 +1571,7 @@ forget popup
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
     <script src="js/guids_to_index.js"></script>
+    <script src="js/auth.js"></script>
 <script src="js/index.js"></script>
     <script>
         function openCity(cityName) {
@@ -1584,157 +1587,7 @@ forget popup
     </script>
 
    <!-- OTP resend eka   new pass add karana thanai-->
-    <script>
-        $(document).ready(function() {
-            let countdownTime = 30; // 30 seconds
-            let countdown = setInterval(function() {
-                countdownTime--;
-                $("#countdown").text(countdownTime + "s");
 
-                if (countdownTime <= 0) {
-                    clearInterval(countdown);
-                    $("#resend").removeClass("disabled"); // Enable the resend link
-                    $("#countdown").text(''); // Clear the countdown
-                }
-            }, 1000); // Runs every second
-        });
-
-        function resendOTP() {
-            if (!$("#resend").hasClass("disabled")) {
-                // Your resend OTP logic here
-                console.log("Resending OTP...");
-
-                // Restart the countdown
-                $("#resend").addClass("disabled");
-                let countdownTime = 30;
-                $("#countdown").text(countdownTime + "s");
-
-                let countdown = setInterval(function() {
-                    countdownTime--;
-                    $("#countdown").text(countdownTime + "s");
-
-                    if (countdownTime <= 0) {
-                        clearInterval(countdown);
-                        $("#resend").removeClass("disabled"); // Enable the resend link
-                        $("#countdown").text(''); // Clear the countdown
-                    }
-                }, 1000);
-            }
-        }
-
-
-
-    </script>
-
-    <script>
-        document.getElementById('submitOTP').onclick = function(event) {
-            event.preventDefault();
-            var enteredOTP = document.getElementById('otp').value;
-
-            if (!enteredOTP) {
-                alert("Please enter the OTP.");
-                return;
-            }
-
-            // You can add server-side validation here
-            alert("OTP Verified. Password recovery process continues.");
-            document.getElementById('newPassword').classList.remove('hidden');
-            document.getElementById('submitPass').classList.remove('hidden');
-            document.getElementById('otpField').classList.add('hidden')
-            document.getElementById('resend').classList.add('hidden')
-            document.getElementById('submitOTP').classList.add('hidden');
-
-
-
-        }
-        function sendOTP() {
-            var email = document.getElementById('emaill').value;
-
-            if (!email) {
-                alert("Please enter your email address.");
-                return;
-            }
-            $("#sentOTP").hide();
-            $("#resend").show();
-            resendOTP();
-            // Simulate sending an OTP (you can replace this with your server-side logic)
-            //var generatedOTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
-            //alert("OTP has been sent to " + email + ". Your OTP is: " + generatedOTP); // In production, don't show OTP like this!
-
-            // Show the OTP input field and submit button
-            document.getElementById('otpField').classList.remove('hidden');
-            document.getElementById('submitOTP').classList.remove('hidden');
-        }
-
-
-        // Open the login modal
-        function openModal() {
-            document.getElementById("loginModal").style.display = "block";
-        }
-
-        // Close the login modal
-        function closeModal() {
-            document.getElementById("loginModal").style.display = "none";
-        }
-
-        // Open the registration modal
-        function openRegModal() {
-            document.getElementById("registrationModal").style.display = "block";
-        }
-
-        // Close the registration modal
-        function closeRegModal() {
-            document.getElementById("registrationModal").style.display = "none";
-        }
-
-        // Close the modals when clicking outside the content
-        window.onclick = function(event) {
-            if (event.target == document.getElementById("loginModal")) {
-                closeModal();
-            }
-            if (event.target == document.getElementById("registrationModal")) {
-                closeRegModal();
-            }
-            if(event.target == document.getElementById("forget")) {
-                closePopup();
-            }
-        }
-
-        function closePopup() {
-            document.getElementById("forget").style.display = "none";
-        }
-
-        function openForgetModal() {
-            closeModal()
-            document.getElementById("forget").style.display = "block";
-        }
-
-
-        $(document).ready(function(){
-            // Add smooth scrolling to all links
-          $(".fixed-side-navbar a, .primary-button a").on('click', function(event) {
-
-            // Make sure this.hash has a value before overriding default behavior
-            if (this.hash !== "") {
-              // Prevent default anchor click behavior
-              event.preventDefault();
-
-              // Store hash
-              var hash = this.hash;
-
-              // Using jQuery's animate() method to add smooth page scroll
-              // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-              $('html, body').animate({
-                scrollTop: $(hash).offset().top
-              }, 800, function(){
-           
-                // Add hash (#) to URL when done scrolling (default click behavior)
-                window.location.hash = hash;
-              });
-            } // End if
-          });
-        });
-    </script>
 <!--
 guids
 -->
