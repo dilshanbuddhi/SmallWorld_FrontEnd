@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Vanilla Bootstrap v4.2.1 Theme</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/fontAwesome.css">
+        <link rel="stylesheet" href="css/hero-slider.css">
+
+       -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+        <link rel="stylesheet" href="css/fontAwesome.css">
+        <link rel="stylesheet" href="css/owl-carousel.css">
+        <link rel="stylesheet" href="css/fontAwesome.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="css/searchSec.css">
+        <link rel="stylesheet" href="css/templatemo-main.css">
+        <link rel="stylesheet" href="css/register.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    </head>
+    <style>
+        /* Applying the playful Baloo 2 font to key sections */
+        body {
+            font-family: 'Baloo 2', cursive;
+        }
+
+        .hero-section h1 {
+            color: #6c757d;
+            font-weight: lighter;
+            font-size: 4rem;
+        }
+
+        .hero-section span {
+            color: orange;
+        }
+
+        .hero-section img {
+            max-width: 100%;
+        }
+
+
+        .navbar-brand img {
+            width: 50px;
+        }
+
+        .nav-link {
+            font-size: 1.1rem;
+        }
+
+        #text{
+            margin-top: -20px;
+        }
+
+        footer {
+            background-color: #f8f2eb;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* Style for the navigation links */
+        .nav-link {
+            color: #888; /* Ash/gray color for non-active links */
+            transition: color 0.3s ease;
+        }
+
+        /* Style for the active navigation link */
+        .nav-link.active {
+            color: #FFA500; /* Orange color for the active link */
+        }
+
+        /* Hover effect for non-active links */
+        .nav-link:hover {
+            color: #555; /* Darker shade of gray for hover effect */
+        }
+
+        #cardSec h1{
+            margin-left: 100px;
+        }
+        .stats-section{
+            padding-top: 50px;
+        }
+        .stats-section .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stats-section .stat-card h3 {
+            font-size: 1.5rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .stats-section .stat-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FF8C00;
+        }
+
+        /* Add hover effect for a more interactive feel */
+        .stats-section .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Adjusting margins and padding for better spacing */
+        .stats-section .col-md-3 {
+            margin-bottom: 20px;
+        }
+
+
+        .join-btn {
+
+            padding: 2px 24px;
+            background-color: #874caf;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .join-btn:hover {
+            background-color: #45a049;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 20px 30px 20px;
+            display: flex
+        ;
+            align-items: center;
+            transition: 0.3s ease-out;
+            backdrop-filter: blur(8px) brightness(1.2);
+            -webkit-backdrop-filter: blur(8px) brightness(1.2);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            color: #000000;
+            font-size: 20px;
+            mask-image: linear-gradient(black 70%, transparent);
+            z-index: 1000;
+
+            @media (min-width: 640px) {
+                padding: 16px 50px 30px 50px;
+            }
+        }
+        nav.is-hidden {
+            transform: translateY(-100%);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+            &:hover,
+            &:focus {
+                text-decoration: underline;
+            }
+        }
+        .list {
+            list-style-type: none;
+            margin-left: auto;
+            display: none;
+            @media (min-width: 640px) {
+                display: flex;
+            }
+            li {
+                margin-left: 20px;
+            }
+        }
+        .search {
+            display: inline-block;
+            padding: 0;
+            font-size: 0;
+            background: none;
+            border: none;
+            margin-left: auto;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,.5));
+            @media (min-width: 640px) {
+                margin-left: 20px;
+            }
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 2rem;
+                height: 2rem;
+                background: center/1.3rem 1.3rem no-repeat url("data:image/svg+xml, %3Csvg%20xmlns=%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2015.17%2014.81%27%20width=%2715.17%27%20height=%2714.81%27%3E%3Cpath%20d=%27M6,.67A5.34,5.34,0,1,1,.67,6,5.33,5.33,0,0,1,6,.67ZM9.86,9.58l4.85,4.75Z%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-width=%271.33%27%2F%3E%3C%2Fsvg%3E");
+            }
+        }
+        .menu {
+            display: inline-block;
+            padding: 0;
+            font-size: 0;
+            background: none;
+            border:  none;
+            margin-left: 20px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,.5));
+            &::before {
+                content: url("data:image/svg+xml, %3Csvg%20xmlns=%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2024.8%2018.92%27%20width=%2724.8%27%20height=%2718.92%27%3E%3Cpath%20d=%27M23.8,9.46H1m22.8,8.46H1M23.8,1H1%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-linecap=%27round%27%20stroke-width=%272%27%2F%3E%3C%2Fsvg%3E")
+            }
+            @media (min-width: 640px) {
+                display: none;
+            }
+        }
+
+    </style>
+
+<body>
+
+<nav>
+    <a href="#">No mask</a>
+    <ul class="list">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">User</a></li>
+        <li><a href="#">Place</a></li>
+        <li><a href="#">Hotel</a></li>
+        <li id="loginIcon" style="display: none"><i class="bi bi-person-plus" onclick="openModal()"></i>
+</li>
+        <li> <a href="userProfile.html"><i class="fas fa-user-circle"></i></a>
+</li>
+        <li><button class="join-btn" onclick="openRegModal()">Join</button></li>
+    </ul>
+    <button class="menu">Menu</button>
+</nav>
+<!--
+forget popup
+-->
+
+    <div id="forget" class="modal">
+        <div class="modal-contentMy">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2 id="forgotinfo">Forgot Login Details?</h2>
+            <p>If you are registered with SMALLWORLD, please enter your username or email address below and we will send you your login credentials.</p>
+
+            <form action="#">
+                <div class="input-field">
+                    <input type="text" id="emaill" required>
+                    <label>Enter your email</label>
+                </div>
+                <button type="button" id="sentOTP" class="formbtn" onclick="sendOTP()">Send OTP</button>
+
+                <div class="input-field otp-field hidden" id="otpField">
+                    <input type="text" id="otp" required>
+                    <label>Enter OTP</label>
+                </div>
+                <a href="#" id="resend" onclick="resendOTP()" class="disabled">resend OTP <span id="countdown">30s</span></a>
+                <button type="submit" class="formbtn hidden" id="submitOTP">Submit OTP</button>
+
+                <div>
+                    <div class="input-field otp-field hidden" id="newPassword">
+                        <input type="text" id="password" required>
+                        <label>Enter Password</label>
+                    </div>
+
+                    <button type="submit" class="formbtn hidden" id="submitPass">Submit</button>
+
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+    <!-- Login Modal -->
+
+    <div id="loginModal" class="modal">
+        <div class="modal-contentMy">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="login">Login</h2>
+            <form action="#">
+                <div class="input-field">
+                    <input type="text" id="loginEmail" required>
+                    <label>Enter your email</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="loginPassword" required>
+                    <label>Enter your password</label>
+                </div>
+                <div class="forget">
+                    <label for="remember">
+                        <input type="checkbox" id="remember">
+                        <p>Remember me</p>
+                    </label>
+                    <a href="#"  onclick="openForgetModal()">Forgot password?</a>
+                </div>
+                <button id="loginBtn" class="formbtn">Log In</button>
+                <div class="register">
+                    <p>Don't have an account? <a href="#">Register</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal" style="display: none;">
+        <div class="modal-contentMy">
+            <span class="close" onclick="closeRegModal()">&times;</span>
+            <h2>Registration</h2>
+            <form action="#">
+                <div class="input-field">
+                    <input type="text" id="first_name" required>
+                    <label>Enter your First Name</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="last_name" required>
+                    <label>Enter your Last Name</label>
+                </div>
+                <div class="input-field">
+                    <select  name="role" id="country"  required>
+                        <option value="Afghanistan"> </option>
+                        <option value="Afghanistan">Afghanistan</option>
+                        <option value="Åland Islands">Åland Islands</option>
+                        <option value="Albania">Albania</option>
+                        <option value="Algeria">Algeria</option>
+                        <option value="American Samoa">American Samoa</option>
+                        <option value="Andorra">Andorra</option>
+                        <option value="Angola">Angola</option>
+                        <option value="Anguilla">Anguilla</option>
+                        <option value="Antarctica">Antarctica</option>
+                        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Armenia">Armenia</option>
+                        <option value="Aruba">Aruba</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Azerbaijan">Azerbaijan</option>
+                        <option value="Bahamas">Bahamas</option>
+                        <option value="Bahrain">Bahrain</option>
+                        <option value="Bangladesh">Bangladesh</option>
+                        <option value="Barbados">Barbados</option>
+                        <option value="Belarus">Belarus</option>
+                        <option value="Belgium">Belgium</option>
+                        <option value="Belize">Belize</option>
+                        <option value="Benin">Benin</option>
+                        <option value="Bermuda">Bermuda</option>
+                        <option value="Bhutan">Bhutan</option>
+                        <option value="Bolivia">Bolivia</option>
+                        <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                        <option value="Botswana">Botswana</option>
+                        <option value="Bouvet Island">Bouvet Island</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
+                        <option value="Brunei Darussalam">Brunei Darussalam</option>
+                        <option value="Bulgaria">Bulgaria</option>
+                        <option value="Burkina Faso">Burkina Faso</option>
+                        <option value="Burundi">Burundi</option>
+                        <option value="Cambodia">Cambodia</option>
+                        <option value="Cameroon">Cameroon</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Cape Verde">Cape Verde</option>
+                        <option value="Cayman Islands">Cayman Islands</option>
+                        <option value="Central African Republic">Central African Republic</option>
+                        <option value="Chad">Chad</option>
+                        <option value="Chile">Chile</option>
+                        <option value="China">China</option>
+                        <option value="Christmas Island">Christmas Island</option>
+                        <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Comoros">Comoros</option>
+                        <option value="Congo">Congo</option>
+                        <option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option>
+                        <option value="Cook Islands">Cook Islands</option>
+                        <option value="Costa Rica">Costa Rica</option>
+                        <option value="Cote D'ivoire">Cote D'ivoire</option>
+                        <option value="Croatia">Croatia</option>
+                        <option value="Cuba">Cuba</option>
+                        <option value="Cyprus">Cyprus</option>
+                        <option value="Czech Republic">Czech Republic</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Djibouti">Djibouti</option>
+                        <option value="Dominica">Dominica</option>
+                        <option value="Dominican Republic">Dominican Republic</option>
+                        <option value="Ecuador">Ecuador</option>
+                        <option value="Egypt">Egypt</option>
+                        <option value="El Salvador">El Salvador</option>
+                        <option value="Equatorial Guinea">Equatorial Guinea</option>
+                        <option value="Eritrea">Eritrea</option>
+                        <option value="Estonia">Estonia</option>
+                        <option value="Ethiopia">Ethiopia</option>
+                        <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
+                        <option value="Faroe Islands">Faroe Islands</option>
+                        <option value="Fiji">Fiji</option>
+                        <option value="Finland">Finland</option>
+                        <option value="France">France</option>
+                        <option value="French Guiana">French Guiana</option>
+                        <option value="French Polynesia">French Polynesia</option>
+                        <option value="French Southern Territories">French Southern Territories</option>
+                        <option value="Gabon">Gabon</option>
+                        <option value="Gambia">Gambia</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Gibraltar">Gibraltar</option>
+                        <option value="Greece">Greece</option>
+                        <option value="Greenland">Greenland</option>
+                        <option value="Grenada">Grenada</option>
+                        <option value="Guadeloupe">Guadeloupe</option>
+                        <option value="Guam">Guam</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Guernsey">Guernsey</option>
+                        <option value="Guinea">Guinea</option>
+                        <option value="Guinea-bissau">Guinea-bissau</option>
+                        <option value="Guyana">Guyana</option>
+                        <option value="Haiti">Haiti</option>
+                        <option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option>
+                        <option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Hong Kong">Hong Kong</option>
+                        <option value="Hungary">Hungary</option>
+                        <option value="Iceland">Iceland</option>
+                        <option value="India">India</option>
+                        <option value="Indonesia">Indonesia</option>
+                        <option value="Iran, Islamic Republic of">Iran, Islamic Republic of</option>
+                        <option value="Iraq">Iraq</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Isle of Man">Isle of Man</option>
+                        <option value="Israel">Israel</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Jamaica">Jamaica</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Jersey">Jersey</option>
+                        <option value="Jordan">Jordan</option>
+                        <option value="Kazakhstan">Kazakhstan</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Kiribati">Kiribati</option>
+                        <option value="Korea, Democratic People's Republic of">Korea, Democratic People's Republic of</option>
+                        <option value="Korea, Republic of">Korea, Republic of</option>
+                        <option value="Kuwait">Kuwait</option>
+                        <option value="Kyrgyzstan">Kyrgyzstan</option>
+                        <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
+                        <option value="Latvia">Latvia</option>
+                        <option value="Lebanon">Lebanon</option>
+                        <option value="Lesotho">Lesotho</option>
+                        <option value="Liberia">Liberia</option>
+                        <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
+                        <option value="Liechtenstein">Liechtenstein</option>
+                        <option value="Lithuania">Lithuania</option>
+                        <option value="Luxembourg">Luxembourg</option>
+                        <option value="Macao">Macao</option>
+                        <option value="Macedonia, The Former Yugoslav Republic of">Macedonia, The Former Yugoslav Republic of</option>
+                        <option value="Madagascar">Madagascar</option>
+                        <option value="Malawi">Malawi</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Maldives">Maldives</option>
+                        <option value="Mali">Mali</option>
+                        <option value="Malta">Malta</option>
+                        <option value="Marshall Islands">Marshall Islands</option>
+                        <option value="Martinique">Martinique</option>
+                        <option value="Mauritania">Mauritania</option>
+                        <option value="Mauritius">Mauritius</option>
+                        <option value="Mayotte">Mayotte</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                        <option value="Moldova, Republic of">Moldova, Republic of</option>
+                        <option value="Monaco">Monaco</option>
+                        <option value="Mongolia">Mongolia</option>
+                        <option value="Montenegro">Montenegro</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Morocco">Morocco</option>
+                        <option value="Mozambique">Mozambique</option>
+                        <option value="Myanmar">Myanmar</option>
+                        <option value="Namibia">Namibia</option>
+                        <option value="Nauru">Nauru</option>
+                        <option value="Nepal">Nepal</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Netherlands Antilles">Netherlands Antilles</option>
+                        <option value="New Caledonia">New Caledonia</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Nicaragua">Nicaragua</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Niue">Niue</option>
+                        <option value="Norfolk Island">Norfolk Island</option>
+                        <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Oman">Oman</option>
+                        <option value="Pakistan">Pakistan</option>
+                        <option value="Palau">Palau</option>
+                        <option value="Palestinian Territory, Occupied">Palestinian Territory, Occupied</option>
+                        <option value="Panama">Panama</option>
+                        <option value="Papua New Guinea">Papua New Guinea</option>
+                        <option value="Paraguay">Paraguay</option>
+                        <option value="Peru">Peru</option>
+                        <option value="Philippines">Philippines</option>
+                        <option value="Pitcairn">Pitcairn</option>
+                        <option value="Poland">Poland</option>
+                        <option value="Portugal">Portugal</option>
+                        <option value="Puerto Rico">Puerto Rico</option>
+                        <option value="Qatar">Qatar</option>
+                        <option value="Reunion">Reunion</option>
+                        <option value="Romania">Romania</option>
+                        <option value="Russian Federation">Russian Federation</option>
+                        <option value="Rwanda">Rwanda</option>
+                        <option value="Saint Helena">Saint Helena</option>
+                        <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                        <option value="Saint Lucia">Saint Lucia</option>
+                        <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
+                        <option value="Saint Vincent and The Grenadines">Saint Vincent and The Grenadines</option>
+                        <option value="Samoa">Samoa</option>
+                        <option value="San Marino">San Marino</option>
+                        <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                        <option value="Saudi Arabia">Saudi Arabia</option>
+                        <option value="Senegal">Senegal</option>
+                        <option value="Serbia">Serbia</option>
+                        <option value="Seychelles">Seychelles</option>
+                        <option value="Sierra Leone">Sierra Leone</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Slovakia">Slovakia</option>
+                        <option value="Slovenia">Slovenia</option>
+                        <option value="Solomon Islands">Solomon Islands</option>
+                        <option value="Somalia">Somalia</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Sri Lanka">Sri Lanka</option>
+                        <option value="Sudan">Sudan</option>
+                        <option value="Suriname">Suriname</option>
+                        <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option>
+                        <option value="Swaziland">Swaziland</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Syrian Arab Republic">Syrian Arab Republic</option>
+                        <option value="Taiwan">Taiwan</option>
+                        <option value="Tajikistan">Tajikistan</option>
+                        <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
+                        <option value="Thailand">Thailand</option>
+                        <option value="Timor-leste">Timor-leste</option>
+                        <option value="Togo">Togo</option>
+                        <option value="Tokelau">Tokelau</option>
+                        <option value="Tonga">Tonga</option>
+                        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                        <option value="Tunisia">Tunisia</option>
+                        <option value="Turkey">Turkey</option>
+                        <option value="Turkmenistan">Turkmenistan</option>
+                        <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
+                        <option value="Tuvalu">Tuvalu</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Ukraine">Ukraine</option>
+                        <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United States">United States</option>
+                        <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                        <option value="Uruguay">Uruguay</option>
+                        <option value="Uzbekistan">Uzbekistan</option>
+                        <option value="Vanuatu">Vanuatu</option>
+                        <option value="Venezuela">Venezuela</option>
+                        <option value="Viet Nam">Viet Nam</option>
+                        <option value="Virgin Islands, British">Virgin Islands, British</option>
+                        <option value="Virgin Islands, U.S.">Virgin Islands, U.S.</option>
+                        <option value="Wallis and Futuna">Wallis and Futuna</option>
+                        <option value="Western Sahara">Western Sahara</option>
+                        <option value="Yemen">Yemen</option>
+                        <option value="Zambia">Zambia</option>
+                        <option value="Zimbabwe">Zimbabwe</option>
+                    </select>
+                    <label for="country">country</label>
+                </div>
+                <div class="input-field">
+                    <input type="email" id="reg_email" required>
+                    <label>Enter your email</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="reg_password" required>
+                    <label>Enter your password</label>
+                </div>
+                <button id="registerBtn">Register</button>
+                <div class="register">
+                    <p>Already have an account? <a href="#">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="fixed-side-navbar">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="#home"><span>Intro</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#services"><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#portfolio"><span>Portfolio</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#our-story"><span>Our Story</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact-us"><span>Contact Us</span></a></li>
+        </ul>
+    </div>
+
+    <div class="parallax-content baner-content" id="home">
+        <div class="container">
+            <div class="first-content">
+                <h1>SMALLWORLD</h1>
+                <button id="testOne"> test</button>
+
+                <span><em>Travell</em> Sri Lanka</span>
+                <div class="primary-button">
+                    <a href="#services">Discover More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-section" id="search">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="search-box">
+                        <h4 class="search-title">Find Your Next Adventure</h4>
+                        <div class="line-dec"></div>
+                        <p>Discover beautiful destinations, book comfortable hotels, and find local guides for an unforgettable travel experience.</p>
+
+                        <form>
+                            <div class="form-group">
+                                <label for="destination">Destination</label>
+                                <input type="text" class="form-control" id="destination" placeholder="Where do you want to go?">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select class="form-control" id="category">
+                                    <option value="">All Categories</option>
+                                    <option value="beach">Beaches</option>
+                                    <option value="mountain">Mountains</option>
+                                    <option value="historical">Historical Sites</option>
+                                    <option value="wildlife">Wildlife</option>
+                                    <option value="adventure">Adventure</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dates">Travel Dates</label>
+                                <input type="text" class="form-control" id="dates" placeholder="Check-in — Check-out">
+                            </div>
+                            <div class="form-group">
+                                <label for="guests">Number of Guests</label>
+                                <input type="number" class="form-control" id="guests" min="1" value="2">
+                            </div>
+                            <button type="submit" class="btn primary-btn btn-block">Search Now</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <h4>Explore by Category</h4>
+                            <div class="line-dec"></div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="category-card">
+                                <div class="category-icon">
+                                    <i class="fas fa-umbrella-beach"></i>
+                                </div>
+                                <h6>Beaches</h6>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="category-card">
+                                <div class="category-icon">
+                                    <i class="fas fa-mountain"></i>
+                                </div>
+                                <h6>Mountains</h6>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="category-card">
+                                <div class="category-icon">
+                                    <i class="fas fa-landmark"></i>
+                                </div>
+                                <h6>Historical</h6>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="category-card">
+                                <div class="category-icon">
+                                    <i class="fas fa-hiking"></i>
+                                </div>
+                                <h6>Adventure</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4" id="places">
+                        <div class="col-12 mb-3">
+                            <h4>Popular Destinations</h4>
+                            <div class="line-dec"></div>
+                        </div>
+
+
+                            <div class="col-md-6">
+                                <div class="popular-place">
+                                    <div class="place-img">
+                                        <img src="img/5th-section.jpg" alt="Beach destination">
+                                        <span class="place-tag">Beach</span>
+                                    </div>
+                                    <div class="place-info">
+                                        <h5 class="place-title">Hikkaduwa Beach</h5>
+                                        <p class="place-location"><i class="fas fa-map-marker-alt"></i> Southern Province</p>
+                                        <div class="weather-info">
+                                            <i class="fas fa-sun"></i> 32°C Sunny
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <span class="text-muted ml-1">(128)</span>
+                                            </div>
+                                            <a href="#" class="outline-btn">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="popular-place">
+                                    <div class="place-img">
+                                        <img src="/api/placeholder/400/320" alt="Mountain destination">
+                                        <span class="place-tag">Mountain</span>
+                                    </div>
+                                    <div class="place-info">
+                                        <h5 class="place-title">Ella Rock</h5>
+                                        <p class="place-location"><i class="fas fa-map-marker-alt"></i> Central Highlands</p>
+                                        <div class="weather-info">
+                                            <i class="fas fa-cloud"></i> 24°C Partly Cloudy
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <span class="text-muted ml-1">(95)</span>
+                                            </div>
+                                            <a href="hotelBook.html" class="outline-btn">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="popular-place">
+                                    <div class="place-img">
+                                        <img src="/api/placeholder/400/320" alt="Historical destination">
+                                        <span class="place-tag">Historical</span>
+                                    </div>
+                                    <div class="place-info">
+                                        <h5 class="place-title">Sigiriya Rock Fortress</h5>
+                                        <p class="place-location"><i class="fas fa-map-marker-alt"></i> Cultural Triangle</p>
+                                        <div class="weather-info">
+                                            <i class="fas fa-sun"></i> 30°C Sunny
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <span class="text-muted ml-1">(210)</span>
+                                            </div>
+                                            <a href="#" class="outline-btn">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="popular-place">
+                                    <div class="place-img">
+                                        <img src="/api/placeholder/400/320" alt="Wildlife destination">
+                                        <span class="place-tag">Wildlife</span>
+                                    </div>
+                                    <div class="place-info">
+                                        <h5 class="place-title">Yala National Park</h5>
+                                        <p class="place-location"><i class="fas fa-map-marker-alt"></i> Southern Province</p>
+                                        <div class="weather-info">
+                                            <i class="fas fa-cloud-sun"></i> 29°C Mostly Sunny
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <span class="text-muted ml-1">(156)</span>
+                                            </div>
+                                            <a href="#" class="outline-btn">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="service-content" id="services">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="left-text">
+                    <h4>Explore Local Experiences</h4>
+                    <div class="line-dec"></div>
+                    <p>Our tourism platform connects travelers with authentic local experiences, certified tour guides, and comprehensive travel planning tools to make your journey unforgettable.</p>
+                    <ul>
+                        <li>- Verified professional tour guides</li>
+                        <li>- Real-time weather updates</li>
+                        <li>- Seamless hotel booking system</li>
+                        <li>- Integrated transport options</li>
+                    </ul>
+                    <div class="primary-button">
+                        <a href="#guides">Discover Our Tour Guides</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="service-item">
+                            <h4>Professional Tour Guides</h4>
+                            <div class="line-dec"></div>
+                            <p>Connect with certified local guides who speak your language and specialize in your interests, from historical tours to adventure expeditions and cultural experiences.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item">
+                            <h4>Personalized Itineraries</h4>
+                            <div class="line-dec"></div>
+                            <p>Discover attractions categorized by your interests - beaches, mountains, historical sites, and more. Create custom itineraries tailored to your preferences and time constraints.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item">
+                            <h4>Accommodation & Transport</h4>
+                            <div class="line-dec"></div>
+                            <p>Book hotels with real-time availability and secure transportation options including buses, taxis, and rental cars with transparent pricing and estimated travel times.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="service-item">
+                            <h4>Local Insights & Weather</h4>
+                            <div class="line-dec"></div>
+                            <p>Access current weather forecasts and authentic reviews from fellow travelers to make informed decisions. Get recommendations for hidden gems from our knowledgeable community.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="guide-section" id="guide-search">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="search-box">
+                    <h4 class="search-title">Find Your Perfect Guide</h4>
+                    <div class="line-dec"></div>
+                    <p>Discover experienced local guides to make your journey unforgettable with personalized tours and insider knowledge.</p>
+
+                    <form>
+                        <div class="form-group">
+                            <label for="location">Destination</label>
+                            <input type="text" class="form-control" id="location" placeholder="Where do you need a guide?">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Languages</label>
+                            <div class="language-filter">
+                                <div class="filter-pill" data-language="english">English</div>
+                                <div class="filter-pill" data-language="japanese">Japanese</div>
+                                <div class="filter-pill" data-language="chinese">Chinese</div>
+                                <div class="filter-pill" data-language="german">German</div>
+                                <div class="filter-pill" data-language="french">French</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Expertise</label>
+                            <div class="expertise-filter">
+                                <div class="filter-pill" data-expertise="history">History</div>
+                                <div class="filter-pill" data-expertise="culture">Culture</div>
+                                <div class="filter-pill" data-expertise="adventure">Adventure</div>
+                                <div class="filter-pill" data-expertise="nature">Nature</div>
+                                <div class="filter-pill" data-expertise="food">Food</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Availability</label>
+                            <div class="availability-filter">
+                                <div class="filter-pill" data-availability="available">Available Now</div>
+                                <div class="filter-pill" data-availability="this-week">This Week</div>
+                                <div class="filter-pill" data-availability="this-month">This Month</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Tour Date</label>
+                            <input type="date" class="form-control" id="date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duration</label>
+                            <select class="form-control" id="duration">
+                                <option value="">Any Duration</option>
+                                <option value="half-day">Half Day (4 hours)</option>
+                                <option value="full-day">Full Day (8 hours)</option>
+                                <option value="multi-day">Multiple Days</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="group-size">Group Size</label>
+                            <select class="form-control" id="group-size">
+                                <option value="1-2">1-2 People</option>
+                                <option value="3-5">3-5 People</option>
+                                <option value="6-10">6-10 People</option>
+                                <option value="10+">More than 10</option>
+                            </select>
+                        </div>
+
+                        <button type="button" class="btn primary-btn btn-block" id="search-guides">Find Guides</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4>Available Tour Guides</h4>
+                        <div class="line-dec"></div>
+                        <p>Showing 12 guides available for your search</p>
+                    </div>
+                </div>
+
+                <div class="row" id="guid-set">
+                    <!-- Guide 1 -->
+                    <div class="col-md-6">
+                        <div class="guide-card">
+                            <div class="guide-img">
+                                <img src="img/3rd-big-item.jpg" alt="Tour Guide">
+                                <div class="experience-badge">5+ Years Experience</div>
+                                <div class="guide-verified">Verified</div>
+                            </div>
+                            <div class="guide-info">
+                                <h5 class="guide-name">Saman Perera</h5>
+                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Colombo, Sri Lanka</p>
+
+                                <div class="guide-short-info">
+                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 10</div>
+                                    <div class="info-item"><i class="fas fa-check-circle"></i> 75 Tours</div>
+                                </div>
+
+                                <div class="guide-languages">
+                                    <span class="language-tag">English</span>
+                                    <span class="language-tag">Japanese</span>
+                                    <span class="language-tag">French</span>
+                                </div>
+
+                                <div class="guide-expertise">
+                                    <span class="expertise-tag">History</span>
+                                    <span class="expertise-tag">Culture</span>
+                                    <span class="expertise-tag">Food</span>
+                                </div>
+
+                                <div class="guide-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-muted ml-1">(42 reviews)</span>
+                                </div>
+
+                                <div class="guide-price">
+                                    From $50 per day
+                                </div>
+
+                                <div class="guide-availability">
+                                    <i class="fas fa-calendar-check"></i> Available this week
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="outline-btn view-profile" data-guide="saman">View Profile</a>
+                                    <a href="#" class="primary-btn contact-guide" data-guide="saman">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guide 2 -->
+                    <div class="col-md-6">
+                        <div class="guide-card">
+                            <div class="guide-img">
+                                <img src="/api/placeholder/400/320" alt="Tour Guide">
+                                <div class="experience-badge">3+ Years Experience</div>
+                                <div class="guide-verified">Verified</div>
+                            </div>
+                            <div class="guide-info">
+                                <h5 class="guide-name">Nimal Jayawardena</h5>
+                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Kandy, Sri Lanka</p>
+
+                                <div class="guide-short-info">
+                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 8</div>
+                                    <div class="info-item"><i class="fas fa-check-circle"></i> 42 Tours</div>
+                                </div>
+
+                                <div class="guide-languages">
+                                    <span class="language-tag">English</span>
+                                    <span class="language-tag">German</span>
+                                    <span class="language-tag">Chinese</span>
+                                </div>
+
+                                <div class="guide-expertise">
+                                    <span class="expertise-tag">Adventure</span>
+                                    <span class="expertise-tag">Nature</span>
+                                    <span class="expertise-tag">History</span>
+                                </div>
+
+                                <div class="guide-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-muted ml-1">(28 reviews)</span>
+                                </div>
+
+                                <div class="guide-price">
+                                    From $45 per day
+                                </div>
+
+                                <div class="guide-availability">
+                                    <i class="fas fa-calendar-check"></i> Available now
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="outline-btn view-profile" data-guide="nimal">View Profile</a>
+                                    <a href="#" class="primary-btn contact-guide" data-guide="nimal">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guide 3 -->
+                    <div class="col-md-6">
+                        <div class="guide-card">
+                            <div class="guide-img">
+                                <img src="/api/placeholder/400/320" alt="Tour Guide">
+                                <div class="experience-badge">7+ Years Experience</div>
+                                <div class="guide-verified">Verified</div>
+                            </div>
+                            <div class="guide-info">
+                                <h5 class="guide-name">Kumari Silva</h5>
+                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Galle, Sri Lanka</p>
+
+                                <div class="guide-short-info">
+                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 6</div>
+                                    <div class="info-item"><i class="fas fa-check-circle"></i> 98 Tours</div>
+                                </div>
+
+                                <div class="guide-languages">
+                                    <span class="language-tag">English</span>
+                                    <span class="language-tag">French</span>
+                                </div>
+
+                                <div class="guide-expertise">
+                                    <span class="expertise-tag">History</span>
+                                    <span class="expertise-tag">Culture</span>
+                                    <span class="expertise-tag">Food</span>
+                                </div>
+
+                                <div class="guide-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-muted ml-1">(62 reviews)</span>
+                                </div>
+
+                                <div class="guide-price">
+                                    From $60 per day
+                                </div>
+
+                                <div class="guide-availability not-available">
+                                    <i class="fas fa-calendar-times"></i> Available from next week
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="outline-btn view-profile" data-guide="kumari">View Profile</a>
+                                    <a href="#" class="primary-btn contact-guide" data-guide="kumari">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guide 4 -->
+                    <div class="col-md-6">
+                        <div class="guide-card">
+                            <div class="guide-img">
+                                <img src="/api/placeholder/400/320" alt="Tour Guide">
+                                <div class="experience-badge">2+ Years Experience</div>
+                                <div class="guide-verified">Verified</div>
+                            </div>
+                            <div class="guide-info">
+                                <h5 class="guide-name">Ranjith Fernando</h5>
+                                <p class="guide-location"><i class="fas fa-map-marker-alt"></i> Sigiriya, Sri Lanka</p>
+
+                                <div class="guide-short-info">
+                                    <div class="info-item"><i class="fas fa-users"></i> Groups up to 12</div>
+                                    <div class="info-item"><i class="fas fa-check-circle"></i> 31 Tours</div>
+                                </div>
+
+                                <div class="guide-languages">
+                                    <span class="language-tag">English</span>
+                                    <span class="language-tag">Russian</span>
+                                    <span class="language-tag">Hindi</span>
+                                </div>
+
+                                <div class="guide-expertise">
+                                    <span class="expertise-tag">Adventure</span>
+                                    <span class="expertise-tag">Wildlife</span>
+                                    <span class="expertise-tag">Photography</span>
+                                </div>
+
+                                <div class="guide-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-muted ml-1">(19 reviews)</span>
+                                </div>
+
+                                <div class="guide-price">
+                                    From $40 per day
+                                </div>
+
+                                <div class="guide-availability">
+                                    <i class="fas fa-calendar-check"></i> Available now
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="outline-btn view-profile" data-guide="ranjith">View Profile</a>
+                                    <a href="#" class="primary-btn contact-guide" data-guide="ranjith">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <ul class="pagination">
+                        <li><a href="#" class="active">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Guide Profile Modal -->
+
+<!-- Guide Profile Modal -->
+<div class="modal fade" id="guideProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Guide Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="" alt="Guide" class="img-fluid rounded profile-image">
+                        <div class="mt-3">
+                            <div class="guide-rating mb-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-muted ml-1">(42)</span>
+                            </div>
+                            <p><i class="fas fa-map-marker-alt text-primary mr-2"></i> <span class="profile-address">Colombo, Sri Lanka</span></p>
+                            <p><i class="fas fa-calendar-check text-success mr-2"></i> <span class="profile-availability">Available this week</span></p>
+                            <p><i class="fas fa-clock text-primary mr-2"></i> Response time: 2 hours</p>
+                            <p><i class="fas fa-users text-primary mr-2"></i> Groups up to 10</p>
+                            <p><i class="fas fa-check-circle text-primary mr-2"></i> 75 Tours completed</p>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 class="profile-name">Guide Name</h4>
+                        <p class="text-muted profile-experience">Professional Tour Guide • 5+ Years Experience</p>
+
+                        <h5 class="mt-4">About Me</h5>
+                        <p class="profile-about">Passionate about sharing the beauty and culture of Sri Lanka with visitors from around the world.</p>
+
+                        <h5 class="mt-4">Certifications</h5>
+                        <div class="profile-certifications">
+                            <p><i class="fas fa-certificate text-warning mr-2"></i> Certified by Sri Lanka Tourism Development Authority</p>
+                            <p><i class="fas fa-certificate text-warning mr-2"></i> First Aid Certified</p>
+                        </div>
+
+                        <h5 class="mt-4">Languages</h5>
+                        <div class="guide-languages mb-3 profile-languages">
+                            <span class="language-tag">English (Fluent)</span>
+                            <span class="language-tag">Japanese (Fluent)</span>
+                        </div>
+
+                        <h5 class="mt-4">Expertise</h5>
+                        <div class="guide-expertise mb-3">
+                            <span class="expertise-tag">History</span>
+                            <span class="expertise-tag">Culture</span>
+                            <span class="expertise-tag">Food</span>
+                            <span class="expertise-tag">Architecture</span>
+                            <span class="expertise-tag">Local Customs</span>
+                        </div>
+
+                        <h5 class="mt-4">Rates</h5>
+                        <p><strong>Standard Rate:</strong> <span class="profile-rate">30000LKR per day</span></p>
+                        <p class="text-muted small">* Rates may vary based on group size and specific requirements</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Reviews section could be added here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn primary-btn contact-guide-btn">Contact Guide</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<h5 class="mt-4">Recent Reviews</h5>
+<div class="review-item">
+    <div class="review-header">
+        <div class="review-author">Maria Johnson</div>
+        <div class="review-date">February 2025</div>
+    </div>
+    <div class="review-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+    </div>
+    <p>Saman was an incredible guide! His knowledge of Sri Lankan history and culture made our trip unforgettable. He took us to hidden spots that weren't in any guidebook and was very accommodating with our schedule. Highly recommend!</p>
+</div>
+
+<div class="review-item">
+    <div class="review-header">
+        <div class="review-author">Takashi Yamamoto</div>
+        <div class="review-date">January 2025</div>
+    </div>
+    <div class="review-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+    </div>
+    <p>I was impressed with Saman's Japanese language skills. Being able to communicate in my native language made the tour much more enjoyable. He's very knowledgeable about Sri Lankan cuisine and took us to some amazing local restaurants.</p>
+</div>
+
+<div class="review-item">
+    <div class="review-header">
+        <div class="review-author">Sophie Dupont</div>
+        <div class="review-date">December 2024</div>
+    </div>
+    <div class="review-rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+    </div>
+    <p>Notre visite à Colombo avec Saman était excellente. Il parle très bien français et connaît parfaitement l'histoire coloniale. Je recommande vivement ses services pour tous les francophones!</p>
+</div>-->
+<!-- Contact Guide Modal -->
+<!-- Contact Guide Modal -->
+<div class="modal fade" id="contactGuideModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Guide</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Guide details section -->
+                <div id="guide-details" class="mb-4 p-3 bg-light rounded">
+                    <!-- Guide info will be inserted here -->
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <label for="contact-name">Your Name</label>
+                        <input type="text" class="form-control" id="contact-name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Email Address</label>
+                        <input type="email" class="form-control" id="contact-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-phone">Phone Number</label>
+                        <input type="tel" class="form-control" id="contact-phone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-date">Preferred Tour Date</label>
+                        <input type="date" class="form-control" id="tour-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="group-size-contact">Group Size</label>
+                        <select class="form-control" id="group-size-contact">
+                            <option value="1-2">1-2 People</option>
+                            <option value="3-5">3-5 People</option>
+                            <option value="6-10">6-10 People</option>
+                            <option value="10+">More than 10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tour-duration">Tour Duration</label>
+                        <select class="form-control" id="tour-duration">
+                            <option value="half-day">Half Day (4 hours)</option>
+                            <option value="full-day">Full Day (8 hours)</option>
+                            <option value="multi-day">Multiple Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="smessage">Message</label>
+                        <textarea class="form-control" id="smessage" rows="4" placeholder="Describe what you're looking for in this tour..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn primary-btn" id="send-request-btn">Send Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <div class="parallax-content projects-content" id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="owl-testimonials" class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/1st-big-item.jpg" data-lightbox="image-1"><img src="img/1st-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Awesome Note Book</h4>
+                                    <span>$18.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/2nd-big-item.jpg" data-lightbox="image-1"><img src="img/2nd-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Antique Decoration Photo</h4>
+                                    <span>$27.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/3rd-big-item.jpg" data-lightbox="image-1"><img src="img/3rd-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Work Hand Bag</h4>
+                                    <span>$36.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/4th-big-item.jpg" data-lightbox="image-1"><img src="img/4th-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Smart Watch</h4>
+                                    <span>$45.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/5th-big-item.jpg" data-lightbox="image-1"><img src="img/5th-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>PC Tablet Draw</h4>
+                                    <span>$63.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/6th-big-item.jpg" data-lightbox="image-1"><img src="img/6th-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Healthy Milkshake</h4>
+                                    <span>$77.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/2nd-big-item.jpg" data-lightbox="image-1"><img src="img/2nd-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Antique Decoration Photo</h4>
+                                    <span>$84.50</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="testimonials-item">
+                                <a href="img/1st-big-item.jpg" data-lightbox="image-1"><img src="img/1st-item.jpg" alt=""></a>
+                                <div class="text-content">
+                                    <h4>Awesome Notes Book</h4>
+                                    <span>$96.75</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabs-content" id="our-story">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="wrapper">
+                    <section id="first-tab-group" class="tabgroup">
+                      <div id="tab1">
+                        <img src="img/1st-tab.jpg" alt="">
+                        <p>Please do not re-distribute our template ZIP file on your template collection sites. You can make a screenshot and a link back to our website. This template can be used for personal or commercial purposes by end-users.</p>
+                      </div>
+                      <div id="tab2">
+                        <img src="img/2nd-tab.jpg" alt="">
+                        <p>Aliquam eu ultrices risus, sed condimentum diam. Duis risus nulla, elementum vitae nisi a, ornare maximus nisl. Morbi et vehicula est. Cras at vulputate justo. Cras eu nulla metus. Ut et pretium velit. Pellentesque at neque tristique dui tempor venenatis.</p>
+                      </div>
+                      <div id="tab3">
+                        <img src="img/3rd-tab.jpg" alt="">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia ligula est, at venenatis ex iaculis quis. Morbi sollicitudin nulla eget odio pellentesque, sed cursus diam iaculis.</p>
+                      </div>
+                      <div id="tab4">
+                        <img src="img/4th-tab.jpg" alt="">
+                        <p>Duis risus nulla, elementum vitae nisi a, ornare maximus nisl. Morbi et vehicula est. Cras at vulputate justo. Cras eu nulla metus. Ut et pretium velit. Pellentesque at neque tristique.</p>
+                      </div>
+                    </section>
+                    <ul class="tabs clearfix" data-tabgroup="first-tab-group">
+                      <li><a href="#tab1" class="active">2008 - 2014</a></li>
+                      <li><a href="#tab2">2014 - 2016</a></li>
+                      <li><a href="#tab3">2016 - 2019</a></li>
+                      <li><a href="#tab4">2019 - Now</a></li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="parallax-content contact-content" id="contact-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-form">
+                        <div class="row">
+                            <form id="contact" action="" method="post">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                      <fieldset>
+                                        <input name="name" type="text" class="form-control" id="name" placeholder="Your name..." required="">
+                                      </fieldset>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <fieldset>
+                                        <input name="email" type="email" class="form-control" id="email" placeholder="Your email..." required="">
+                                      </fieldset>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <fieldset>
+                                        <textarea name="message" rows="6" class="form-control" id="message" placeholder="Your message..." required=""></textarea>
+                                      </fieldset>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <fieldset>
+                                        <button type="submit" id="form-submit" class="btn">Send Message</button>
+                                      </fieldset>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="map">
+                    <!-- How to change your own map point
+                           1. Go to Google Maps
+                           2. Click on your location point
+                           3. Click "Share" and choose "Embed map" tab
+                           4. Copy only URL and paste it within the src="" field below
+                    -->
+
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1197183.8373802372!2d-1.9415093691103689!3d6.781986417238027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdb96f349e85efd%3A0xb8d1e0b88af1f0f5!2sKumasi+Central+Market!5e0!3m2!1sen!2sth!4v1532967884907" width="100%" height="390" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="primary-button">
+                        <a href="#home">Back To Top</a>
+                    </div>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                    </ul>
+                    <p>Copyright &copy; 2019 Company Name 
+            
+            		- Design: <a rel="nofollow noopener" href="https://templatemo.com"><em>TemplateMo</em></a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/guids_to_index.js"></script>
+    <script src="js/auth.js"></script>
+<script src="js/index.js"></script>
+    <script>
+        function openCity(cityName) {
+            var i;
+            var x = document.getElementsByClassName("city");
+            for (i = 0; i < x.length; i++) {
+               x[i].style.display = "none";  
+            }
+            document.getElementById(cityName).style.display = "block";  
+        }
+
+
+    </script>
+
+   <!-- OTP resend eka   new pass add karana thanai-->
+
+<!--
+guids
+-->
+<script>
+    $(document).ready(function() {
+        // View Profile Button Click
+        $('.view-profile').click(function(e) {
+            e.preventDefault();
+            $('#guideProfileModal').modal('show');
+        });
+
+        // Contact Guide Button Click
+        $('.contact-guide').click(function(e) {
+            e.preventDefault();
+            $('#contactGuideModal').modal('show');
+        });
+
+        // Filter pill click handling
+        $('.filter-pill').click(function() {
+            $(this).toggleClass('active');
+        });
+    });
+</script>
+
+
+</body>
+</html>
