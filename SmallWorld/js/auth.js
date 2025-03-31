@@ -12,9 +12,16 @@
 }, 1000); // Runs every second
 });
 
-    function resendOTP() {
+    // Store the OTP from server response
+    let serverOTP;
+
+    function sendOTP() {
         var email = document.getElementById('emaill').value;
 
+        if (!email) {
+            alert("Please enter your email address.");
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -24,100 +31,144 @@
             dataType: "json",
             success: function (response) {
                 console.log(response);
-                if (!$("#resend").hasClass("disabled")) {
-                    // Your resend OTP logic here
-                    console.log("Resending OTP...");
+                // Store the OTP from the server response
+                serverOTP = response;
 
-                    // Restart the countdown
-                    $("#resend").addClass("disabled");
-                    let countdownTime = 30;
+                alert("OTP has been sent to " + email + ". Please check your inbox.");
+
+                // Show OTP field and submit button
+                document.getElementById('otpField').classList.remove('hidden');
+                document.getElementById('submitOTP').classList.remove('hidden');
+
+                // Hide send OTP button, show resend link with countdown
+                $("#sentOTP").hide();
+                $("#resend").show();
+                $("#resend").addClass("disabled");
+
+                // Start countdown for resend
+                let countdownTime = 30;
+                $("#countdown").text(countdownTime + "s");
+
+                let countdown = setInterval(function() {
+                    countdownTime--;
                     $("#countdown").text(countdownTime + "s");
 
-                    let countdown = setInterval(function() {
-                        countdownTime--;
-                        $("#countdown").text(countdownTime + "s");
-
-                        if (countdownTime <= 0) {
-                            clearInterval(countdown);
-                            $("#resend").removeClass("disabled"); // Enable the resend link
-                            $("#countdown").text(''); // Clear the countdown
-                        }
-                    }, 1000);
-                }
+                    if (countdownTime <= 0) {
+                        clearInterval(countdown);
+                        $("#resend").removeClass("disabled");
+                        $("#countdown").text('');
+                    }
+                }, 1000);
             },
             error: function (xhr, status, error) {
                 console.log(error);
                 alert('Failed to send OTP. Please try again.');
-
             }
         });
-
-
-
-
-}
-
-    document.getElementById('submitOTP').onclick = function(event) {
-    event.preventDefault();
-    var enteredOTP = document.getElementById('otp').value;
-
-    if (!enteredOTP) {
-    alert("Please enter the OTP.");
-    return;
     }
-        $("#resend").hide();
 
-        // You can add server-side validation here
-    alert("OTP Verified. Password recovery process continues.");
-    document.getElementById('newPassword').classList.remove('hidden');
-    document.getElementById('submitPass').classList.remove('hidden');
-    document.getElementById('otpField').classList.add('hidden')
-    document.getElementById('resend').classList.add('hidden')
-    document.getElementById('submitOTP').classList.add('hidden');
-
-}
-
-    function sendOTP() {
-    var email = document.getElementById('emaill').value;
-
-    if (!email) {
-    alert("Please enter your email address.");
-    return;
-}
-    $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/api/v1/password/sentOTP",
-        contentType: "application/json",
-        data: JSON.stringify({email: email}),
-        dataType: "json",
-        success: function (response) {
-            console.log(response);
-            alert("OTP has been sent to " + email + ". Please check your inbox.");
-            $("#sentOTP").show();
-            $("#resend").hide();
-            $("#countdown").text('30s');
-
-            $("#sentOTP").hide();
-            $("#resend").show();
-            //resendOTP();
-            document.getElementById('otpField').classList.remove('hidden');
-            document.getElementById('submitOTP').classList.remove('hidden');
-
-            //alert('OTP has been sent to ' + email + '. Please check your inbox.');
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-            alert('Failed to send OTP. Please try again.');
-
+    function resendOTP() {
+        // Only proceed if the resend button is not disabled
+        if ($("#resend").hasClass("disabled")) {
+            return;
         }
+
+        var email = document.getElementById('emaill').value;
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/v1/password/sentOTP",
+            contentType: "application/json",
+            data: JSON.stringify({email: email}),
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                // Update stored OTP with new one from server
+                serverOTP = response;
+
+                // Restart countdown
+                $("#resend").addClass("disabled");
+                let countdownTime = 30;
+                $("#countdown").text(countdownTime + "s");
+
+                let countdown = setInterval(function() {
+                    countdownTime--;
+                    $("#countdown").text(countdownTime + "s");
+
+                    if (countdownTime <= 0) {
+                        clearInterval(countdown);
+                        $("#resend").removeClass("disabled");
+                        $("#countdown").text('');
+                    }
+                }, 1000);
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+                alert('Failed to resend OTP. Please try again.');
+            }
+        });
+    }
+
+    // Verify OTP
+    document.getElementById('submitOTP').onclick = function(event) {
+        event.preventDefault();
+        var enteredOTP = document.getElementById('otp').value;
+
+        if (!enteredOTP) {
+            alert("Please enter the OTP.");
+            return;
+        }
+
+        // Compare entered OTP with the one received from server
+        if (enteredOTP == serverOTP) {
+            // If OTP matches, proceed to password reset
+            document.getElementById('newPassword').classList.remove('hidden');
+            document.getElementById('submitPass').classList.remove('hidden');
+            document.getElementById('otpField').classList.add('hidden');
+            document.getElementById('resend').classList.add('hidden');
+            document.getElementById('submitOTP').classList.add('hidden');
+            $("#resend").hide();
+
+
+            alert("OTP Verified. Please set your new password.");
+        } else {
+            alert("Invalid OTP. Please try again.");
+        }
+    }
+
+    // Reset password
+    $("#submitPass").on("click", function(event) {
+        event.preventDefault();
+
+        var password = $("#password").val();
+
+        if (!password) {
+            alert("Please enter a new password.");
+            return;
+        }
+
+        var data = {
+            email: $("#emaill").val(),
+            password: password
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/api/v1/password/resetPassword",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function(response) {
+                console.log(response);
+                alert("Password has been reset successfully. You can now login with your new password.");
+                closePopup(); // Close the forgot password modal
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+                alert('Failed to reset password. Please try again.');
+            }
+        });
     });
-
-    // Simulate sending an OTP (you can replace this with your server-side logic)
-    //var generatedOTP = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
-    //alert("OTP has been sent to " + email + ". Your OTP is: " + generatedOTP); // In production, don't show OTP like this!
-
-    // Show the OTP input field and submit button
-   }
 
 
     // Open the login modal
