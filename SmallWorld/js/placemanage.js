@@ -7,7 +7,7 @@ function setcategories() {
         url: 'http://localhost:8080/api/v1/placeCategory/getAll',
         type: 'GET',
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
         },
         success: function(response) {
                 // Populate the select dropdown with category options
@@ -37,7 +37,7 @@ function getAll() {
     $.ajax({
         url: "http://localhost:8080/api/v1/place/getAll",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
         },
         type: "GET",
         contentType: "application/json",
@@ -100,6 +100,7 @@ $(document).ready(function() {
         formData1.append('location', $('#placelocation').val());
         formData1.append('latitude', $('#latitude').val());
         formData1.append('longitude', $('#longitude').val());
+        formData1.append('city' , $('#city').val());
 
 
         var imageFiles = $('#placeimages')[0].files; // Use 'files' to get the FileList object
@@ -138,7 +139,7 @@ $(document).ready(function() {
                             url: 'http://localhost:8080/api/v1/place/save',
                             type: 'POST',
                             headers: {
-                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
                             },
                             data: formData1,
                             processData: false, // Important to prevent jQuery from processing the data

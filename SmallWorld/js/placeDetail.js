@@ -5,14 +5,16 @@ let placeLon;
     // Get the category ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const placeId = urlParams.get('id');
-    console.log(placeId)
+    console.log(placeId);
+    const city = urlParams.get('city');
+    console.log(city);
 
     // Fetch category details using the ID
     $.ajax({
     url: `http://localhost:8080/api/v1/place/getOne/${placeId}`,
-    headers: {
-    Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
-},
+        headers: {
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
+        },
     type: "GET",
     success: function (response) {
     if (response.code === 200 && response.data) {
@@ -71,6 +73,69 @@ console.log(response.data.longitude);
     console.error("An error occurred while fetching category details:", error);
 }
 });
+
+    getPlacesByCity();
+
+        function getPlacesByCity() {
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/place/getAllByCity/' + city,
+                method: 'GET',
+                dataType: 'json',
+                headers: {
+                    Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    if (data.code === 200 && data.data) {
+                        $("#places").empty();
+                        $("#places").append(
+                            ` <div class="col-12 mb-3">
+                            <h4>Popular Destinations in ${city}</h4>
+                            <div class="line-dec"></div>
+                        </div>`
+                        );
+                        for (let i = 0; i < data.data.length; i++) {
+                            let place = data.data[i];
+                            $("#places").append(`
+                                                    <div class="col-md-6">
+                                <div class="popular-place">
+                                    <div class="place-img">
+                                        <img src="${place.image[0]}" alt="Beach destination">
+                                        <span class="place-tag">${place.category.name} </span>
+                                    </div>
+                                    <div class="place-info">
+                                        <h5 class="place-title">${place.name} </h5>
+                                        <p class="place-location"><i class="fas fa-map-marker-alt"></i> ${place.location}</p>
+                                        <div class="weather-info">
+                                            <i class="fas fa-sun"></i> 32°C Sunny
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <span class="text-muted ml-1">(128)</span>
+                                            </div>
+                                            <a href="placeDetail.html?id=${place.id}&city=${place.city}" class="outline-btn">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    `);
+                        }
+                    }
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            })
+
+
+        }
     });
 
 
