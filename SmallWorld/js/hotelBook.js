@@ -1,8 +1,28 @@
 // Store selected room information
+let payMethod = "Credit card";
+document.addEventListener("DOMContentLoaded", function () {
+    const paymentMethods = document.querySelectorAll(".payment-method");
+
+    paymentMethods.forEach(method => {
+        method.addEventListener("click", function () {
+            // Remove 'active' class from all methods
+            paymentMethods.forEach(m => m.classList.remove("active"));
+
+            // Add 'active' class to the clicked method
+            this.classList.add("active");
+
+            // Get the selected value
+            payMethod=this.textContent.trim();
+            //console.log("Selected Payment Method:", this.textContent.trim());
+        });
+    });
+});
+
 let selectedRoom = {
     name: "",
     pricePerNight: 0,
-    nights: 1  // Default to 1 night instead of 3
+    nights: 1,  // Default to 1 night instead of 3
+    roomId: null // Add room ID property
 };
 
 function openBookingModal(hotelIndex) {
@@ -10,7 +30,8 @@ function openBookingModal(hotelIndex) {
     selectedRoom = {
         name: "",
         pricePerNight: 0,
-        nights: 1  // Default to 1 night
+        nights: 1,  // Default to 1 night
+        roomId: null // Add room ID property
     };
 
     // Get the specific hotel data from the previous ajax call
@@ -36,7 +57,7 @@ function openBookingModal(hotelIndex) {
     $.ajax({
         url: "http://localhost:8080/api/v1/room/getAllByHotelId/" + hotel.id,
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
         },
         type: "GET",
         contentType: "application/json",
@@ -47,7 +68,7 @@ function openBookingModal(hotelIndex) {
             $("#room-cards").empty();
 
             // Add night selection controls to the header
-            const checkInDate = new Date(2025, 2, 15); // March 15, 2025
+            const checkInDate = new Date();
             const checkOutDate = new Date(checkInDate);
             checkOutDate.setDate(checkOutDate.getDate() + selectedRoom.nights);
 
@@ -70,7 +91,7 @@ function openBookingModal(hotelIndex) {
                 const formattedPrice = priceNumber.toLocaleString();
 
                 $("#room-cards").append(`
-                    <div class="room-card" data-room-id="${index}" data-room-name="${room.room_type.room_type}" data-room-price="${priceNumber}">
+                    <div class="room-card" data-room-id="${room.id}" data-room-name="${room.room_type.room_type}" data-room-price="${priceNumber}">
                         <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
                         <div class="room-details">
                             <h4>${room.room_type.room_type}</h4>
@@ -83,12 +104,16 @@ function openBookingModal(hotelIndex) {
                                 <div class="room-feature">Mini bar</div>
                                 <div class="room-feature">Balcony</div>
                                 <div class="room-feature">Separate living area</div>
+
                             </div>
+                                <p style="color: #1e7e34">Available Rooms :${room.availableRooms}</p>
+
                         </div>
                         <div class="room-price">
                             <div class="price">${formattedPrice} LKR</div>
                             <span class="price-period">per night</span>
-                            <button class="select-button" onclick="selectRoom(${index}, '${room.room_type.room_type}', ${priceNumber})">Select</button>
+                            <button class="select-button" onclick="selectRoom(${room.id}, '${room.room_type.room_type}', ${priceNumber})">Select</button>
+                          
                         </div>
                     </div>
                 `);
@@ -132,7 +157,7 @@ function updateNightsDisplay() {
     $("#nights-count").next().text(` ${nightText}`);
 
     // Update the check-out date based on the number of nights
-    const checkInDate = new Date(2025, 2, 15); // March 15, 2025
+    const checkInDate = new Date(); // March 15, 2025
     const checkOutDate = new Date(checkInDate);
     checkOutDate.setDate(checkOutDate.getDate() + selectedRoom.nights);
 
@@ -151,14 +176,15 @@ function updateNightsDisplay() {
     }
 }
 
-function selectRoom(roomIndex, roomName, roomPrice) {
+function selectRoom(roomId, roomName, roomPrice) {
     // Update selected room
     selectedRoom.name = roomName;
     selectedRoom.pricePerNight = roomPrice;
+    selectedRoom.roomId = roomId; // Store the room ID
 
     // Highlight the selected room
     $(".room-card").removeClass("selected-room");
-    $(`.room-card[data-room-id="${roomIndex}"]`).addClass("selected-room");
+    $(`.room-card[data-room-id="${roomId}"]`).addClass("selected-room");
 
     // Update the booking summary
     updateBookingSummary();
@@ -228,7 +254,7 @@ function updateBookingSummary() {
             </div>
         </div>
 
-        <button class="confirm-button" ${selectedRoom.name ? '' : 'disabled'}>Confirm Booking</button>
+        <button class="confirm-button" ${selectedRoom.name ? '' : 'disabled'} onclick="confirmBooking()">Confirm Booking</button>
     `;
 
     // Update the booking summary section
@@ -239,6 +265,97 @@ function updateBookingSummary() {
         $(".payment-method").removeClass("active");
         $(this).addClass("active");
     });
+}
+
+function confirmBooking() {
+    // Calculate check-in and check-out dates
+    const checkInDate = new Date();
+    const checkOutDate = new Date(checkInDate);
+    checkOutDate.setDate(checkOutDate.getDate() + selectedRoom.nights);
+
+    // Format dates as ISO strings (YYYY-MM-DD)
+    const formattedCheckIn = checkInDate.toISOString().split('T')[0];
+    const formattedCheckOut = checkOutDate.toISOString().split('T')[0];
+
+    // Calculate total price (including taxes)
+    const roomTotal = selectedRoom.pricePerNight * selectedRoom.nights;
+    const taxes = roomTotal * 0.1; // 10% tax rate
+    const grandTotal = roomTotal + taxes;
+
+    // Current date for booking_date
+    const bookingDate = new Date().toISOString().split('T')[0];
+
+    // Create booking data object
+    const bookingData = {
+        room_id: selectedRoom.roomId,
+        check_in_date: formattedCheckIn,
+        check_out_date: formattedCheckOut,
+        num_rooms: 1,
+        total_price: grandTotal,
+        status: "Completed",
+        booking_date: bookingDate,
+        paymentMethod : payMethod,
+    };
+
+    const paymentData = {
+        paymentMethod : payMethod,
+        amount : grandTotal
+    }
+
+    console.log("Booking Data:", bookingData);
+
+
+
+    // Validate payment information
+    const cardNumber = $("#cardNumber").val();
+    const cardName = $("#cardName").val();
+    const expiry = $("#expiry").val();
+    const cvv = $("#cvv").val();
+
+    if (!cardNumber || !cardName || !expiry || !cvv) {
+        alert("Please fill in all payment details");
+        return;
+    }
+
+
+
+    //console.log(bookingData);
+
+    // Send booking data to server
+
+    $.ajax({
+        url: "http://localhost:8080/api/v1/booking/save",
+        headers: {
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+        },
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(bookingData),
+        dataType: "json",
+        success: function(response) {
+            console.log("Booking successful:", response);
+
+            // Show success message to user
+            $(".modal-content").html(`
+                <div class="booking-confirmation">
+                    <div class="confirmation-icon">✅</div>
+                    <h2>Booking Confirmed!</h2>
+                    <p>Your booking at ${$(".hotel-detail h2").text()} has been confirmed.</p>
+                    <p>Check-in: ${formatDate(checkInDate)}</p>
+                    <p>Check-out: ${formatDate(checkOutDate)}</p>
+                    <p>Room: ${selectedRoom.name}</p>
+                    <p>Total: ${grandTotal.toLocaleString()} LKR</p>
+                    <p>A confirmation email has been sent to your email address.</p>
+                    <button class="confirm-button" onclick="closeBookingModal()">Close</button>
+                </div>
+            `);
+        },
+        error: function(error) {
+            console.error("Booking error:", error);
+            alert("There was an error processing your booking. Please try again.");
+        }
+    });
+
 }
 
 function getAmenityIcon(amenity) {
@@ -258,7 +375,7 @@ function getAllHotels() {
     $.ajax({
         url: "http://localhost:8080/api/v1/hotel/getAll",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
         },
         type: "GET",
         contentType: "application/json",
@@ -316,4 +433,29 @@ $(document).ready(function() {
         $('.payment-method').removeClass('active');
         $(this).addClass('active');
     });
+
+    // Add CSS for booking confirmation success message
+    $('<style>')
+        .prop('type', 'text/css')
+        .html(`
+            .booking-confirmation {
+                text-align: center;
+                padding: 40px 20px;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .confirmation-icon {
+                font-size: 60px;
+                margin-bottom: 20px;
+            }
+            .booking-confirmation h2 {
+                margin-bottom: 20px;
+                color: #4CAF50;
+            }
+            .booking-confirmation p {
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+        `)
+        .appendTo('head');
 });
