@@ -230,6 +230,7 @@
             dataType: "json",
 
             success: function(response) {
+                checkLoginStatus();
                 console.log(response);
                 if (response.message === "Success") {
                     console.log('log una')

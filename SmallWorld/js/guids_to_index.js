@@ -243,12 +243,14 @@ $("#send-request-btn").click(function() {
         message: message
     };
 
+    console.log(requestData);
+
     // Send request to backend (example)
     $.ajax({
         url: 'http://localhost:8080/api/v1/tourRequest/create',
         type: 'POST',
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzMzMzNjA0LCJleHAiOjE3NDQzNzA0MDR9.pvTaWycEl_iHVD9JtzCQeG2UbKxjVC8Qh4YM7U6h6L5_hZu1n5-iBHz4_Pf-0crL3TENSD59Dz69ddaO03-74Q"
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNjU3MTQ0LCJleHAiOjE3NDQ2OTM5NDR9.99NbKqcpInWUohv_89_49cAcke4AOcKjaEI0xw4NDnkc_ZFEgoCKkhS8lFgMIkT07gmfNBEWo2ht1POwtrJwJg"
         },
         contentType: 'application/json',
         data: JSON.stringify(requestData),
