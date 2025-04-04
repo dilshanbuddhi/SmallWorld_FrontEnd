@@ -221,6 +221,7 @@ $("#send-request-btn").click(function() {
     const email = $("#contact-email").val();
     const phone = $("#contact-phone").val();
     const date = $("#tour-date").val();
+    const language = $("#language").val();
     const groupSize = $("#group-size-contact").val();
     const duration = $("#tour-duration").val();
     const message = $("#smessage").val();
@@ -240,7 +241,9 @@ $("#send-request-btn").click(function() {
         tourDate: date,
         groupSize: groupSize,
         tourDuration: duration,
-        message: message
+        message: message,
+        language : language,
+        status : "pending"
     };
 
     console.log(requestData);
