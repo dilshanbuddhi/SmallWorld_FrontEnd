@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tour Guide Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        .chat-header {
+            padding: 12px 15px;
+            background-color: #4a89dc;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+
+        .chat-message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+            position: relative;
+            clear: both;
+        }
+
+        .chat-message.sent {
+            background-color: #dcf8c6;
+            float: right;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.received {
+            background-color: #fff;
+            float: left;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .timestamp {
+            font-size: 10px;
+            color: #888;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        #chat-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+        }
+
+        #sendBtn {
+            background-color: #4a89dc;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #sendBtn:hover {
+            background-color: #3a70c2;
+        }
+
+        #sendBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .connection-status {
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Clear float after messages */
+        .chat-messages::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="chat-box" class="chat-box">
+        <div class="chat-header">
+            <img id="chat-user-avatar" src="img/avatar2.webp" alt="User Avatar">
+            <span id="chat-user-name">Tour Client</span>
+        </div>
+        <div class="connection-status" id="connection-status">Connecting...</div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+<script>
+    let stompClient = null;
+    let currentUserId = null;
+    let currentUserRole = null;
+    let chatPartnerId = null;
+    let chatHistory = [];
+
+    // Function to initialize chat with correct user IDs
+    function initializeChat(userId, partnerId, userRole, partnerName, partnerAvatar) {
+        currentUserId = userId;
+        chatPartnerId = partnerId;
+        currentUserRole = userRole;
+
+        // Update chat header with partner info
+        if (partnerName) {
+            document.getElementById("chat-user-name").innerText = partnerName;
+        }
+
+        if (partnerAvatar) {
+            document.getElementById("chat-user-avatar").src = partnerAvatar;
+        }
+
+        // Connect to WebSocket
+        connect();
+
+        // Load chat history
+        loadChatHistory(userId, partnerId);
+    }
+
+    function connect() {
+        const connectionStatus = document.getElementById("connection-status");
+        connectionStatus.innerText = "Connecting...";
+
+        const socket = new SockJS("http://localhost:8080/ws");
+        stompClient = Stomp.over(socket);
+
+        // Disable debug logs
+        stompClient.debug = null;
+
+        stompClient.connect({}, function (frame) {
+            connectionStatus.innerText = "Connected";
+            connectionStatus.style.color = "#4CAF50";
+            setTimeout(() => {
+                connectionStatus.style.display = "none";
+            }, 2000);
+
+            // Enable send button after connection
+            document.getElementById("sendBtn").disabled = false;
+
+            // Subscribe to personal topic to receive messages
+            stompClient.subscribe("/topic/chat/" + currentUserId, function (messageOutput) {
+                const msg = JSON.parse(messageOutput.body);
+                displayMessage(msg, "received");
+
+                // Add to history
+                chatHistory.push(msg);
+            });
+        }, function (error) {
+            console.error("🔴 WebSocket connection error: ", error);
+            connectionStatus.innerText = "Connection failed. Please try again.";
+            connectionStatus.style.color = "#F44336";
+        });
+    }
+
+    function sendMessage() {
+        const msgContent = document.getElementById("chat-input").value.trim();
+
+        if (!msgContent) return;
+
+        if (!stompClient || !stompClient.connected) {
+            alert("⚠️ WebSocket is not connected.");
+            return;
+        }
+
+        const chatMessage = {
+            content: msgContent,
+            senderId: currentUserId,
+            receiverId: chatPartnerId,
+            timestamp: new Date().toISOString(),
+            senderRole: currentUserRole
+        };
+
+        console.log(chatMessage);
+
+       stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+        displayMessage(chatMessage, "sent");
+
+        // Add to history
+        chatHistory.push(chatMessage);
+
+        document.getElementById("chat-input").value = "";
+    }
+
+    function displayMessage(msg, type) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("chat-message", type);
+
+        // Message content
+        messageDiv.innerText = msg.content;
+
+        // Add timestamp
+        const timestamp = document.createElement("div");
+        timestamp.classList.add("timestamp");
+        const messageTime = new Date(msg.timestamp);
+        timestamp.innerText = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        messageDiv.appendChild(timestamp);
+
+        const messageBox = document.getElementById("chat-messages");
+        messageBox.appendChild(messageDiv);
+        messageBox.scrollTop = messageBox.scrollHeight;
+    }
+
+    function loadChatHistory(userId, partnerId) {
+        // Make AJAX call to get chat history from server
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/history?user1=${userId}&user2=${partnerId}`,
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200) {
+                    const messages = response.data;
+
+                    // Clear existing messages
+                    document.getElementById("chat-messages").innerHTML = "";
+
+                    // Display each message
+                    messages.forEach(msg => {
+                        const messageType = msg.senderId === currentUserId ? "sent" : "received";
+                        displayMessage(msg, messageType);
+                    });
+
+                    // Store in history
+                    chatHistory = messages;
+                }
+            },
+            error: function(error) {
+                console.error("Error loading chat history:", error);
+            }
+        });
+    }
+
+    // Listen for Enter key on input field
+    document.getElementById("chat-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Function to open chat from guide request list
+    function openChatWithUser(userId, userName, userAvatar) {
+        // Get the current guide ID from localStorage or page context
+        const guideId = localStorage.getItem("guideId") || "0aab77e1-e5cc-4b6b-998d-31eaac066f9e"; // Use default if not set
+        const guideName = localStorage.getItem("guideName") || "Tour Guide";
+
+        // Initialize chat with proper IDs
+        initializeChat(guideId, userId, "guide", userName, userAvatar);
+
+        // Show chat interface
+        document.getElementById("chat-box").style.display = "flex";
+    }
+
+    // Example of initialization when page loads
+    // This would be called when the chat is opened from a specific context
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize with placeholder values - replace these with actual values from your application context
+        const urlParams = new URLSearchParams(window.location.search);
+        const partnerId = urlParams.get('partnerId');
+        const partnerName = urlParams.get('partnerName');
+        const partnerAvatar = urlParams.get('partnerAvatar') || 'img/avatar2.webp';
+
+        if (partnerId) {
+            // Get current user info from localStorage or other source
+            const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {
+                id: '730fd58f-43da-4e48-ba8c-40baf3c88c33',
+                role: 'guide'
+            };
+
+            initializeChat(currentUser.id, partnerId, currentUser.role, partnerName, partnerAvatar);
+        } else {
+            // Hide chat if no partner specified
+            document.getElementById("chat-box").style.display = "none";
+            document.body.innerHTML = "<p>Please select a chat partner first.</p>";
+        }
+    });
+</script>
+
+</body>
+</html>

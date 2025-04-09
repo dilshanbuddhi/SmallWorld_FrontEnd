@@ -291,7 +291,66 @@
 #hero {
     padding-top: 5rem !important;
 }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 20vh;
+            margin: 0;
+            padding: 0;
+        }
 
+        .hotel-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .modern-button {
+            background: linear-gradient(135deg, #6e8efb, #4a6cf7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.3);
+        }
+
+        .modern-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 108, 247, 0.4);
+            background: linear-gradient(135deg, #5d7ef8, #3a5ce6);
+        }
+
+        .modern-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(74, 108, 247, 0.3);
+        }
+
+        .button-text {
+            margin-right: 4px;
+        }
+
+        .button-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .modern-button:hover .button-icon {
+            transform: translateX(3px);
+        }
+
+        /* Adding these styles ensures proper centering in most contexts */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -455,8 +514,16 @@
     </div>
 </div>
 
-
-
+<div class="button-container">
+    <a href="#" id="hotel" class="hotel-link">
+        <button id="hotel-discover" class="modern-button">
+            <span class="button-text">Discover Perfect Stay</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+                <path d="m9 18 6-6-6-6"></path>
+            </svg>
+        </button>
+    </a>
+</div>
 <div class="search-section" id="search">
     <div class="container">
         <div class="row">

@@ -9,6 +9,9 @@ let placeLon;
     const city = urlParams.get('city');
     console.log(city);
 
+$("#hotel-discover").on("click", function() {
+    window.location.href = "hotelBook.html?city=" + city;
+})
     // Fetch category details using the ID
     $.ajax({
     url: `http://localhost:8080/api/v1/place/getOne/${placeId}`,

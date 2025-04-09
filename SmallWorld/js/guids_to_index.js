@@ -79,7 +79,7 @@ function getAllguids() {
                                 
                                 <div class="d-flex justify-content-between">
                                     <a href="#" class="outline-btn view-profile" 
-                                        data-guide-id="${guid.guidID}"
+                                        data-guide-id="${guid.id}"
                                         data-guide-name="${guid.name}"
                                         data-guide-image="${guid.profile_image}"
                                         data-guide-years="${guid.experience_of_years}"
@@ -88,7 +88,7 @@ function getAllguids() {
                                         data-guide-price="${guid.price}"
                                         data-guide-availability="${guid.availability}">View Profile</a>
                                     <a href="#" class="primary-btn contact-guide" 
-                                       data-guide-id="${guid.guidID}" 
+                                       data-guide-id="${guid.id}" 
                                        data-guide-name="${guid.name}" 
                                        data-guide-email="${guid.email}" 
                                        data-guide-phone="${guid.phone_number}"
@@ -225,6 +225,7 @@ $("#send-request-btn").click(function() {
     const groupSize = $("#group-size-contact").val();
     const duration = $("#tour-duration").val();
     const message = $("#smessage").val();
+    const title = $("#title").val();
 
     // Validate form
     if (!name || !email || !phone || !date || !message) {
@@ -243,7 +244,8 @@ $("#send-request-btn").click(function() {
         tourDuration: duration,
         message: message,
         language : language,
-        status : "pending"
+        status : "pending",
+        title: title
     };
 
     console.log(requestData);
@@ -258,6 +260,7 @@ $("#send-request-btn").click(function() {
         contentType: 'application/json',
         data: JSON.stringify(requestData),
         success: function(response) {
+            console.log(response);
             // Close modal and show success message
             $("#contactGuideModal").modal('hide');
             alert("Your request has been sent successfully!");

@@ -424,10 +424,67 @@ function closeBookingModal() {
     document.getElementById('bookingModal').style.display = 'none';
 }
 
+function getAllByCity(city) {
+    $.ajax({
+        url: "http://localhost:8080/api/v1/hotel/getAllByCity/" + city,
+        headers: {
+            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+        },
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            getAllHotels.hotelData = data;
+
+            $("#hotel-city").text("Hotels in " + city + "(" + data.data.length + " Results)");
+            console.log(data);
+            $("#hotel-cards").empty();
+            data.data.forEach((hotel, index) => {
+                const hotelCard = `
+                    <div class="hotel-card" data-hotel-id="${index}">
+                        <div class="hotel-image" style="background-image: url('${hotel.image[0]}');"></div>
+                        <div class="hotel-content">
+                            <div class="hotel-price">Beach Resort <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ Day/ Night</span></div>
+                            <h3 class="hotel-title">${hotel.name}</h3>
+                            <div class="hotel-location">📍, ${hotel.location}</div>
+
+                            <div class="hotel-features">
+                                <div class="feature">🏊‍♂️, ${hotel.amenities[0]}</div>
+                                <div class="feature">🍽️, ${hotel.amenities[1]}</div>
+                                <div class="feature">🅿️, ${hotel.amenities[2]}</div>
+                            </div>
+
+                            <div class="hotel-rating">
+                                <div class="rating">
+                                    <span class="rating-number">4.8</span>
+                                    <span class="rating-count">(423 reviews)</span>
+                                </div>
+                                <button class="book-button" onclick="openBookingModal(${index})">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $("#hotel-cards").append(hotelCard);
+            });
+        },
+
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
 // Initialize
 $(document).ready(function() {
-    getAllHotels();
+    const urlParams = new URLSearchParams(window.location.search);
 
+    const city = urlParams.get('city');
+    console.log(city   , "    hyuhuuhu");
+    if (city) {
+        getAllByCity(city);
+    }else {
+        getAllHotels();
+    }
     // Handle payment method selection
     $(document).on('click', '.payment-method', function() {
         $('.payment-method').removeClass('active');

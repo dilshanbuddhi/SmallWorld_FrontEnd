@@ -395,7 +395,7 @@
             color: #d97706;
         }
 
-        .status-confirmed {
+        .status-accepted {
             background-color: #d1fae5;
             color: #059669;
         }
@@ -802,55 +802,23 @@
                 <button class="tab-button">Past Tours (127)</button>
             </div>
 
-            <div class="request-list">
-                <div class="request-item">
-                    <div class="request-header">
-                        <div class="request-title">Gothic Quarter & Cathedral Tour</div>
-                        <div class="request-status status-pending">Pending</div>
-                    </div>
-                    <div class="request-details">
-                        <div class="request-info">
-                            <p><strong>Date:</strong> April 15, 2025</p>
-                            <p><strong>Time:</strong> 10:00 AM - 1:00 PM</p>
-                            <p><strong>Group Size:</strong> 4 people</p>
-                        </div>
-                        <div class="request-info">
-                            <p><strong>Price:</strong> €150</p>
-                            <p><strong>Language:</strong> English</p>
-                            <p><strong>Special Requests:</strong> Wheelchair accessible route</p>
-                        </div>
-                    </div>
-                    <div class="request-user">
-                        <div class="user-avatar">
-                            <img src="img/avatar1.webp" alt="User Avatar">
-                        </div>
-                        <div class="user-info">
-                            <h5>Emma Thompson</h5>
-                            <p>United Kingdom</p>
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        <button class="action-btn btn-accept">Accept Request</button>
-                        <button class="action-btn btn-reject">Decline</button>
-                        <button class="action-btn btn-message">Message Client</button>
-                    </div>
-                </div>
+            <div class="request-list" id="requestList">
 
                 <div class="request-item">
                     <div class="request-header">
-                        <div class="request-title">Gaudí Masterpieces Tour</div>
-                        <div class="request-status status-pending">Pending</div>
+                        <div class="request-title" id="title">Gaudí Masterpieces Tour</div>
+                        <div class="request-status status-pending" id="status">Pending</div>
                     </div>
                     <div class="request-details">
                         <div class="request-info">
-                            <p><strong>Date:</strong> April 20, 2025</p>
-                            <p><strong>Time:</strong> 9:00 AM - 2:00 PM</p>
-                            <p><strong>Group Size:</strong> 2 people</p>
+                            <p id="date"><strong>Date:</strong> April 20, 2025</p>
+                            <p id="tourDuration"><strong>Duration:</strong> 2 Day</p>
+                            <p id="groupSize"><strong>Group Size:</strong> 2 people</p>
                         </div>
                         <div class="request-info">
                             <p><strong>Price:</strong> €200</p>
-                            <p><strong>Language:</strong> French</p>
-                            <p><strong>Special Requests:</strong> Architecture photography focus</p>
+                            <p id="language"><strong>Language:</strong> French</p>
+                            <p id="message"><strong>Special Requests:</strong> Architecture photography focus</p>
                         </div>
 
                     </div>
@@ -859,41 +827,8 @@
                             <img src="img/avatar2.webp" alt="User Avatar">
                         </div>
                         <div class="user-info">
-                            <h5>Jean Dupont</h5>
-                            <p>France</p>
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        <button class="action-btn btn-accept">Accept Request</button>
-                        <button class="action-btn btn-reject">Decline</button>
-                        <button class="action-btn btn-message">Message Client</button>
-                    </div>
-                </div>
-
-                <div class="request-item">
-                    <div class="request-header">
-                        <div class="request-title">Barcelona Food Tour</div>
-                        <div class="request-status status-pending">Pending</div>
-                    </div>
-                    <div class="request-details">
-                        <div class="request-info">
-                            <p><strong>Date:</strong> April 25, 2025</p>
-                            <p><strong>Time:</strong> 6:00 PM - 10:00 PM</p>
-                            <p><strong>Group Size:</strong> 6 people</p>
-                        </div>
-                        <div class="request-info">
-                            <p><strong>Price:</strong> €280</p>
-                            <p><strong>Language:</strong> English</p>
-                            <p><strong>Special Requests:</strong> Vegetarian options, local wines</p>
-                        </div>
-                    </div>
-                    <div class="request-user">
-                        <div class="user-avatar">
-                            <img src="img/avatar3.webp" alt="User Avatar">
-                        </div>
-                        <div class="user-info">
-                            <h5>Carlos Rodriguez</h5>
-                            <p>Mexico</p>
+                            <h5 id="username">Jean Dupont</h5>
+                            <p id="userCountry">France</p>
                         </div>
                     </div>
                     <div class="request-actions">
