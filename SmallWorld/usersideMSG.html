@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tour Guide Chat</title>
+    <title>Tour Client Chat</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -123,6 +123,52 @@
             color: #666;
         }
 
+        .guides-list {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: white;
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .guide-item:last-child {
+            border-bottom: none;
+        }
+
+        .guide-item:hover {
+            background-color: #f0f7ff;
+        }
+
+        .guide-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .guide-info {
+            flex: 1;
+        }
+
+        .guide-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .guide-status {
+            font-size: 12px;
+            color: #4CAF50;
+        }
+
         /* Clear float after messages */
         .chat-messages::after {
             content: "";
@@ -133,16 +179,35 @@
 </head>
 <body>
 <div class="container">
-    <div id="chat-box" class="chat-box">
+    <h2>Available Tour Guides</h2>
+    <div id="guides-list" class="guides-list">
+        <!-- Guide list will be populated here -->
+        <div class="guide-item" onclick="openChatWithGuide('0aab77e1-e5cc-4b6b-998d-31eaac066f9e', 'John Smith', 'img/avatar1.webp')">
+            <img src="img/avatar1.webp" alt="Guide Avatar" class="guide-avatar">
+            <div class="guide-info">
+                <div class="guide-name">John Smith</div>
+                <div class="guide-status">Online</div>
+            </div>
+        </div>
+        <div class="guide-item" onclick="openChatWithGuide('1bbc88f2-f6dd-5c7c-998d-42fbbd177a0f', 'Maria Garcia', 'img/avatar3.webp')">
+            <img src="img/avatar3.webp" alt="Guide Avatar" class="guide-avatar">
+            <div class="guide-info">
+                <div class="guide-name">Maria Garcia</div>
+                <div class="guide-status">Online</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-box" class="chat-box" style="display: none;">
         <div class="chat-header">
-            <img id="chat-user-avatar" src="img/avatar2.webp" alt="User Avatar">
-            <span id="chat-user-name">Tour Client</span>
+            <img id="chat-guide-avatar" src="img/avatar1.webp" alt="Guide Avatar">
+            <span id="chat-guide-name">Tour Guide</span>
         </div>
         <div class="connection-status" id="connection-status">Connecting...</div>
         <div id="chat-messages" class="chat-messages"></div>
         <div class="chat-input-container">
             <input type="text" id="chat-input" placeholder="Type a message...">
-            <button id="sendBtn" onclick="sendMessage()">Send</button>
+            <button id="sendBtn" disabled onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
@@ -154,23 +219,34 @@
 <script>
     let stompClient = null;
     let currentUserId = null;
-    let currentUserRole = null;
+    let currentUserRole = 'client';
     let chatPartnerId = null;
     let chatHistory = [];
 
+    // Function to open chat with a selected guide
+    function openChatWithGuide(guideId, guideName, guideAvatar) {
+        // Get the current user/client ID from localStorage or use default for demo
+        const clientId =/* localStorage.getItem("clientId") || */"dd40b3b9-2076-4304-bf5b-7e28c8b530cb"; // Use default if not set
+
+        // Initialize chat with proper IDs
+        initializeChat(guideId,clientId, guideName, guideAvatar);
+
+        // Show chat interface
+        document.getElementById("chat-box").style.display = "flex";
+    }
+
     // Function to initialize chat with correct user IDs
-    function initializeChat(userId, partnerId, userRole, partnerName, partnerAvatar) {
-        currentUserId = userId;
-        chatPartnerId = partnerId;
-        currentUserRole = userRole;
+    function initializeChat(userId, partnerId, partnerName, partnerAvatar) {
+        currentUserId = partnerId;
+        chatPartnerId = userId;
 
         // Update chat header with partner info
         if (partnerName) {
-            document.getElementById("chat-user-name").innerText = partnerName;
+            document.getElementById("chat-guide-name").innerText = partnerName;
         }
 
         if (partnerAvatar) {
-            document.getElementById("chat-user-avatar").src = partnerAvatar;
+            document.getElementById("chat-guide-avatar").src = partnerAvatar;
         }
 
         // Connect to WebSocket
@@ -233,9 +309,7 @@
             senderRole: currentUserRole
         };
 
-        console.log(chatMessage);
-
-       stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
         displayMessage(chatMessage, "sent");
 
         // Add to history
@@ -269,7 +343,7 @@
             url: `http://localhost:8080/api/v1/chat/history?user1=${userId}&user2=${partnerId}`,
             method: "GET",
             headers: {
-                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzMzMzNjA0LCJleHAiOjE3NDQzNzA0MDR9.pvTaWycEl_iHVD9JtzCQeG2UbKxjVC8Qh4YM7U6h6L5_hZu1n5-iBHz4_Pf-0crL3TENSD59Dz69ddaO03-74Q"
+                Authorization: "Bearer " + localStorage.getItem("token")
             },
             success: function(response) {
                 if (response.code === 200) {
@@ -294,6 +368,67 @@
         });
     }
 
+    // Function to load available guides
+    function loadAvailableGuides() {
+        // Make AJAX call to get available guides from server
+        $.ajax({
+            url: "http://localhost:8080/api/v1/guides/available",
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200) {
+                    const guides = response.data;
+                    const guidesList = document.getElementById("guides-list");
+
+                    // Clear existing list
+                    guidesList.innerHTML = "";
+
+                    // Display each guide
+                    guides.forEach(guide => {
+                        const guideItem = document.createElement("div");
+                        guideItem.classList.add("guide-item");
+                        guideItem.onclick = function() {
+                            openChatWithGuide(guide.id, guide.name, guide.avatarUrl);
+                        };
+
+                        guideItem.innerHTML = `
+                            <img src="${guide.avatarUrl || 'img/default-avatar.webp'}" alt="Guide Avatar" class="guide-avatar">
+                            <div class="guide-info">
+                                <div class="guide-name">${guide.name}</div>
+                                <div class="guide-status">${guide.status || 'Online'}</div>
+                            </div>
+                        `;
+
+                        guidesList.appendChild(guideItem);
+                    });
+                }
+            },
+            error: function(error) {
+                console.error("Error loading available guides:", error);
+                // Add fallback guides for demo purposes
+                const guidesList = document.getElementById("guides-list");
+                guidesList.innerHTML = `
+                    <div class="guide-item" onclick="openChatWithGuide('0aab77e1-e5cc-4b6b-998d-31eaac066f9e', 'John Smith', 'img/avatar1.webp')">
+                        <img src="img/avatar1.webp" alt="Guide Avatar" class="guide-avatar">
+                        <div class="guide-info">
+                            <div class="guide-name">John Smith</div>
+                            <div class="guide-status">Online</div>
+                        </div>
+                    </div>
+                    <div class="guide-item" onclick="openChatWithGuide('1bbc88f2-f6dd-5c7c-998d-42fbbd177a0f', 'Maria Garcia', 'img/avatar3.webp')">
+                        <img src="img/avatar3.webp" alt="Guide Avatar" class="guide-avatar">
+                        <div class="guide-info">
+                            <div class="guide-name">Maria Garcia</div>
+                            <div class="guide-status">Online</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+
     // Listen for Enter key on input field
     document.getElementById("chat-input").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
@@ -302,41 +437,19 @@
         }
     });
 
-    // Function to open chat from guide request list
-    function openChatWithUser(userId, userName, userAvatar) {
-        console.log("gggggggggggg")
-        // Get the current guide ID from localStorage or page context
-        const guideId = localStorage.getItem("guideId") || "0aab77e1-e5cc-4b6b-998d-31eaac066f9e"; // Use default if not set
-        const guideName = localStorage.getItem("guideName") || "Tour Guide";
-
-        // Initialize chat with proper IDs
-        initializeChat(guideId, userId, "guide", userName, userAvatar);
-
-        // Show chat interface
-        document.getElementById("chat-box").style.display = "flex";
-    }
-
-    // Example of initialization when page loads
-    // This would be called when the chat is opened from a specific context
+    // Load available guides when page loads
     document.addEventListener("DOMContentLoaded", function() {
-        // Initialize with placeholder values - replace these with actual values from your application context
+        // Try to load guides from API
+        loadAvailableGuides();
+
+        // Check if we should open chat directly from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const partnerId = urlParams.get('partnerId');
-        const partnerName = urlParams.get('partnerName');
-        const partnerAvatar = urlParams.get('partnerAvatar') || 'img/avatar2.webp';
+        const guideId = urlParams.get('guideId');
+        const guideName = urlParams.get('guideName');
+        const guideAvatar = urlParams.get('guideAvatar');
 
-        if (partnerId) {
-            // Get current user info from localStorage or other source
-            const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {
-                id: '730fd58f-43da-4e48-ba8c-40baf3c88c33',
-                role: 'guide'
-            };
-
-            initializeChat(localStorage.getItem("guideId"), partnerId, currentUser.role, partnerName, partnerAvatar);
-        } else {
-            // Hide chat if no partner specified
-            document.getElementById("chat-box").style.display = "none";
-            document.body.innerHTML = "<p>Please select a chat partner first.</p>";
+        if (guideId) {
+            openChatWithGuide(guideId, guideName || 'Tour Guide', guideAvatar || 'img/avatar1.webp');
         }
     });
 </script>

@@ -7,6 +7,7 @@ function getGuidData() {
         },
         dataType: "json",
         success: function (response) {
+            localStorage.setItem("guideId", "0aab77e1-e5cc-4b6b-998d-31eaac066f9e");
             if (response.code === 200) {
                 let data = response.data;
                 console.log(data.id  , " fgtuivgugfg8u")
@@ -235,6 +236,7 @@ function getGuideRequestsByStatus(guideId, status) {
 
 // Function to open chat in a modal or redirect to chat page
 function openChat(guideId, userId, userName, userAvatar) {
+    console.log(guideId)
     // Option 1: Open in a modal
     if ($("#chat-modal").length) {
         // If chat modal exists, initialize it
