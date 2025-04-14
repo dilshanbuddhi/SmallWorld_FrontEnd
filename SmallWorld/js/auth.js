@@ -283,6 +283,8 @@
                 dataType: "json",
 
                 success: function(response) {
+                    console.log(response);
+                    checkLoginStatus();
                     localStorage.clear();
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("role", response.data.role);
@@ -300,6 +302,7 @@
                 },
                 error: function(xhr, status, error) {
                     console.log("Error: " + error);
+                    alert(error)
                 }
             });
         } else {

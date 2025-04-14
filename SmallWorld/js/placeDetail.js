@@ -15,9 +15,9 @@ $("#hotel-discover").on("click", function() {
     // Fetch category details using the ID
     $.ajax({
     url: `http://localhost:8080/api/v1/place/getOne/${placeId}`,
-        headers: {
+        /*headers: {
             Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
-        },
+        },*/
     type: "GET",
     success: function (response) {
     if (response.code === 200 && response.data) {
@@ -84,9 +84,9 @@ console.log(response.data.longitude);
                 url: 'http://localhost:8080/api/v1/place/getAllByCity/' + city,
                 method: 'GET',
                 dataType: 'json',
-                headers: {
+                /*headers: {
                     Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
-                },
+                },*/
 
                 success: function (data) {
                     console.log(data);

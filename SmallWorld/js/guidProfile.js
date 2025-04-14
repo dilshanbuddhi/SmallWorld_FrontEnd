@@ -7,7 +7,7 @@ function getGuidData() {
         },
         dataType: "json",
         success: function (response) {
-            localStorage.setItem("guideId", "0aab77e1-e5cc-4b6b-998d-31eaac066f9e");
+            localStorage.setItem("guideId", response.data.user_id);
             if (response.code === 200) {
                 let data = response.data;
                 console.log(data.id  , " fgtuivgugfg8u")
