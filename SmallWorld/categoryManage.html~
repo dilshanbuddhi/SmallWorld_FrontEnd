@@ -217,7 +217,7 @@
     </style>
 </head>
 <body>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <!-- Header / Navbar -->
 <nav>
     <a href="#">No mask</a>

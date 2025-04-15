@@ -2,7 +2,7 @@ function getAll() {
     $.ajax({
         url: "http://localhost:8080/api/v1/placeCategory/getAll",
         headers: {
-            Authorization: "Bearer " +"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "GET",
         dataType: "json",
@@ -16,7 +16,7 @@ function getAll() {
                 response.data.forEach(function(category) {
                     tableBody += `
                     <tr>
-                        <td>${category.id}</td>
+                       
                         <td>${category.name}</td>
                         <td>${category.description}</td>
                         <td>
@@ -59,7 +59,7 @@ $('#editCategoryBtn').on('click', function()  {
     $.ajax({
         url: "http://localhost:8080/api/v1/placeCategory/update",
         headers: {
-            Authorization: "Bearer " +"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "PUT",
         contentType: "application/json",
@@ -70,6 +70,7 @@ $('#editCategoryBtn').on('click', function()  {
                 getAll();
                 $('#editCategoryName').val('');
                 $('#editCategoryDescription').val('');
+                $('#editCategoryModal').modal('hide');
 
         },
         error: function (error) {
@@ -88,7 +89,7 @@ $('#saveCategoryBtn').on('click', function() {
     $.ajax({
         url: "http://localhost:8080/api/v1/placeCategory/save",
         headers: {
-            Authorization: "Bearer " +"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "POST",
         contentType: "application/json",
@@ -113,25 +114,35 @@ $('#deleteCategoryBtn').on('click', function() {
     $.ajax({
         url: "http://localhost:8080/api/v1/placeCategory/delete/" + id,
         headers: {
-            Authorization: "Bearer " +"eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQyMjc4Nzg4LCJleHAiOjE3NDMzMTU1ODh9.a9c-iVn2SYAS96w6iU_zsigxrIzuief_0ZYYGmF4O5bnH3wo7EztPdrtloj7y_e5qNn8MRRGbgsVcOZ5eYcLSQ"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "DELETE",
         contentType: "application/json",
         dataType: "json",
         success: function (response) {
             console.log(response);
+            //getAll();
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Category deleted successfully',
+                showConfirmButton: false,
+                timer: 1500
+            })
                 getAll();
         },
         error: function (error) {
             console.error("An error occurred while deleting category:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong while trying to delete the category. Please try again.',
+            });
         }
     });
 });
 
 // Call the function to fetch and populate the table when the page loads
 $(document).ready(function() {
-
-
-
     getAll();
 });

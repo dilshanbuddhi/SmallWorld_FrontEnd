@@ -70,7 +70,7 @@ $("#editUserModal form").submit(function (e) {
     console.log(updatedUser);
 
     $.ajax({
-        url: "http://localhost:8080/api/v1/user/update/" + userId, // adjust this URL if needed
+        url: "http://localhost:8080/api/v1/user/update", // adjust this URL if needed
         method: "PUT", // or POST depending on your backend
         contentType: "application/json",
         headers: {
@@ -125,12 +125,13 @@ $("#delete-user-btn").click(function () {
             Authorization: "Bearer " + localStorage.getItem("token")
         },
         success: function (response) {
+            console.log(response)
             alert("User deleted successfully!");
             $("#deleteUserModal").modal('hide');
             getAllUsers(); // Refresh the user table
         },
         error: function (xhr, status, error) {
-            console.error("Delete failed:", error);
+            console.log("Delete failed:", error);
             alert("Failed to delete user.");
         }
     });
