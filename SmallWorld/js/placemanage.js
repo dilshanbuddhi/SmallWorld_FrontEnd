@@ -7,7 +7,7 @@ function setcategories() {
         url: 'http://localhost:8080/api/v1/placeCategory/getAll',
         type: 'GET',
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         success: function(response) {
                 // Populate the select dropdown with category options
@@ -37,7 +37,7 @@ function getAll() {
     $.ajax({
         url: "http://localhost:8080/api/v1/place/getAll",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "GET",
         contentType: "application/json",
@@ -127,6 +127,7 @@ $(document).ready(function() {
                 processData: false, // Stop jQuery from processing the data
                 contentType: false, // Prevent jQuery from setting contentType
                 success: function(response) {
+                    console.log(response.url)
                     // Store the uploaded URL
                     uploadedUrls.push(response.url);
                     console.log('Uploaded Successfully:', response.url);
@@ -139,7 +140,7 @@ $(document).ready(function() {
                             url: 'http://localhost:8080/api/v1/place/save',
                             type: 'POST',
                             headers: {
-                                Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDk3NDkxLCJleHAiOjE3NDQ1MzQyOTF9.HlRWspJ5JnrD-dyj-Lp416hnZ5RAMqdC4G_gYBg7Ls32RyI3Uj1W4LCYSGYBef6ec8i7zXJTqf1AzbGmoE345Q"
+                                Authorization: "Bearer " + localStorage.getItem("token")
                             },
                             data: formData1,
                             processData: false, // Important to prevent jQuery from processing the data
@@ -148,7 +149,7 @@ $(document).ready(function() {
                                 console.log('Success:', response);
                                 // Handle success (e.g., show a success message or close modal)
                                 uploadedUrls = [];
-                                alert('Place added successfully!');
+                                //alert('Place added successfully!');
                                 $('#addPlaceModal').modal('hide');
                                 getAll();// Hide the modal after submission
                             },
@@ -168,12 +169,6 @@ $(document).ready(function() {
             });
         }
 
-
-        // Get image files and append them
-/*        var imageFiles = $('#placeimages')[0].files;
-        $.each(imageFiles, function(i, file) {
-            formData.append('imageFiles', file);
-        });*/
 
     });
 });

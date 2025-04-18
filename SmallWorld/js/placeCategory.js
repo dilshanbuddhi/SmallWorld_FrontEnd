@@ -97,13 +97,24 @@ $('#saveCategoryBtn').on('click', function() {
         dataType: "json",
         success: function (response) {
             console.log(response);
-                getAll();
-                $('#categoryName').val('');
-                $('#categoryDescription').val('');
-
+            getAll();
+            $('#categoryName').val('');
+            $('#categoryDescription').val('');
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Category saved successfully',
+                showConfirmButton: false,
+                timer: 1500
+            });
         },
         error: function (error) {
             console.error("An error occurred while saving category:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong while trying to save the category. Please try again.',
+            });
         }
     });
 });

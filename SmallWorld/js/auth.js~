@@ -4,7 +4,7 @@
         console.log(role, " vghji")
         if (role === "user" || role === "guide" || role === "admin") {
             $("#loginIcon").css("display", "none");
-            $(".join-btn").attr("disabled", true);
+            $(".join-btn").prop("disabled", true);
         }
         if (role === "admin") {
             window.location.href = "admindash.html";

@@ -41,7 +41,7 @@ function openBookingModal(hotelIndex) {
     $("#card-test").text(hotel.name);
 
     // Update hotel details
-    $(".detail-image").css("background-image", `url('${hotel.image[0]}')`);
+    $(".detail-image").css("background-image", `url('img/images.jpg')`);
     $(".hotel-detail h2").text(hotel.name);
     $(".hotel-location").text(`📍 ${hotel.location} - 2.3 km from center`);
     $("#desc").text(hotel.description);
@@ -57,7 +57,7 @@ function openBookingModal(hotelIndex) {
     $.ajax({
         url: "http://localhost:8080/api/v1/room/getAllByHotelId/" + hotel.id,
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "GET",
         contentType: "application/json",
@@ -92,7 +92,9 @@ function openBookingModal(hotelIndex) {
 
                 $("#room-cards").append(`
                     <div class="room-card" data-room-id="${room.id}" data-room-name="${room.room_type.room_type}" data-room-price="${priceNumber}">
-                        <div class="room-image" style="background-image: url('/api/placeholder/150/90');"></div>
+                        <div class="room-image" >
+                        <img src="img/put-together-a-perfect-guest-room-1976987-hero-223e3e8f697e4b13b62ad4fe898d492d.jpg" alt="" width="100%">
+</div>
                         <div class="room-details">
                             <h4>${room.room_type.room_type}</h4>
                             <p>${room.room_type.description}</p>
@@ -326,7 +328,7 @@ function confirmBooking() {
     $.ajax({
         url: "http://localhost:8080/api/v1/booking/save",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "POST",
         contentType: "application/json",
@@ -428,7 +430,7 @@ function getAllByCity(city) {
     $.ajax({
         url: "http://localhost:8080/api/v1/hotel/getAllByCity/" + city,
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "GET",
         contentType: "application/json",
@@ -442,9 +444,11 @@ function getAllByCity(city) {
             data.data.forEach((hotel, index) => {
                 const hotelCard = `
                     <div class="hotel-card" data-hotel-id="${index}">
-                        <div class="hotel-image" style="background-image: url('${hotel.image[0]}');"></div>
+                        <div class="hotel-image">
+                        <img src="img/images.jpg" width="100%" alt="">
+</div>
                         <div class="hotel-content">
-                            <div class="hotel-price">Beach Resort <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ Day/ Night</span></div>
+                            <div class="hotel-price">Resort <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ Day/ Night</span></div>
                             <h3 class="hotel-title">${hotel.name}</h3>
                             <div class="hotel-location">📍, ${hotel.location}</div>
 

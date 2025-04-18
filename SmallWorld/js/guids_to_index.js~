@@ -143,7 +143,7 @@ function getAllguids() {
                 $("#guideProfileModal .profile-availability").text(guideAvailability === "available" ? "Available this week" : "Currently unavailable");
                 $("#guideProfileModal .profile-about").text(guideAbout || "Passionate about sharing the beauty and culture of Sri Lanka with visitors from around the world.");
                 $("#guideProfileModal .profile-certifications").html(profileCertificationsHTML);
-               // $("#guideProfileModal .profile-languages").html(profileLanguagesHTML);
+                $("#guideProfileModal .profile-languages").html(profileLanguagesHTML);
                 $("#guideProfileModal .profile-rate").text(`${guidePrice}LKR per day`);
 
                 // Store guide ID in contact button
