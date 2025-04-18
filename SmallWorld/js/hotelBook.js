@@ -429,9 +429,7 @@ function closeBookingModal() {
 function getAllByCity(city) {
     $.ajax({
         url: "http://localhost:8080/api/v1/hotel/getAllByCity/" + city,
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-        },
+
         type: "GET",
         contentType: "application/json",
         dataType: "json",

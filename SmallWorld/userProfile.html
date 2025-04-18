@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link rel="stylesheet" href="css/register.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         nav{
@@ -322,6 +323,109 @@
                 margin-bottom: 24px;
             }
         }
+
+
+        /* Container styling */
+        #guid {
+            display: flex;
+            flex-direction: column;
+            border-radius: 30px;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(157deg, #ffffff 0%, #dadada 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+        }
+
+        /* Heading styling */
+        #guidtxt {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modern button styling */
+        .modern-button {
+            position: relative;
+            padding: 14px 28px;
+            border: none;
+            background: #007bff;
+            border-radius: 50px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Button text styling */
+        .button-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hover effect */
+        .modern-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6);
+            background: #0056b3;
+        }
+
+        /* Ripple effect on click */
+        .modern-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Optional: Add a subtle animation for the button */
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .modern-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+        }
+
+        .modern-button:active::before {
+            animation: ripple 0.6s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .modern-button {
+                padding: 12px 24px;
+            }
+
+            .button-text {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -418,6 +522,12 @@
 
                     <div class="detail-section">
 
+<div id="guid">
+
+    <h1 id="guidtxt">Do You Want To Create Guid Profile!!!</h1>
+    <button class="modern-button" id="guidbtn"><span class="button-text">Create Profile</span></button>
+
+</div>
                         <a href="#" class="add-link">
                             <!-- Logout SVG icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"

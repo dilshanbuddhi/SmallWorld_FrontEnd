@@ -57,3 +57,15 @@ function getPlaces() {
 
 
 }
+
+$("#profileIcon").on("click", function () {
+    //let role = localStorage.getItem("role");
+    let role = "guide";
+    if (role === "user") {
+        window.location.href = "userProfile.html";
+    } else if (role === "admin") {
+        window.location.href = "admindash.html";
+    } else if (role === "guide") {
+        window.location.href = "guidProfile.html";
+    }
+})

@@ -132,9 +132,11 @@ https://templatemo.com/tm-526-vanilla
         <li><a href="#">Guids</a></li>
         <li><a href="#">Bookings</a></li>
         <li><a href="#">Transport</a></li>
-
+        <li id="logOutIcon"><i class="bi bi-box-arrow-right" onclick="logout()"></i>
+        </li>
         <li><button class="join-btn" onclick="openRegModal()">Join</button></li>
     </ul>
+
     <button class="menu">Menu</button>
 </nav>
 
@@ -233,11 +235,18 @@ forget popup
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="JQ/jquery-3.7.1.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 <script src="js/vendor/bootstrap.min.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
 <script>
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
+
     function openCity(cityName) {
         var i;
         var x = document.getElementsByClassName("city");
@@ -294,6 +303,8 @@ forget popup
 </script>
 
 <script>
+
+
     document.getElementById('submitOTP').onclick = function(event) {
         event.preventDefault();
         var enteredOTP = document.getElementById('otp').value;
