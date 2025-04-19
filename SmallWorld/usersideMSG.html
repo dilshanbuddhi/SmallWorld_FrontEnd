@@ -217,16 +217,52 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 
 <script>
+    //setrecieveGuids();
     let stompClient = null;
     let currentUserId = null;
     let currentUserRole = 'client';
     let chatPartnerId = null;
     let chatHistory = [];
 
+    function setrecieveGuids() {
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/chat/received-guids/' + localStorage.getItem("userid"),
+            method: 'GET',
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.code === 200 && response.data.length > 0) {
+                    const guidesList = $('#guides-list');
+                    guidesList.empty(); // Clear existing content
+
+                    response.data.forEach(function(guide) {
+                        const guideItem = `
+                        <div class="guide-item" onclick="openChatWithGuide('${guide.user_id}', '${guide.name}', '${guide.profile_image}')">
+                            <img src="${guide.profile_image}" alt="Guide Avatar" class="guide-avatar">
+                            <div class="guide-info">
+                                <div class="guide-name">${guide.name}</div>
+                                <div class="guide-status">${guide.availability === 'available' ? 'Online' : 'Offline'}</div>
+                            </div>
+                        </div>
+                    `;
+                        guidesList.append(guideItem);
+                    });
+                } else {
+                    $('#guides-list').html('<p>No guides found.</p>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    }
+
     // Function to open chat with a selected guide
     function openChatWithGuide(guideId, guideName, guideAvatar) {
         // Get the current user/client ID from localStorage or use default for demo
-        const clientId =/* localStorage.getItem("clientId") || */"dd40b3b9-2076-4304-bf5b-7e28c8b530cb"; // Use default if not set
+        const clientId ="dd40b3b9-2076-4304-bf5b-7e28c8b530cb"; // Use default if not set
 
         // Initialize chat with proper IDs
         initializeChat(guideId,clientId, guideName, guideAvatar);
@@ -440,7 +476,8 @@
     // Load available guides when page loads
     document.addEventListener("DOMContentLoaded", function() {
         // Try to load guides from API
-        loadAvailableGuides();
+        //loadAvailableGuides();
+        setrecieveGuids();
 
         // Check if we should open chat directly from URL parameters
         const urlParams = new URLSearchParams(window.location.search);

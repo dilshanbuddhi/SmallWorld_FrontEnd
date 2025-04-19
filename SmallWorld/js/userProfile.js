@@ -9,6 +9,7 @@ function getLiveUserDetail() {
         },
         dataType: 'json',
         success: function (response) {
+            localStorage.setItem("userid" , response.data.uid);
             console.log(response);
 
             // Extract data

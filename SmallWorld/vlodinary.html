@@ -2,63 +2,325 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload to Cloudinary</title>
+    <title>Tour Client Inbox</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .inbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .inbox-list {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .inbox-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .inbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .inbox-item:hover {
+            background-color: #f0f7ff;
+        }
+
+        .inbox-item.unread {
+            background-color: #f0f7ff;
+        }
+
+        .guide-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .guide-info {
+            flex: 1;
+        }
+
+        .guide-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .last-message {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 400px;
+        }
+
+        .message-time {
+            color: #888;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .unread-badge {
+            background-color: #4a89dc;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .search-box {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #4a89dc;
+        }
+    </style>
 </head>
 <body>
-<!-- Form to upload images -->
-<form id="imageUploadForm">
-    <input name="imageFiles" type="file" class="form-control" id="placeimages" multiple accept="image/*">
-    <button type="submit" id="uploadBtn">Upload to Cloudinary</button>
-</form>
+<div class="container">
+    <div class="inbox-header">
+        <h2>Message Inbox</h2>
+        <button id="refreshBtn" class="btn">Refresh</button>
+    </div>
 
-<script src="JQ/jquery-3.7.1.min.js"></script>
+    <input type="text" id="searchBox" class="search-box" placeholder="Search guides...">
+
+    <div id="inbox-list" class="inbox-list">
+        <!-- Guide conversations will be loaded here -->
+        <div class="no-messages" id="no-messages">You don't have any messages yet.</div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-    $('#uploadBtn').on('click', function(e) {
-        e.preventDefault();
+    // Client ID from localStorage or default for demo
+    const clientId = localStorage.getItem("clientId") || "dd40b3b9-2076-4304-bf5b-7e28c8b530cb";
 
-        // Get the image files
-        var imageFiles = $('#placeimages')[0].files; // Use 'files' to get the FileList object
+    // Load conversations for the user
+    function loadConversations() {
+        // Show loading state
+        document.getElementById("inbox-list").innerHTML = '<div class="no-messages">Loading conversations...</div>';
 
-        if (imageFiles.length === 0) {
-            alert('Please select some images to upload.');
-            return;
-        }
+        // Make AJAX call to get chat partners from server
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/chat-partners?userId=${clientId}`,
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200) {
+                    const partners = response.data;
+                    displayConversations(partners);
 
-        var uploadedUrls = []; // Array to store the uploaded image URLs
-
-        // Loop through the files and upload each one
-        for (var i = 0; i < imageFiles.length; i++) {
-            var formData = new FormData();
-            formData.append('file', imageFiles[i]); // Append each file individually
-            formData.append('upload_preset', 'smallworld'); // Replace with your actual preset
-            formData.append('cloud_name', 'dtvizkvur'); // Replace with your Cloudinary cloud name
-
-            // Make the AJAX request to Cloudinary's API
-            $.ajax({
-                url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
-                type: 'POST',
-                data: formData,
-                processData: false, // Stop jQuery from processing the data
-                contentType: false, // Prevent jQuery from setting contentType
-                success: function(response) {
-                    // Store the uploaded URL
-                    uploadedUrls.push(response.url);
-                    console.log('Uploaded Successfully:', response.url);
-
-                    // If all files have been processed
-                    if (uploadedUrls.length === imageFiles.length) {
-                        console.log('All images uploaded:', uploadedUrls);
-                        alert('All images uploaded successfully!');
-                        // You can now use the uploadedUrls array as needed
+                    // If no conversations found
+                    if (partners.length === 0) {
+                        document.getElementById("inbox-list").innerHTML =
+                            '<div class="no-messages">You don\'t have any messages yet.</div>';
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Upload Failed:', error);
-                    alert('There was an error uploading one of the images.');
+                }
+            },
+            error: function(error) {
+                console.error("Error loading conversations:", error);
+                document.getElementById("inbox-list").innerHTML =
+                    '<div class="no-messages">Failed to load conversations. Please try again.</div>';
+            }
+        });
+    }
+
+    // Get unread message count for each guide
+    function getUnreadCount(guideId, callback) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/unread-count?userId=${clientId}&senderId=${guideId}`,
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200) {
+                    callback(response.data);
+                } else {
+                    callback(0);
+                }
+            },
+            error: function() {
+                callback(0);
+            }
+        });
+    }
+
+    // Get last message for conversation preview
+    function getLastMessage(guideId, callback) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/history?user1=${clientId}&user2=${guideId}&limit=1`,
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200 && response.data.length > 0) {
+                    callback(response.data[0]);
+                } else {
+                    callback(null);
+                }
+            },
+            error: function() {
+                callback(null);
+            }
+        });
+    }
+
+    // Display conversations in the inbox
+    function displayConversations(partners) {
+        const inboxList = document.getElementById("inbox-list");
+        inboxList.innerHTML = '';
+
+        // Process each partner
+        partners.forEach(partner => {
+            // Create inbox item for each partner
+            const inboxItem = document.createElement("div");
+            inboxItem.classList.add("inbox-item");
+            inboxItem.setAttribute("data-guide-id", partner.id);
+
+            // Get unread count
+            getUnreadCount(partner.id, function(count) {
+                if (count > 0) {
+                    inboxItem.classList.add("unread");
+                    const unreadBadge = document.createElement("div");
+                    unreadBadge.classList.add("unread-badge");
+                    unreadBadge.innerText = count > 99 ? "99+" : count;
+                    inboxItem.appendChild(unreadBadge);
                 }
             });
+
+            // Get last message for preview
+            getLastMessage(partner.id, function(lastMsg) {
+                const timestamp = lastMsg ? new Date(lastMsg.timestamp) : new Date();
+                const timeStr = formatTime(timestamp);
+
+                inboxItem.innerHTML = `
+                    <img src="${partner.avatarUrl || 'img/avatar1.webp'}" alt="${partner.firstName} ${partner.lastName}" class="guide-avatar">
+                    <div class="guide-info">
+                        <div class="guide-name">${partner.firstName} ${partner.lastName}</div>
+                        <div class="last-message">${lastMsg ? lastMsg.content : 'No messages yet'}</div>
+                    </div>
+                    <div class="message-time">${timeStr}</div>
+                `;
+
+                // Add click event
+                inboxItem.addEventListener("click", function() {
+                    // Mark messages as read when opening chat
+                    markMessagesAsRead(partner.id);
+
+                    // Open chat with this guide
+                    window.location.href = `n.html?guideId=${partner.id}&guideName=${partner.firstName} ${partner.lastName}&guideAvatar=${partner.avatarUrl || 'img/avatar1.webp'}`;
+                });
+
+                inboxList.appendChild(inboxItem);
+            });
+        });
+    }
+
+    // Format timestamp for display
+    function formatTime(date) {
+        const now = new Date();
+        const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 0) {
+            // Today, show time
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        } else if (diffDays === 1) {
+            // Yesterday
+            return 'Yesterday';
+        } else if (diffDays < 7) {
+            // This week
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[date.getDay()];
+        } else {
+            // Older
+            return date.toLocaleDateString();
         }
+    }
+
+    // Mark messages as read
+    function markMessagesAsRead(guideId) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/mark-read?userId=${clientId}&senderId=${guideId}`,
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            }
+        });
+    }
+
+    // Search functionality
+    document.getElementById("searchBox").addEventListener("input", function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const items = document.querySelectorAll(".inbox-item");
+
+        items.forEach(item => {
+            const guideName = item.querySelector(".guide-name").innerText.toLowerCase();
+            const lastMessage = item.querySelector(".last-message").innerText.toLowerCase();
+
+            if (guideName.includes(searchTerm) || lastMessage.includes(searchTerm)) {
+                item.style.display = "flex";
+            } else {
+                item.style.display = "none";
+            }
+        });
     });
+
+    // Refresh button
+    document.getElementById("refreshBtn").addEventListener("click", loadConversations);
+
+    // Load conversations when page loads
+    document.addEventListener("DOMContentLoaded", loadConversations);
 </script>
 
 </body>

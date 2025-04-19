@@ -10,7 +10,6 @@ $(document).ready(function() {
     setupSmoothScrolling();
 });
 
-// Initialize UI based on login status without causing redirects
 function initializeUI() {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
@@ -254,6 +253,7 @@ $(document).on('click', '#loginBtn', function(event) {
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("role", response.data.role);
                     localStorage.setItem("email", response.data.email);
+
 
                     // Update UI based on role
                     $("#loginIcon").css("display", "none");

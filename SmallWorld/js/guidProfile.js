@@ -235,8 +235,8 @@ function getGuideRequestsByStatus(guideId, status) {
 
 // Function to open chat in a modal or redirect to chat page
 function openChat(guideId, userId, userName, userAvatar) {
-    console.log(guideId)
-    // Option 1: Open in a modal
+    console.log(guideId,"   hhh  " , userId, userName, userAvatar);
+    // Option 1: Open in a modl
     if ($("#chat-modal").length) {
         // If chat modal exists, initialize it
         initializeChat(guideId, userId, "guide", userName, userAvatar);
@@ -290,7 +290,7 @@ function updatereq(id , status , g_id) {
         url: "http://localhost:8080/api/v1/tourRequest/update/" + id + "/" + status,
         method: "PUT",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzMzMzNjA0LCJleHAiOjE3NDQzNzA0MDR9.pvTaWycEl_iHVD9JtzCQeG2UbKxjVC8Qh4YM7U6h6L5_hZu1n5-iBHz4_Pf-0crL3TENSD59Dz69ddaO03-74Q"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         dataType: "json",
         success: function (response) {

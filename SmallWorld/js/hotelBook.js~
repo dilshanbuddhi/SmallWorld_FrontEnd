@@ -231,7 +231,7 @@ function updateBookingSummary() {
         <h4>Payment Method</h4>
         <div class="payment-methods">
             <div class="payment-method active">Credit Card</div>
-            <div class="payment-method" onclick="window.location.href='payhere.html';">PayHere</div>
+            <div class="payment-method">PayPal</div>
             <div class="payment-method">Bank Transfer</div>
         </div>
 

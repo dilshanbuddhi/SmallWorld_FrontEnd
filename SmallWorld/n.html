@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tour Client Chat</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .chat-box {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background-color: white;
+    }
+
+    .chat-header {
+      padding: 12px 15px;
+      background-color: #4a89dc;
+      color: white;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .guide-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .chat-header img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .back-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f9f9f9;
+    }
+
+    .chat-message {
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 18px;
+      max-width: 70%;
+      word-wrap: break-word;
+      position: relative;
+      clear: both;
+    }
+
+    .chat-message.sent {
+      background-color: #dcf8c6;
+      float: right;
+      border-bottom-right-radius: 5px;
+    }
+
+    .chat-message.received {
+      background-color: #fff;
+      float: left;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .timestamp {
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .read-status {
+      font-size: 10px;
+      color: #888;
+      margin-top: 2px;
+      text-align: right;
+    }
+
+    .chat-input-container {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    #chat-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 8px 15px;
+      outline: none;
+    }
+
+    #sendBtn {
+      background-color: #4a89dc;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      margin-left: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #sendBtn:hover {
+      background-color: #3a70c2;
+    }
+
+    #sendBtn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .connection-status {
+      text-align: center;
+      padding: 5px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Clear float after messages */
+    .chat-messages::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div id="chat-box" class="chat-box">
+    <div class="chat-header">
+      <div class="guide-info">
+        <img id="chat-guide-avatar" src="img/avatar1.webp" alt="Guide Avatar">
+        <span id="chat-guide-name">Tour Guide</span>
+      </div>
+      <button class="back-button" onclick="goToInbox()">Back to Inbox</button>
+    </div>
+    <div class="connection-status" id="connection-status">Connecting...</div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Type a message...">
+      <button id="sendBtn" disabled onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+<script>
+
+  // Check if URL contains guide parameters
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const partnerId = urlParams.get('guideId'); // This could be either guide or client ID depending on context
+    const partnerName = urlParams.get('guideName');
+    const partnerAvatar = urlParams.get('guideAvatar');
+
+    // Get role from localStorage or default to client
+    const userRole = localStorage.getItem("userRole") || "client";
+
+    if (partnerId) {
+      // If we're a guide messaging a client
+      if (userRole === "guide") {
+        // Get guide ID from localStorage
+        const guideId = localStorage.getItem("guideId");
+
+        // In this case, the partner is a client
+        openChatWithClient(guideId, partnerId, partnerName, partnerAvatar);
+      }
+      // If we're a client messaging a guide (original flow)
+      else {
+        openChatWithGuide(partnerId, partnerName, partnerAvatar);
+      }
+    } else {
+      // No partner selected, show message
+      document.getElementById("chat-messages").innerHTML =
+              '<div style="text-align: center; color: #666;">Please select a user to chat with.</div>';
+    }
+  });
+
+  // Function to open chat with a client (for guides)
+  function openChatWithClient(guideId, clientId, clientName, clientAvatar) {
+    // Get the current guide ID from localStorage
+    const guideSenderId = guideId;
+
+    // Set the role to guide
+    currentUserRole = 'guide';
+
+    // Initialize chat with proper IDs (guide is sender, client is receiver)
+    initializeChat(clientId, guideSenderId, clientName, clientAvatar);
+
+    // Show chat interface
+    document.getElementById("chat-box").style.display = "flex";
+  }
+  let stompClient = null;
+  let currentUserId = null;
+  let currentUserRole = 'client';
+  let chatPartnerId = null;
+  let chatHistory = [];
+
+  // Function to go back to inbox
+  function goToInbox() {
+    window.location.href = "user-inbox.html";
+  }
+
+  // Function to open chat with a selected guide
+  function openChatWithGuide(guideId, guideName, guideAvatar) {
+    // Get the current user/client ID from localStorage or use default for demo
+    const clientId = localStorage.getItem("clientId") || "dd40b3b9-2076-4304-bf5b-7e28c8b530cb"; // Use default if not set
+
+    // Initialize chat with proper IDs
+    initializeChat(guideId, clientId, guideName, guideAvatar);
+
+    // Show chat interface
+    document.getElementById("chat-box").style.display = "flex";
+  }
+
+  // Function to initialize chat with correct user IDs
+  function initializeChat(userId, partnerId, partnerName, partnerAvatar) {
+    currentUserId = partnerId;
+    chatPartnerId = userId;
+
+    // Update chat header with partner info
+    if (partnerName) {
+      document.getElementById("chat-guide-name").innerText = partnerName;
+    }
+
+    if (partnerAvatar) {
+      document.getElementById("chat-guide-avatar").src = partnerAvatar;
+    }
+
+    // Connect to WebSocket
+    connect();
+
+    // Load chat history
+    loadChatHistory(userId, partnerId);
+
+    // Mark messages as read when opening chat
+    markMessagesAsRead(userId);
+  }
+
+  function connect() {
+    const connectionStatus = document.getElementById("connection-status");
+    connectionStatus.innerText = "Connecting...";
+
+    const socket = new SockJS("http://localhost:8080/ws");
+    stompClient = Stomp.over(socket);
+
+    // Disable debug logs
+    stompClient.debug = null;
+
+    stompClient.connect({}, function (frame) {
+      connectionStatus.innerText = "Connected";
+      connectionStatus.style.color = "#4CAF50";
+      setTimeout(() => {
+        connectionStatus.style.display = "none";
+      }, 2000);
+
+      // Enable send button after connection
+      document.getElementById("sendBtn").disabled = false;
+
+      // Subscribe to personal topic to receive messages
+      stompClient.subscribe("/topic/chat/" + currentUserId, function (messageOutput) {
+        const msg = JSON.parse(messageOutput.body);
+        displayMessage(msg, "received");
+
+        // Mark message as read immediately as user is currently in chat
+        markMessagesAsRead(chatPartnerId);
+
+        // Add to history
+        chatHistory.push(msg);
+      });
+    }, function (error) {
+      console.error("🔴 WebSocket connection error: ", error);
+      connectionStatus.innerText = "Connection failed. Please try again.";
+      connectionStatus.style.color = "#F44336";
+    });
+  }
+
+  function sendMessage() {
+    const msgContent = document.getElementById("chat-input").value.trim();
+
+    if (!msgContent) return;
+
+    if (!stompClient || !stompClient.connected) {
+      alert("⚠️ WebSocket is not connected.");
+      return;
+    }
+
+    const chatMessage = {
+      content: msgContent,
+      senderId: currentUserId,
+      receiverId: chatPartnerId,
+      timestamp: new Date().toISOString(),
+      senderRole: currentUserRole,
+      read: false
+    };
+
+    console.log(chatMessage);
+
+    stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+    displayMessage(chatMessage, "sent");
+
+    // Add to history
+    chatHistory.push(chatMessage);
+
+    document.getElementById("chat-input").value = "";
+  }
+
+  function displayMessage(msg, type) {
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("chat-message", type);
+
+    // Format the timestamp for display
+    const timestamp = new Date(msg.timestamp);
+    const timeString = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Create the message content with timestamp
+    messageDiv.innerHTML = `
+            <div class="message-content">${msg.content}</div>
+            <div class="timestamp">${timeString}</div>
+            ${type === 'sent' ? `<div class="read-status">${msg.read ? 'Read' : 'Delivered'}</div>` : ''}
+        `;
+
+    // Add the message to the chat window
+    const chatMessages = document.getElementById("chat-messages");
+    chatMessages.appendChild(messageDiv);
+
+    // Scroll to the bottom of the chat window
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function loadChatHistory(guideId, clientId) {
+    $.ajax({
+      url: `http://localhost:8080/api/v1/chat/history?user1=${guideId}&user2=${clientId}`,
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      success: function(response) {
+        if (response.code === 200) {
+          // Clear chat window
+          document.getElementById("chat-messages").innerHTML = '';
+
+          // Display each message in the history
+          response.data.forEach(message => {
+            const messageType = message.senderId === currentUserId ? "sent" : "received";
+            displayMessage(message, messageType);
+          });
+
+          // Store the chat history
+          chatHistory = response.data;
+        }
+      },
+      error: function(error) {
+        console.error("Error loading chat history:", error);
+        document.getElementById("chat-messages").innerHTML =
+                '<div style="text-align: center; color: #666;">Failed to load chat history.</div>';
+      }
+    });
+  }
+
+  function markMessagesAsRead(senderId) {
+    $.ajax({
+      url: `http://localhost:8080/api/v1/chat/mark-read?userId=${currentUserId}&senderId=${senderId}`,
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      success: function() {
+        // Update the read status in the UI
+        updateReadStatus();
+      }
+    });
+  }
+
+  function updateReadStatus() {
+    // Update the displayed read status for sent messages
+    const sentMessages = document.querySelectorAll(".chat-message.sent .read-status");
+    sentMessages.forEach(status => {
+      status.innerText = "Read";
+    });
+  }
+
+  // Listen for Enter key in the input field
+  document.getElementById("chat-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Check if URL contains guide parameters
+  document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const guideId = urlParams.get('guideId');
+    const guideName = urlParams.get('guideName');
+    const guideAvatar = urlParams.get('guideAvatar');
+
+    if (guideId) {
+      openChatWithGuide(guideId, guideName, guideAvatar);
+    } else {
+      // No guide selected, show message or redirect to inbox
+      document.getElementById("chat-messages").innerHTML =
+              '<div style="text-align: center; color: #666;">Please select a guide to chat with.</div>';
+    }
+  });
+</script>
+</body>
+</html>
