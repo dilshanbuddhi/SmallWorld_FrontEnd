@@ -123,7 +123,7 @@ $(document).ready(function() {
             $.ajax({
                 url: 'https://api.cloudinary.com/v1_1/dtvizkvur/image/upload', // Replace with your Cloudinary cloud name
                 type: 'POST',
-                data: formData,
+                data: JSON.stringify(formData),
                 processData: false, // Stop jQuery from processing the data
                 contentType: false, // Prevent jQuery from setting contentType
                 success: function(response) {

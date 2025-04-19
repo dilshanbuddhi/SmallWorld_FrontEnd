@@ -304,6 +304,11 @@ function updatereq(id , status , g_id) {
     });
 }
 
+$("#logout").on("click", function () {
+    localStorage.clear();
+    window.location.href = "index.html";
+})
+
 // Call the function when the page loads
 $(document).ready(function () {
     getGuidData();

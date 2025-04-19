@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tour Client Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        .chat-header {
+            padding: 12px 15px;
+            background-color: #4a89dc;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+
+        .chat-message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+            position: relative;
+            clear: both;
+        }
+
+        .chat-message.sent {
+            background-color: #dcf8c6;
+            float: right;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.received {
+            background-color: #fff;
+            float: left;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .timestamp {
+            font-size: 10px;
+            color: #888;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        #chat-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+        }
+
+        #sendBtn {
+            background-color: #4a89dc;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #sendBtn:hover {
+            background-color: #3a70c2;
+        }
+
+        #sendBtn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .connection-status {
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .guides-list {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: white;
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .guide-item:last-child {
+            border-bottom: none;
+        }
+
+        .guide-item:hover {
+            background-color: #f0f7ff;
+        }
+
+        .guide-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .guide-info {
+            flex: 1;
+        }
+
+        .guide-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .guide-status {
+            font-size: 12px;
+            color: #4CAF50;
+        }
+
+        /* Clear float after messages */
+        .chat-messages::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Available Tour Guides</h2>
+    <div id="guides-list" class="guides-list">
+        <!-- Guide list will be populated here -->
+        <div class="guide-item" onclick="openChatWithGuide('0aab77e1-e5cc-4b6b-998d-31eaac066f9e', 'John Smith', 'img/avatar1.webp')">
+            <img src="img/avatar1.webp" alt="Guide Avatar" class="guide-avatar">
+            <div class="guide-info">
+                <div class="guide-name">John Smith</div>
+                <div class="guide-status">Online</div>
+            </div>
+        </div>
+        <div class="guide-item" onclick="openChatWithGuide('1bbc88f2-f6dd-5c7c-998d-42fbbd177a0f', 'Maria Garcia', 'img/avatar3.webp')">
+            <img src="img/avatar3.webp" alt="Guide Avatar" class="guide-avatar">
+            <div class="guide-info">
+                <div class="guide-name">Maria Garcia</div>
+                <div class="guide-status">Online</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-box" class="chat-box" style="display: none;">
+        <div class="chat-header">
+            <img id="chat-guide-avatar" src="img/avatar1.webp" alt="Guide Avatar">
+            <span id="chat-guide-name">Tour Guide</span>
+        </div>
+        <div class="connection-status" id="connection-status">Connecting...</div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="sendBtn" disabled onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+<script src="js/guidProfile.js"></script>
+
+<script>
+    function setrecieveGuids() {
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/chat/getClients/' + localStorage.getItem("guideId"),
+            method: 'GET',
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.code === 200 && response.data.length > 0) {
+                    const guidesList = $('#guides-list');
+                    guidesList.empty(); // Clear existing content
+
+                    response.data.forEach(function(guide) {
+                       /* <button className="action-btn btn-message"
+                                onClick="openChat('${guideId}', '${item.user.uid}', '${item.customerName}', '${item.user.profileImage || 'img/avatar2.webp'}')">Message
+                            Client</button>*/
+
+                        const guideItem = `
+                        <div class="guide-item" onclick="openChat('${localStorage.getItem("guideId")}', '${guide.uid}', '${guide.firstName}' ,'${guide.profileImage || 'img/avatar2.webp'}')">
+                            <img src="${guide.profile_image}" alt="Guide Avatar" class="guide-avatar">
+                            <div class="guide-info">
+                                <div class="guide-name">${guide.firstName}</div>
+                                <div class="guide-status">${guide.availability === 'available' ? 'Online' : 'Offline'}</div>
+                            </div>
+                        </div>
+                    `;
+                        guidesList.append(guideItem);
+                    });
+                } else {
+                    $('#guides-list').html('<p>No guides found.</p>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    }
+
+    // Function to open chat with a selected guide
+
+
+
+    // Load available guides when page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        // Try to load guides from API
+        //loadAvailableGuides();
+        setrecieveGuids();
+
+    });
+</script>
+
+</body>
+</html>
