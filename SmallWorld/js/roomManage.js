@@ -79,18 +79,37 @@
 
     // Add event listener to the modal when it is about to be shown
     deleteRoomModal.addEventListener('show.bs.modal', function (event) {
-    // Button that triggered the modal
     const button = event.relatedTarget;
-
-    // Extract room ID from data-id attribute
     const roomId = button.getAttribute('data-id');
 
-    // Get the hidden input field in the delete form
     const deleteRoomIdInput = document.getElementById('deleteRoomId');
 
-    // Set the room ID in the hidden input field
     deleteRoomIdInput.value = roomId;
 });
+
+    $("#deleteRoomBtn").on("click", function (e) {
+        e.preventDefault();
+        let roomId = $("#deleteRoomId").val();
+        console.log(roomId);
+
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/room/delete/' + roomId,
+            type: 'DELETE',
+            dataType: 'json',
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    alert("Room deleted successfully!");
+                    getAllRooms();
+                    $("#deleteRoomModal").modal('hide');
+                }
+            }
+        })
+    })
+
+
     setHoteslst();
     setRoomtypelst();
     getAllRooms();

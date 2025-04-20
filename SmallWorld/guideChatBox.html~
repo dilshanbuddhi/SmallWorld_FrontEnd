@@ -182,7 +182,7 @@
     <h2>Available Tour Guides</h2>
     <div id="guides-list" class="guides-list">
         <!-- Guide list will be populated here -->
-
+       
     </div>
 
     <div id="chat-box" class="chat-box" style="display: none;">

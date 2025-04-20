@@ -138,6 +138,7 @@
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background-color 0.2s;
+            position: relative;
         }
 
         .guide-item:last-child {
@@ -174,6 +175,25 @@
             content: "";
             display: table;
             clear: both;
+        }
+
+        /* Unread count badge */
+        .unread-badge {
+            background-color: #FF4757;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0 5px;
         }
     </style>
 </head>
@@ -217,12 +237,13 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 
 <script>
-    //setrecieveGuids();
+    let partnerId = null;
     let stompClient = null;
     let currentUserId = null;
     let currentUserRole = 'client';
     let chatPartnerId = null;
     let chatHistory = [];
+    let unreadCounts = {};
 
     function setrecieveGuids() {
         $.ajax({
@@ -239,22 +260,25 @@
 
                     response.data.forEach(function(guide) {
                         const guideItem = `
-                        <div class="guide-item" onclick="openChatWithGuide('${guide.user_id}', '${guide.name}', '${guide.profile_image}')">
+                        <div class="guide-item" data-guide-id="${guide.user_id}" onclick="openChatWithGuide('${guide.user_id}', '${guide.name}', '${guide.profile_image}')">
                             <img src="${guide.profile_image}" alt="Guide Avatar" class="guide-avatar">
                             <div class="guide-info">
                                 <div class="guide-name">${guide.name}</div>
                                 <div class="guide-status">${guide.availability === 'available' ? 'Online' : 'Offline'}</div>
                             </div>
+                            <div class="unread-badge" id="unread-${guide.user_id}" style="display: none;">0</div>
                         </div>
                     `;
                         guidesList.append(guideItem);
+                        partnerId = guide.user_id;
+                        getUnreadMsgs(guide.user_id);
                     });
                 } else {
                     $('#guides-list').html('<p>No guides found.</p>');
                 }
             },
             error: function(xhr, status, error) {
-                console.log("Error: " + error);
+                console.error("Error loading guides: " + error);
             }
         });
     }
@@ -262,13 +286,42 @@
     // Function to open chat with a selected guide
     function openChatWithGuide(guideId, guideName, guideAvatar) {
         // Get the current user/client ID from localStorage or use default for demo
-        const clientId ="dd40b3b9-2076-4304-bf5b-7e28c8b530cb"; // Use default if not set
+        const clientId = localStorage.getItem("userid"); // Use default if not set
+
+        // Reset unread count when opening chat
+        resetUnreadCount(guideId);
 
         // Initialize chat with proper IDs
-        initializeChat(guideId,clientId, guideName, guideAvatar);
+        initializeChat(guideId, clientId, guideName, guideAvatar);
 
         // Show chat interface
         document.getElementById("chat-box").style.display = "flex";
+    }
+
+    function resetUnreadCount(guideId) {
+        // Reset unread badge in UI
+        const unreadBadge = document.getElementById(`unread-${guideId}`);
+        if (unreadBadge) {
+            unreadBadge.style.display = 'none';
+            unreadBadge.innerText = '0';
+        }
+
+        // Optionally, make an API call to reset unread count on server side
+        // Mark messages as read in database
+        const userId = localStorage.getItem("userid");
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/mark-read?userId=${userId}&guidId=${guideId}`,
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                console.log("Messages marked as read");
+            },
+            error: function(error) {
+                console.error("Error marking messages as read:", error);
+            }
+        });
     }
 
     // Function to initialize chat with correct user IDs
@@ -319,12 +372,27 @@
 
                 // Add to history
                 chatHistory.push(msg);
+
+                // If chat with this sender is not currently open, increment unread count
+                if (chatPartnerId !== msg.senderId) {
+                    incrementUnreadCount(msg.senderId);
+                }
             });
         }, function (error) {
             console.error("🔴 WebSocket connection error: ", error);
             connectionStatus.innerText = "Connection failed. Please try again.";
             connectionStatus.style.color = "#F44336";
         });
+    }
+
+    function incrementUnreadCount(senderId) {
+        // Update UI badge
+        const unreadBadge = document.getElementById(`unread-${senderId}`);
+        if (unreadBadge) {
+            const currentCount = parseInt(unreadBadge.innerText) || 0;
+            unreadBadge.innerText = currentCount + 1;
+            unreadBadge.style.display = 'flex';
+        }
     }
 
     function sendMessage() {
@@ -404,65 +472,53 @@
         });
     }
 
-    // Function to load available guides
-    function loadAvailableGuides() {
-        // Make AJAX call to get available guides from server
+    function getUnreadMsgs(guideId) {
+        const userId = localStorage.getItem("userid");
+
         $.ajax({
-            url: "http://localhost:8080/api/v1/guides/available",
+            url: "http://localhost:8080/api/v1/chat/unread-count?userId=" + userId + "&guidId=" + guideId,
             method: "GET",
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
             },
             success: function(response) {
                 if (response.code === 200) {
-                    const guides = response.data;
-                    const guidesList = document.getElementById("guides-list");
+                    const unreadCount = response.data;
+                    console.log(`Unread messages for guide ${guideId}: ${unreadCount}`);
 
-                    // Clear existing list
-                    guidesList.innerHTML = "";
-
-                    // Display each guide
-                    guides.forEach(guide => {
-                        const guideItem = document.createElement("div");
-                        guideItem.classList.add("guide-item");
-                        guideItem.onclick = function() {
-                            openChatWithGuide(guide.id, guide.name, guide.avatarUrl);
-                        };
-
-                        guideItem.innerHTML = `
-                            <img src="${guide.avatarUrl || 'img/default-avatar.webp'}" alt="Guide Avatar" class="guide-avatar">
-                            <div class="guide-info">
-                                <div class="guide-name">${guide.name}</div>
-                                <div class="guide-status">${guide.status || 'Online'}</div>
-                            </div>
-                        `;
-
-                        guidesList.appendChild(guideItem);
-                    });
+                    // Update UI with unread count
+                    updateUnreadBadge(guideId, unreadCount);
                 }
             },
             error: function(error) {
-                console.error("Error loading available guides:", error);
-                // Add fallback guides for demo purposes
-                const guidesList = document.getElementById("guides-list");
-                guidesList.innerHTML = `
-                    <div class="guide-item" onclick="openChatWithGuide('0aab77e1-e5cc-4b6b-998d-31eaac066f9e', 'John Smith', 'img/avatar1.webp')">
-                        <img src="img/avatar1.webp" alt="Guide Avatar" class="guide-avatar">
-                        <div class="guide-info">
-                            <div class="guide-name">John Smith</div>
-                            <div class="guide-status">Online</div>
-                        </div>
-                    </div>
-                    <div class="guide-item" onclick="openChatWithGuide('1bbc88f2-f6dd-5c7c-998d-42fbbd177a0f', 'Maria Garcia', 'img/avatar3.webp')">
-                        <img src="img/avatar3.webp" alt="Guide Avatar" class="guide-avatar">
-                        <div class="guide-info">
-                            <div class="guide-name">Maria Garcia</div>
-                            <div class="guide-status">Online</div>
-                        </div>
-                    </div>
-                `;
+                console.error("Error getting unread messages:", error);
             }
         });
+    }
+
+    function updateUnreadBadge(guideId, count) {
+        const unreadBadge = document.getElementById(`unread-${guideId}`);
+        if (unreadBadge) {
+            if (count > 0) {
+                unreadBadge.innerText = count;
+                unreadBadge.style.display = 'flex';
+            } else {
+                unreadBadge.style.display = 'none';
+            }
+        }
+    }
+
+    // Poll for unread messages periodically
+    function startUnreadMessagePolling() {
+        setInterval(() => {
+            const guideItems = document.querySelectorAll('.guide-item');
+            guideItems.forEach(item => {
+                const guideId = item.getAttribute('data-guide-id');
+                if (guideId && guideId !== chatPartnerId) {  // Only poll for guides not currently in chat
+                    getUnreadMsgs(guideId);
+                }
+            });
+        }, 30000); // Poll every 30 seconds
     }
 
     // Listen for Enter key on input field
@@ -476,8 +532,10 @@
     // Load available guides when page loads
     document.addEventListener("DOMContentLoaded", function() {
         // Try to load guides from API
-        //loadAvailableGuides();
         setrecieveGuids();
+
+        // Start polling for unread messages
+        startUnreadMessagePolling();
 
         // Check if we should open chat directly from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
