@@ -1,0 +1,31 @@
+getAllbooking();
+function getAllbooking() {
+    $.ajax({
+        url: "http://localhost:8080/api/v1/booking/getAll",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        },
+        type: "GET",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            loadTable(response.data);
+        }
+    });
+}
+
+function loadTable(data) {
+    $("#booking-table").empty();
+    data.forEach((booking) => {
+        let row = `<tr>
+            <td>${booking.user.name}</td>
+            <td>${booking.hotel.name}</td>
+            <td>${booking.num_rooms}</td>
+            <td>${new Date(booking.check_in_date).toLocaleDateString()}</td>
+            <td>${new Date(booking.check_out_date).toLocaleDateString()}</td>
+            <td>${booking.total_price} LKR</td>
+            
+        </tr>`;
+        $("#booking-table").append(row);
+    });
+}

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Category Management</title>
+    <title>Room Type Management</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -119,7 +118,6 @@
 
 
         .join-btn {
-
             padding: 2px 24px;
             background-color: #874caf;
             color: white;
@@ -133,14 +131,32 @@
         .join-btn:hover {
             background-color: #45a049;
         }
+
+        .amenities-input {
+            margin-bottom: 10px;
+        }
+
+        .amenity-item {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 15px;
+        }
+
+        .remove-amenity {
+            margin-left: 5px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             padding: 16px 20px 30px 20px;
-            display: flex
-        ;
+            display: flex;
             align-items: center;
             transition: 0.3s ease-out;
             background: #ffecce;
@@ -156,9 +172,11 @@
                 padding: 16px 50px 30px 50px;
             }
         }
+
         nav.is-hidden {
             transform: translateY(-100%);
         }
+
         a {
             color: inherit;
             text-decoration: none;
@@ -167,6 +185,7 @@
                 text-decoration: underline;
             }
         }
+
         .list {
             list-style-type: none;
             margin-left: auto;
@@ -178,6 +197,7 @@
                 margin-left: 20px;
             }
         }
+
         .search {
             display: inline-block;
             padding: 0;
@@ -198,6 +218,7 @@
                 background: center/1.3rem 1.3rem no-repeat url("data:image/svg+xml, %3Csvg%20xmlns=%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2015.17%2014.81%27%20width=%2715.17%27%20height=%2714.81%27%3E%3Cpath%20d=%27M6,.67A5.34,5.34,0,1,1,.67,6,5.33,5.33,0,0,1,6,.67ZM9.86,9.58l4.85,4.75Z%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-width=%271.33%27%2F%3E%3C%2Fsvg%3E");
             }
         }
+
         .menu {
             display: inline-block;
             padding: 0;
@@ -213,26 +234,28 @@
                 display: none;
             }
         }
-
     </style>
 </head>
 <body>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Header / Navbar -->
 <nav>
     <a href="#">No mask</a>
     <ul class="list">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">User</a></li>
-        <li><a href="#">Place</a></li>
-        <li><a href="#">Hotel</a></li>
-        <li><a href="#">Room</a></li>
-        <li><a href="#">Guids</a></li>
+        <li><a href="userManage.html">User</a></li>
+        <li><a href="placemanage.html">Place</a></li>
+        <li><a href="hotelmanage.html">Hotel</a></li>
+        <li><a href="categoryManage.html">Category</a></li>
+        <li><a href="guideManage.html">Guids</a></li>
+        <li><a href="roomType.html">Room Type</a></li>
+        <li><a href="roomManage.html">Rooms</a></li>
         <li><a href="#">Bookings</a></li>
         <li><a href="#">Transport</a></li>
-
+        <li id="logOutIcon"><i class="bi bi-box-arrow-right" onclick="logout()"></i>
+        </li>
         <li><button class="join-btn" onclick="openRegModal()">Join</button></li>
     </ul>
+
     <button class="menu">Menu</button>
 </nav>
 <br><br>
@@ -243,9 +266,9 @@
             <div class="col-md-6" id="text">
                 <br>
                 <br>
-                <h1>Category <span>Manage!</span></h1>
-                <h2>Manage All <span>Categories from here</span></h2>
-                <p>You can add, update, or delete product categories.</p>
+                <h1>Room Type <span>Manage!</span></h1>
+                <h2>Manage All <span>Room Types from here</span></h2>
+                <p>You can add, update, or delete hotel room types and their amenities.</p>
             </div>
         </div>
     </div>
@@ -253,116 +276,111 @@
 
 <br><br>
 
-<section class="category-management-section py-5">
+<section class="roomtype-management-section py-5">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <!-- Add Category Button -->
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal"><i class="bi bi-plus-square"></i> Add New Category</button>
+                <!-- Add Room Type Button -->
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addRoomTypeModal"><i class="bi bi-plus-square"></i> Add New Room Type</button>
 
-                <!-- Category Table -->
+                <!-- Room Type Table -->
                 <table class="table table-bordered table-hover">
                     <thead class="table-dark">
                     <tr>
-                        <th>Category Name</th>
+                        <th>Room Type</th>
                         <th>Description</th>
+                        <th>Amenities</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
 
-                    <tbody id="categoryBody">
-                    <tr>
-                        <td><%= category.getName() %></td>
-                        <td><%= category.getDescription() %></td>
-                        <td>
-                            <button class="btn btn-sm btn-success"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editCategoryModal"
-                                    data-id=""
-                                    data-name=""
-                                    data-description="">
-                                <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteCategoryModal"
-                                    data-id="">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </td>
-                    </tr>
-</tbody>
+                    <tbody id="roomTypeBody">
+                    <!-- Room types will be loaded here dynamically -->
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Add Category Modal -->
-<div class="modal fade" id="addCategoryModal"  aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<!-- Add Room Type Modal -->
+<div class="modal fade" id="addRoomTypeModal" tabindex="-1" aria-labelledby="addRoomTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                <h5 class="modal-title" id="addRoomTypeModalLabel">Add New Room Type</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="categoryName" class="form-label">Category Name</label>
-                        <input name="name" type="text" class="form-control" id="categoryName" required>
+                <div class="mb-3">
+                    <label for="roomTypeName" class="form-label">Room Type</label>
+                    <input type="text" class="form-control" id="roomTypeName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="roomTypeDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="roomTypeDescription" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="roomTypeAmenities" class="form-label">Amenities</label>
+                    <div class="input-group amenities-input">
+                        <input type="text" class="form-control" id="roomTypeAmenities" placeholder="Add amenity">
+                        <button class="btn btn-outline-secondary" type="button" id="addAmenityBtn">Add</button>
                     </div>
-                    <div class="mb-3">
-                        <label for="categoryDescription" class="form-label">Description</label>
-                        <textarea name="description" class="form-control" id="categoryDescription" rows="3"></textarea>
-                    </div>
-                    <button id="saveCategoryBtn" class="btn btn-primary">Add Category</button>
+                    <div id="amenitiesList" class="mt-2"></div>
+                </div>
+                <button id="saveRoomTypeBtn" class="btn btn-primary">Add Room Type</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+<!-- Edit Room Type Modal -->
+<div class="modal fade" id="editRoomTypeModal" tabindex="-1" aria-labelledby="editRoomTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                <h5 class="modal-title" id="editRoomTypeModalLabel">Edit Room Type</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-                        <input name="id" type="text" class="form-control" id="editCategoryId" hidden="">
-
-                    <div class="mb-3">
-                        <label for="editCategoryName" class="form-label">Category Name</label>
-                        <input name="name" type="text" class="form-control" id="editCategoryName" required>
+                <input type="hidden" id="editRoomTypeId">
+                <div class="mb-3">
+                    <label for="editRoomTypeName" class="form-label">Room Type</label>
+                    <input type="text" class="form-control" id="editRoomTypeName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="editRoomTypeDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="editRoomTypeDescription" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="editRoomTypeAmenities" class="form-label">Amenities</label>
+                    <div class="input-group amenities-input">
+                        <input type="text" class="form-control" id="editRoomTypeAmenities" placeholder="Add amenity">
+                        <button class="btn btn-outline-secondary" type="button" id="editAddAmenityBtn">Add</button>
                     </div>
-                    <div class="mb-3">
-                        <label for="editCategoryDescription" class="form-label">Description</label>
-                        <textarea name="description" class="form-control" id="editCategoryDescription" rows="3">All types of pet food products</textarea>
-                    </div>
-                    <button id="editCategoryBtn" class="btn btn-success">Update Category</button>
+                    <div id="editAmenitiesList" class="mt-2"></div>
+                </div>
+                <button id="updateRoomTypeBtn" class="btn btn-success">Update Room Type</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteRoomTypeModal" tabindex="-1" aria-labelledby="deleteRoomTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="deleteRoomTypeModalLabel">Confirm Deletion</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this category?
+                Are you sure you want to delete this room type?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <!-- Hidden input to store the category ID -->
-                    <input type="hidden" id="deleteCategoryId" name="id">
-                    <button id="deleteCategoryBtn" class="btn btn-danger">Delete</button>
+                <input type="hidden" id="deleteRoomTypeId">
+                <button id="deleteRoomTypeBtn" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </div>
@@ -371,89 +389,19 @@
 <!-- Footer -->
 <footer class="text-center py-4">
     <div class="container">
-        <p class="mb-0">&copy; 2025 Waggy Pet Shop. All Rights Reserved.</p>
+        <p class="mb-0">&copy; 2025 Hotel Management System. All Rights Reserved.</p>
     </div>
 </footer>
+<script>
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="JQ/jquery-3.7.1.min.js"></script>
-<script src="js/placeCategory.js"></script>
-
-<script>
-    // Get the edit modal element
-    const editCategoryModal = document.getElementById('editCategoryModal');
-
-    // Add event listener to the modal when it is about to be shown
-    editCategoryModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        const button = event.relatedTarget;
-
-        // Extract info from data-* attributes
-        const categoryId = button.getAttribute('data-id');
-        const categoryName = button.getAttribute('data-name');
-        const categoryDescription = button.getAttribute('data-description');
-
-        // Get the input fields in the modal
-        const editCategoryNameInput = document.getElementById('editCategoryName');
-        const editCategoryDescriptionInput = document.getElementById('editCategoryDescription');
-        const editCategoryIdInput = document.getElementById('editCategoryId'); // if you want to pass the ID
-
-        // Update the modal's fields with the selected category data
-        editCategoryIdInput.value = categoryId;
-        editCategoryNameInput.value = categoryName;
-        editCategoryDescriptionInput.value = categoryDescription;
-
-        // Optional: If you have a hidden field for category ID
-        if (editCategoryIdInput) {
-            editCategoryIdInput.value = categoryId;
-        }
-    });
-</script>
-
-<script>
-    document.getElementById("logoutLink").addEventListener("click", function(event) {
-        // Prevent the default link behavior
-        event.preventDefault();
-
-        // Use SweetAlert2 for confirmation
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You will be logged out!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, log out!'
-        }).then((result) => {
-            // If the user confirms, redirect to index.jsp
-            if (result.isConfirmed) {
-                // Redirect after showing success message
-                window.location.href = "index.jsp";
-            }
-        });
-    });
-</script>
-<script>
-    // Get the delete modal element
-    const deleteCategoryModal = document.getElementById('deleteCategoryModal');
-
-    // Add event listener to the modal when it is about to be shown
-    deleteCategoryModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        const button = event.relatedTarget;
-
-        // Extract category ID from data-id attribute
-        const categoryId = button.getAttribute('data-id');
-
-        // Get the hidden input field in the delete form
-        const deleteCategoryIdInput = document.getElementById('deleteCategoryId');
-
-        // Set the category ID in the hidden input field
-        deleteCategoryIdInput.value = categoryId;
-    });
-</script>
-
-
-<!-- Bootstrap JS -->
+<script src="js/roomType.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
