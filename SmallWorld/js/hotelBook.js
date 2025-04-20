@@ -377,7 +377,7 @@ function getAllHotels() {
     $.ajax({
         url: "http://localhost:8080/api/v1/hotel/getAll",
         headers: {
-            Authorization: "Bearer " + "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoidXNlciIsInN1YiI6ImRpbHNoYW5AZ21haWwuY29tIiwiaWF0IjoxNzQzNDgyMTMyLCJleHAiOjE3NDQ1MTg5MzJ9.YRFhZUVduq6AxUvuIrri_zxmSmp0fu0CwJI5qkLvPOd8VQArqAlXYlCy2YU7qrusBmMSP8F4l9ExNJleT24lVg"
+            Authorization: "Bearer " + localStorage.getItem("token")
         },
         type: "GET",
         contentType: "application/json",
@@ -388,12 +388,15 @@ function getAllHotels() {
 
             console.log(data);
             $("#hotel-cards").empty();
+            $("#hotel-city").text("Hotels in " + "SmallWorld" + "(" + data.data.length + " Results)");
             data.data.forEach((hotel, index) => {
                 const hotelCard = `
                     <div class="hotel-card" data-hotel-id="${index}">
-                        <div class="hotel-image" style="background-image: url('${hotel.image[0]}');"></div>
+                        <div class="hotel-image">
+                        <img src="${hotel.image}" alt="">
+</div>
                         <div class="hotel-content">
-                            <div class="hotel-price">Beach Resort <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ Day/ Night</span></div>
+                            <div class="hotel-price">Resort <span style="font-size: 14px; font-weight: normal; color: var(--gray);">/ Day/ Night</span></div>
                             <h3 class="hotel-title">${hotel.name}</h3>
                             <div class="hotel-location">📍, ${hotel.location}</div>
 
@@ -421,6 +424,11 @@ function getAllHotels() {
         }
     });
 }
+
+$("#city-selector").on("change", function () {
+    const selectedCity = $(this).val();
+    getAllByCity(selectedCity);
+})
 
 function closeBookingModal() {
     document.getElementById('bookingModal').style.display = 'none';

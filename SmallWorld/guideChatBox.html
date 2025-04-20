@@ -138,6 +138,7 @@
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background-color 0.2s;
+            position: relative;
         }
 
         .guide-item:last-child {
@@ -175,14 +176,47 @@
             display: table;
             clear: both;
         }
+
+        /* Unread message badge */
+        .unread-badge {
+            position: absolute;
+            right: 15px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4a89dc;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Available Tour Guides</h2>
+    <h2>Requested Tour Clients</h2>
     <div id="guides-list" class="guides-list">
         <!-- Guide list will be populated here -->
-
+        <div class="loading-spinner"></div> Loading clients...
     </div>
 
     <div id="chat-box" class="chat-box" style="display: none;">
@@ -205,9 +239,15 @@
 <script src="js/guidProfile.js"></script>
 
 <script>
+    let guidId = localStorage.getItem("guideId");
+    let currentChatUser = null;
+    let unreadCounts = {};
+
     function setrecieveGuids() {
+        $('#guides-list').html('<div class="loading-spinner"></div> Loading clients...');
+
         $.ajax({
-            url: 'http://localhost:8080/api/v1/chat/getClients/' + localStorage.getItem("guideId"),
+            url: 'http://localhost:8080/api/v1/chat/getClients/' + guidId,
             method: 'GET',
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
@@ -215,45 +255,293 @@
             success: function(response) {
                 console.log(response);
                 if (response.code === 200 && response.data.length > 0) {
-                    const guidesList = $('#guides-list');
-                    guidesList.empty(); // Clear existing content
+                    const clientList = $('#guides-list');
+                    clientList.empty(); // Clear existing content
 
                     response.data.forEach(function(guide) {
-                       /* <button className="action-btn btn-message"
-                                onClick="openChat('${guideId}', '${item.user.uid}', '${item.customerName}', '${item.user.profileImage || 'img/avatar2.webp'}')">Message
-                            Client</button>*/
-
-                        const guideItem = `
-                        <div class="guide-item" onclick="openChat('${localStorage.getItem("guideId")}', '${guide.uid}', '${guide.firstName}' ,'${guide.profileImage || 'img/avatar2.webp'}')">
-                            <img src="${guide.profile_image}" alt="Guide Avatar" class="guide-avatar">
+                        const clientItem = `
+                        <div class="guide-item" id="client-${guide.uid}" onclick="openChat('${guidId}', '${guide.uid}', '${guide.firstName}' ,'${guide.profileImage || 'img/avatar2.webp'}')">
+                            <img src="${guide.profileImage || 'img/avatar2.webp'}" alt="Client Avatar" class="guide-avatar">
                             <div class="guide-info">
                                 <div class="guide-name">${guide.firstName}</div>
                                 <div class="guide-status">${guide.availability === 'available' ? 'Online' : 'Offline'}</div>
                             </div>
+                            <div class="unread-badge" id="unread-${guide.uid}" style="display: none;">0</div>
                         </div>
                     `;
-                        guidesList.append(guideItem);
+                        clientList.append(clientItem);
+                        getUnreadMsgs(guide.uid);
                     });
                 } else {
-                    $('#guides-list').html('<p>No guides found.</p>');
+                    $('#guides-list').html('<p>No clients found.</p>');
                 }
             },
             error: function (xhr, status, error) {
                 console.log("Error: " + error);
+                $('#guides-list').html('<p>Error loading clients. Please try again.</p>');
             }
         });
     }
 
-    // Function to open chat with a selected guide
+    function openChat(senderId, receiverId, receiverName, receiverAvatar) {
+        $('#chat-guide-avatar').attr('src', receiverAvatar);
+        $('#chat-guide-name').text(receiverName);
 
+        $('#chat-box').show();
 
+        // Set current chat user
+        currentChatUser = receiverId;
+
+        // Reset unread count for this user
+        resetUnreadCount(receiverId);
+
+        // Load chat history here
+        loadChatHistory(senderId, receiverId);
+
+        // Focus on input field
+        $('#chat-input').focus();
+
+        // Enable send button
+        $('#sendBtn').prop('disabled', false);
+    }
+
+    function loadChatHistory(senderId, receiverId) {
+        // Clear existing messages
+        $('#chat-messages').empty();
+        $('#connection-status').text('Loading messages...');
+
+        // API call to get chat history
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/history?user1=${senderId}&user2=${receiverId}`,
+            method: 'GET',
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200) {
+                    $('#connection-status').text('Connected');
+
+                    // Display messages
+                    response.data.forEach(function(msg) {
+                        const isReceived = msg.senderId !== guidId;
+                        const messageClass = isReceived ? 'received' : 'sent';
+                        const timestamp = new Date(msg.timestamp).toLocaleTimeString();
+
+                        const messageHtml = `
+                            <div class="chat-message ${messageClass}">
+                                ${msg.content}
+                                <div class="timestamp">${timestamp}</div>
+                            </div>
+                        `;
+
+                        $('#chat-messages').append(messageHtml);
+                    });
+
+                    // Scroll to bottom
+                    const chatMessages = document.getElementById('chat-messages');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else {
+                    $('#connection-status').text('Failed to load messages');
+                }
+            },
+            error: function(error) {
+                console.error("Error loading chat history:", error);
+                $('#connection-status').text('Error loading messages');
+            }
+        });
+    }
+
+    function resetUnreadCount(userid) {
+        // Reset unread badge in UI
+        const unreadBadge = document.getElementById(`unread-${userid}`);
+        if (unreadBadge) {
+            unreadBadge.style.display = 'none';
+            unreadBadge.innerText = '0';
+        }
+
+        // Update local tracking
+        unreadCounts[userid] = 0;
+
+        // Make an API call to reset unread count on server side
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/mark-read`,
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            data: {
+                userId: guidId,
+                guidId: userid
+            },
+            success: function(response) {
+                console.log("Messages marked as read");
+            },
+            error: function(error) {
+                console.error("Error marking messages as read:", error);
+            }
+        });
+    }
+
+    function getUnreadMsgs(receiverId) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/chat/unread-count?userId=${guidId}&guidId=${receiverId}`,
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            success: function(response) {
+                if (response.code === 200 && response.data > 0) {
+                    // Update unread badge
+                    const unreadBadge = document.getElementById(`unread-${receiverId}`);
+                    if (unreadBadge) {
+                        unreadBadge.style.display = 'flex';
+                        unreadBadge.innerText = response.data;
+
+                        // Store count in our tracking object
+                        unreadCounts[receiverId] = response.data;
+                    }
+                }
+            },
+            error: function(error) {
+                console.error("Error getting unread messages:", error);
+            }
+        });
+    }
+
+    function sendMessage() {
+        const messageInput = document.getElementById('chat-input');
+        const message = messageInput.value.trim();
+
+        if (message && currentChatUser) {
+            // Clear input field
+            messageInput.value = '';
+
+            // Add message to chat
+            const timestamp = new Date().toLocaleTimeString();
+            const messageHtml = `
+                <div class="chat-message sent">
+                    ${message}
+                    <div class="timestamp">${timestamp}</div>
+                </div>
+            `;
+
+            $('#chat-messages').append(messageHtml);
+
+            // Scroll to bottom
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send message to server
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/chat/send',
+                method: 'POST',
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    senderId: guidId,
+                    receiverId: currentChatUser,
+                    content: message,
+                    timestamp: new Date().toISOString()
+                }),
+                success: function(response) {
+                    console.log("Message sent successfully");
+                },
+                error: function(error) {
+                    console.error("Error sending message:", error);
+                    $('#connection-status').text('Failed to send message');
+                }
+            });
+        }
+    }
+
+    // Handle Enter key in input field
+    document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Setup WebSocket connection for real-time messaging
+    function setupWebSocket() {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            console.log('Connected to WebSocket: ' + frame);
+
+            // Subscribe to personal channel
+            stompClient.subscribe(`/user/${guidId}/queue/messages`, function(message) {
+                const receivedMsg = JSON.parse(message.body);
+
+                // If chat is open with this sender, display message
+                if (currentChatUser === receivedMsg.senderId) {
+                    const timestamp = new Date(receivedMsg.timestamp).toLocaleTimeString();
+                    const messageHtml = `
+                        <div class="chat-message received">
+                            ${receivedMsg.content}
+                            <div class="timestamp">${timestamp}</div>
+                        </div>
+                    `;
+
+                    $('#chat-messages').append(messageHtml);
+
+                    // Scroll to bottom
+                    const chatMessages = document.getElementById('chat-messages');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // Mark as read since we're viewing it
+                    resetUnreadCount(receivedMsg.senderId);
+                } else {
+                    // Update unread count for this sender
+                    unreadCounts[receivedMsg.senderId] = (unreadCounts[receivedMsg.senderId] || 0) + 1;
+
+                    // Update UI
+                    const unreadBadge = document.getElementById(`unread-${receivedMsg.senderId}`);
+                    if (unreadBadge) {
+                        unreadBadge.style.display = 'flex';
+                        unreadBadge.innerText = unreadCounts[receivedMsg.senderId];
+                    }
+                }
+            });
+        }, function(error) {
+            console.error('Error connecting to WebSocket:', error);
+            $('#connection-status').text('Disconnected');
+
+            // Try to reconnect after 5 seconds
+            setTimeout(setupWebSocket, 5000);
+        });
+
+        return stompClient;
+    }
 
     // Load available guides when page loads
     document.addEventListener("DOMContentLoaded", function() {
-        // Try to load guides from API
-        //loadAvailableGuides();
+        // Check if guide ID exists
+        if (!guidId) {
+            alert('Guide ID not found. Please log in again.');
+            // Redirect to login page
+            // window.location.href = 'login.html';
+            return;
+        }
+
+        // Load clients
         setrecieveGuids();
 
+        // Setup WebSocket
+        const stompClient = setupWebSocket();
+
+        // Set up periodic refresh for unread messages
+        setInterval(function() {
+            if (!currentChatUser) {
+                const clientElements = document.querySelectorAll('.guide-item');
+                clientElements.forEach(function(element) {
+                    const clientId = element.id.replace('client-', '');
+                    getUnreadMsgs(clientId);
+                });
+            }
+        }, 30000); // Refresh every 30 seconds
     });
 </script>
 

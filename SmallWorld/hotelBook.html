@@ -380,8 +380,14 @@
         }
 
         .hotel-image {
-            background-size: cover;
-            background-position: center;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        .hotel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .hotel-content {
@@ -820,13 +826,48 @@
         <div class="result-header">
             <h2 id="hotel-city">Hotels in Bali (25 results)</h2>
             <div class="filter-sort">
-                <button class="filter-button">Filters ↓</button>
-                <select class="sort-select">
-                    <option>Sort by: Recommended</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Guest Rating</option>
+                <button class="filter-button">City ↓</button>
+                <select class="city-select" id="city-selector">
+                    <option selected disabled>Select a City</option>
+                    <option>Colombo</option>
+                    <option>Dehiwala-Mount Lavinia</option>
+                    <option>Moratuwa</option>
+                    <option>Jaffna</option>
+                    <option>Negombo</option>
+                    <option>Kandy</option>
+                    <option>Galle</option>
+                    <option>Kalutara</option>
+                    <option>Matara</option>
+                    <option>Kurunegala</option>
+                    <option>Anuradhapura</option>
+                    <option>Polonnaruwa</option>
+                    <option>Ratnapura</option>
+                    <option>Badulla</option>
+                    <option>Trincomalee</option>
+                    <option>Vavuniya</option>
+                    <option>Ampara</option>
+                    <option>Batticaloa</option>
+                    <option>Chilaw</option>
+                    <option>Hambantota</option>
+                    <option>Mannar</option>
+                    <option>Nuwara Eliya</option>
+                    <option>Monaragala</option>
+                    <option>Matale</option>
+                    <option>Gampaha</option>
+                    <option>Puttalam</option>
+                    <option>Kegalle</option>
+                    <option>Horana</option>
+                    <option>Wattala</option>
+                    <option>Panadura</option>
+                    <option>Beruwala</option>
+                    <option>Kadawatha</option>
+                    <option>Katunayake</option>
+                    <option>Hatton</option>
+                    <option>Kotagala</option>
+                    <option>Embilipitiya</option>
+                    <option>Talawakele</option>
                 </select>
+
             </div>
         </div>
 
